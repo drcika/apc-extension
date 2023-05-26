@@ -1,0 +1,105 @@
+{
+  "theme": [
+    {
+      "color": "#00000000",
+      "tokens": [
+        "tab.activeBorderTop",
+        "editorGroupHeader.tabsBorder",
+        "editorIndentGuide.activeBackground",
+        "editorGroupHeader.tabsBackground",
+        "sideBar.background",
+        "sideBarSectionHeader.border",
+        "sideBarSectionHeader.background",
+        "sideBar.border",
+        "editor.background",
+        "editorIndentGuide.background",
+        "peekViewEditor.background",
+        "peekViewEditorGutter.background",
+        "peekViewTitle.background",
+        "peekViewResult.background",
+        "tab.border",
+        "tab.activeModifiedBorder",
+        "tab.inactiveModifiedBorder",
+        "tab.activeBackground",
+        "tab.inactiveBackground",
+        "tab.lastPinnedBorder",
+        "editorOverviewRuler.border",
+        "statusBar.background",
+        "statusBar.debuggingBackground",
+        "statusBar.noFolderBackground",
+        "statusBar.focusBorder",
+        "statusBarItem.activeBackground",
+        "statusBar.border",
+        "widget.shadow",
+        "focusBorder",
+        "list.focusAndSelectionOutline",
+        "tree.indentGuidesStroke",
+        "terminal.border",
+        "panel.border",
+        "panel.background",
+        "activityBar.background",
+        "activityBar.activeBorder",
+        "activityBar.dropBorder",
+        "peekViewEditor.matchHighlightBackground",
+        "peekViewEditor.matchHighlightBorder"
+      ]
+    },
+    {
+      "color": "#0C1125",
+      "tokens": [
+        "titleBar.activeBackground",
+        "titleBar.inactiveBackground",
+        "activityBarBadge.background",
+        "editorWidget.background",
+        "settings.dropdownBackground",
+        "input.background",
+        "badge.background"
+      ]
+    },
+    {
+      "color": "#01589b99",
+      "tokens": [
+        "activityBar.inactiveForeground",
+        "button.background",
+        "panelTitle.inactiveForeground",
+        "editorLineNumber.foreground",
+        "editorSuggestWidget.border",
+        "list.hoverBackground",
+        "list.inactiveSelectionBackground",
+        "list.activeSelectionBackground",
+        "input.border"
+      ]
+    },
+    {
+      "color": "#1979c2",
+      "tokens": [ "editorLineNumber.activeForeground", "editorWidget.border", "peekView.border", "statusBar.foreground" ]
+    },
+    {
+      "color": "#29B6F6",
+      "tokens": [
+        "activityBar.foreground",
+        "activityBarBadge.foreground",
+        "sideBarSectionHeader.foreground",
+        "sideBarTitle.foreground",
+        "tab.activeBorder",
+        "icon.foreground",
+        "badge.foreground",
+        "list.focusOutline",
+        "panelTitle.activeForeground",
+        "panelTitle.activeBorder",
+        "titleBar.activeForeground"
+      ]
+    },
+    {
+      "color": "#81bae6",
+      "tokens": [
+        "sideBar.foreground",
+        "gitDecoration.modifiedResourceForeground",
+        "gitDecoration.untrackedResourceForeground",
+        "gitDecoration.ignoredResourceForeground",
+        "gitDecoration.addedResourceForeground",
+        "gitDecoration.renamedResourceForeground"
+      ]
+    }
+  ]
+}

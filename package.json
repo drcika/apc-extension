@@ -1,0 +1,249 @@
+{
+  "name": "apc-extension",
+  "displayName": "apc-extension",
+  "description": "apc-extension",
+  "version": "0.0.3",
+  "repository": "null",
+  "publisher": "apc",
+  "license": "MIT",
+  "engines": {
+    "vscode": "^1.77.0"
+  },
+  "categories": [
+    "Other"
+  ],
+  "activationEvents": [
+    "onStartupFinished"
+  ],
+  "capabilities": {
+    "untrustedWorkspaces": {
+      "supported": true
+    }
+  },
+  "main": "./dist/extension.js",
+  "contributes": {
+    "commands": [
+      {
+        "command": "apc.extension.enable",
+        "title": "Enable Apc extension"
+      },
+      {
+        "command": "apc.extension.disable",
+        "title": "Disable Apc extension"
+      }
+    ],
+    "configuration": {
+      "type": "object",
+      "title": "Apc",
+      "properties": {
+        "apc.backgroundColor": {
+          "type": "string",
+          "format": "color",
+          "description": "#00000000 for transparent"
+        },
+        "apc.listRow": {
+          "type": "object",
+          "fontSize": {
+            "type": "number",
+            "default": 13
+          },
+          "height": {
+            "type": "number",
+            "default": 22
+          }
+        },
+        "apc.stylesheet": {
+          "type": "object",
+          "markdownDescription": "Additional stylesheet definitions.\n```\n\"apc.stylesheet\" : {\n\t\"body\" : {\n\t\t\"font-size\": \"12px\"\n\t}\n}\n```\n"
+        },
+        "apc.statusBar": {
+          "type": "object",
+          "properties": {
+            "fontSize": {
+              "type": "number",
+              "default": 12
+            },
+            "height": {
+              "type": "number",
+              "default": 22
+            },
+            "position": {
+              "type": "string",
+              "enum": [
+                "top",
+                "bottom",
+                "editor-top",
+                "editor-bottom"
+              ],
+              "default": "bottom"
+            }
+          }
+        },
+        "apc.activityBar": {
+          "type": "object",
+          "properties": {
+            "hideSettings": {
+              "type": "boolean",
+              "default": false,
+              "description": "Hides settings and accounts icon"
+            },
+            "size": {
+              "type": "number",
+              "default": 35
+            },
+            "position": {
+              "type": "string",
+              "enum": [
+                "bottom"
+              ]
+            }
+          }
+        },
+        "apc.electron": {
+          "type": "object",
+          "description": "see https://www.electronjs.org/docs/latest/tutorial/window-customization",
+          "properties": {
+            "frame": {
+              "description": "see https://www.electronjs.org/docs/latest/tutorial/window-customization",
+              "type": "boolean",
+              "default": true
+            },
+            "transparent": {
+              "description": "see https://www.electronjs.org/docs/latest/tutorial/window-customization",
+              "type": "boolean",
+              "default": false
+            },
+            "titleBarStyle": {
+              "description": "see https://www.electronjs.org/docs/latest/tutorial/window-customization",
+              "type": "string",
+              "enum": [
+                "hidden",
+                "hiddenInset",
+                "customButtonsOnHover"
+              ]
+            },
+            "trafficLightPosition": {
+              "description": "see https://www.electronjs.org/docs/latest/tutorial/window-customization",
+              "type": "object",
+              "properties": {
+                "x": { "type": "number" },
+                "y": { "type": "number" }
+              }
+            },
+            "titleBarOverlay": {
+              "description": "see https://www.electronjs.org/docs/latest/tutorial/window-customization",
+              "type": [ "object", "boolean" ],
+              "properties": {
+                "color": {
+                  "type": "string",
+                  "format": "color" },
+                "symbolColor": {
+                  "type": "string",
+                  "format": "color" },
+                "height": { "type": "number" }
+              }
+            }
+          }
+        },
+        "apc.header": {
+          "type": "object",
+          "properties": {
+            "fontSize": {
+              "type": "number",
+              "default": 13
+            },
+            "height": {
+              "type": "number",
+              "default": 37
+            }
+          }
+        },
+        "apc.theme": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "color": {
+                "type": "string",
+                "format": "color"
+              },
+              "tokens": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        },
+        "apc.buttons": {
+          "type": "array",
+          "description": "Views to include on the status bar with associated icons",
+          "default": [ ],
+          "uniqueItems": true,
+          "items": {
+            "type": "object",
+            "properties": {
+              "text": "string",
+              "tooltip": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "vscommand": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "command": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "priority": {
+                "type": [
+                  "number",
+                  "null"
+                ]
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "extensionKind": [
+    "ui"
+  ],
+  "scripts": {
+    "vscode:prepublish": "npm run compile",
+    "start": "tsc -watch -p ./",
+    "compile": "tsc -p ./",
+    "watch": "tsc -watch -p ./",
+    "postinstall": "node ./node_modules/vscode/bin/install",
+    "package": "vsce package",
+    "compile-tests": "tsc -p . --outDir out",
+    "watch-tests": "tsc -p . -w --outDir out",
+    "pretest": "npm run compile-tests && npm run compile && npm run lint",
+    "lint": "eslint src --ext ts",
+    "test": "node ./out/test/runTest.js"
+  },
+  "devDependencies": {
+    "@types/glob": "^8.1.0",
+    "@types/mocha": "^10.0.1",
+    "@types/node": "16.x",
+    "@types/vscode": "^1.77.0",
+    "@typescript-eslint/eslint-plugin": "^5.56.0",
+    "@typescript-eslint/parser": "^5.56.0",
+    "@vscode/test-electron": "^2.3.0",
+    "eslint": "^8.36.0",
+    "mocha": "^10.2.0",
+    "ts-loader": "^9.4.2",
+    "typescript": "^4.9.5",
+    "vsce": "^2.15.0"
+  },
+  "dependencies": { }
+}

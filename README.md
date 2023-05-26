@@ -1,1 +1,1 @@
-<img src="https://raw.githubusercontent.com/drcika/apc-extension/production/images/demo.png"/>
+<img src="https://github.com/drcika/apc-extension/blob/production/demo.png"/>

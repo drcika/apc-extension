@@ -2,6 +2,14 @@
 
 The successor of iocave/Customize UI
 
+## Enabling and Disabling
+
+VSCode commands:
+* Enable Apc extension
+  apc.extension.enable
+* Disable Apc extension
+  apc.extension.disable
+  
 ## Supported configuration options
 
 ### `apc.stylesheet`

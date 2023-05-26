@@ -1,16 +1,26 @@
 {
   "name": "apc-extension",
-  "displayName": "apc-extension",
-  "description": "apc-extension",
+  "displayName": "Apc Customize UI++",
+  "description": "Advanced VSCode user interface customizations. Very experimental.",
   "version": "0.0.3",
-  "repository": "null",
-  "publisher": "apc",
+  "repository": "https://github.com/drcika/apc-extension",
+  "publisher": "drcika",
   "license": "MIT",
   "engines": {
     "vscode": "^1.77.0"
   },
   "categories": [
+    "Themes",
     "Other"
+  ],
+  "keywords": [
+    "custom",
+    "customise",
+    "UI",
+    "activity bar",
+    "interface",
+    "titlebar",
+    "activitybar"
   ],
   "activationEvents": [
     "onStartupFinished"
@@ -219,12 +229,13 @@
     "ui"
   ],
   "scripts": {
-    "vscode:prepublish": "npm run compile",
     "start": "tsc -watch -p ./",
+    "package": "vsce package",
+    "publish": "vsce publish",
+    "vscode:prepublish": "npm run compile",
     "compile": "tsc -p ./",
     "watch": "tsc -watch -p ./",
     "postinstall": "node ./node_modules/vscode/bin/install",
-    "package": "vsce package",
     "compile-tests": "tsc -p . --outDir out",
     "watch-tests": "tsc -p . -w --outDir out",
     "pretest": "npm run compile-tests && npm run compile && npm run lint",

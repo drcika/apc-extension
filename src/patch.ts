@@ -20,6 +20,7 @@ const workbenchHtmlPath = path.join(workbenchHtmldir, workbenchHtmlName);
 const workbenchHtmlReplacementPath = workbenchHtmlPath.replace(workbenchHtmlName, "workbench-apc-extension.html");
 const patchPath = path.join(installationPath, modules);
 const isWin = os.platform() === 'win32';
+const browserMain = 'browser.main.js';
 
 function fixPath(path: string) {
   return isWin ? "file://./" + path.replace(/\\/g, "/") : path;
@@ -28,10 +29,15 @@ function fixPath(path: string) {
 const fixedPatchPath = fixPath(patchPath);
 
 export async function ensurePatch(context: vscode.ExtensionContext) {
+  const browserEntrypointPath = path.join(patchPath, browserMain);
+  const generatedScriptsPathRelative = path.join(path.relative(installationPath, context.extensionPath), modules).replace(/\\/g, '/');
+  
   if (
     !fs.existsSync(bootstrapBackupPath) ||
     !fs.existsSync(workbenchHtmlReplacementPath) ||
-    !fs.readFileSync(bootstrapPath, "utf8")?.includes('$apcExtensionBootstrapToken$')
+    !fs.readFileSync(bootstrapPath, "utf8")?.includes('$apcExtensionBootstrapToken$') || 
+    !fs.existsSync(browserEntrypointPath) ||
+    !fs.readFileSync(browserEntrypointPath, "utf8")?.includes(generatedScriptsPathRelative)
   ) {
     await install(context);
   }
@@ -114,7 +120,6 @@ function restoreMain() {
 
 function patchWorkbench(extensionPath: string) {
   const workbenchHtmldirRelative = path.relative(workbenchHtmldir, patchPath).replace(/\\/g, '/');
-  const browserMain = 'browser.main.js';
   const browserEntrypointPathRelative = path.join(workbenchHtmldirRelative, browserMain).replace(/\\/g, '/');
 
   const patchedWorkbenchHtml = fs.readFileSync(workbenchHtmlPath, 'utf8')

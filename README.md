@@ -5,10 +5,8 @@ The successor of iocave/Customize UI
 ## Enabling and Disabling
 
 VSCode commands:
-* Enable Apc extension
-  apc.extension.enable
-* Disable Apc extension
-  apc.extension.disable
+* Enable Apc extension / apc.extension.enable
+* Disable Apc extension / apc.extension.disable
   
 ## Supported configuration options
 
@@ -31,7 +29,7 @@ VSCode commands:
 
 ```jsonc
     "apc.activityBar": {
-      "position": "bottom" | undefined // activity bar will be positioned below the sidebar
+      "position": "bottom" | "bottom" | undefined (regular) // activity bar will be positioned below/above the sidebar
       "size": number // if position set to bottom  this is the heigth else width of activity bar
     }
 ```
@@ -81,6 +79,15 @@ see https://www.electronjs.org/docs/latest/tutorial/window-customization
 
 ```jsonc
     "apc.header": {
+      "height": number,
+      "fontSize": number
+    }
+```
+
+### `apc.sidebar.titlebar`
+
+```jsonc
+    "apc.sidebar.titlebar": {
       "height": number,
       "fontSize": number
     }

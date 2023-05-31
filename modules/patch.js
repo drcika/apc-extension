@@ -1,277 +1,412 @@
 function error() { }
+function getProperty(obj, key) {
+  return Object.getOwnPropertyDescriptor(obj, key) || (obj.__proto__ ? getProperty(obj.__proto__, key) : undefined);
+}
 
-function customize(exports, utils, configuration, browser, platform, electron, dom) {
-  const isCodium = platform.globals.location?.href.includes('VSCodium');
+function customize(exports, utils, configuration, browser, platform, electron, dom, themeService, workbench) {
 
   class Customize {
-    constructor(configurationService, nativeHostService) {
+    constructor(configurationService, nativeHostService, themeService) {
+      this.themeService = themeService;
       this.configurationService = configurationService;
       this.nativeHostService = nativeHostService;
       this.init();
     }
     get headerConfig() {
-      const config = this.configurationService.getValue('apc.header') || {};
-      const height = config?.height ?? 37;
-      const fontSize = config?.fontSize ?? 13;
+      const { height, fontSize } = this.configurationService.getValue('apc.header') || {};
       const factor = browser.getZoomFactor();
       return {
-        height: height * factor,
-        fontSize: fontSize * factor
+        height: (height || 37) * factor,
+        fontSize: (fontSize || 13) * factor,
+        isEnabled: !!(fontSize || height)
+      };
+    }
+
+    get sidebarTitlebarConfig() {
+      const { height, fontSize } = this.configurationService.getValue('apc.sidebar.titlebar') || {};
+      const factor = browser.getZoomFactor();
+      return {
+        height: (height || 35) * factor,
+        fontSize: (fontSize || 11) * factor,
+        isEnabled: !!(fontSize || height)
       };
     }
     get listRowConfig() {
-      const config = this.configurationService.getValue('apc.listRow') || {};
+      const { height, fontSize } = this.configurationService.getValue('apc.listRow') || {};
       const factor = browser.getZoomFactor();
-      const height = config.height ?? 22;
-      const fontSize = config.fontSize ?? 13;
       return {
-        height: height * factor,
-        fontSize: fontSize * factor
+        height: (height || 22) * factor,
+        fontSize: (fontSize || 13) * factor,
+        isEnabled: !!(fontSize || height)
       };
     }
-    get activityBarConfig() {
-      const config = this.configurationService.getValue('apc.activityBar') || {};
-      const factor = browser.getZoomFactor();
-      const size = (config?.size ?? 35) * factor;
-      const isBottom = config?.position === 'bottom';
 
+    get activityBarConfig() {
+      const { size, position, hideSettings } = this.configurationService.getValue('apc.activityBar') || {};
+      const factor = browser.getZoomFactor();
+      const isHorizontal = !!position;
       return {
-        position: config.position,
-        hideSettings: !!config.hideSettings,
-        orientation: isBottom ? 0 : 1,
-        size
+        position,
+        hideSettings,
+        isHorizontal,
+        orientation: isHorizontal ? 0 : 1,
+        size: (size ?? 48) * factor,
+        isEnabled: !!size
       };
     }
+
     get statusBarConfig() {
-      const config = this.configurationService.getValue('apc.statusBar') || {};
+      const { fontSize, height, position } = this.configurationService.getValue('apc.statusBar') || {};
       const factor = browser.getZoomFactor();
-      const height = config.height ?? 22;
-      const fontSize = config.fontSize ?? 12;
       return {
-        position: config.position || 'bottom',
-        height: height * factor,
-        fontSize: fontSize * factor
+        position: position || 'bottom',
+        height: (height ?? 22) * factor,
+        fontSize: (fontSize ?? 12) * factor,
+        isEnabled: !!fontSize
       };
+    }
+
+    updateStatusBar() {
+      if (!this.layout?.isVisible(this.Parts?.STATUSBAR_PART)) { return; }
+
+      const { position, height, isEnabled } = this.statusBarConfig;
+      this.statusBarPartView.minimumHeight = isEnabled ? height : this.statusBarPartView.minimumHeight;
+      this.statusBarPartView.maximumHeight = isEnabled ? height : this.statusBarPartView.minimumHeight;
+
+      const isTop = position.includes('top');
+      const isEditor = position.includes('editor');
+
+      if (isEditor) {
+        const order = isTop ? 0 : 1;
+        this.workbenchGrid.moveView(this.statusBarPartView, this.statusBarPartView.minimumHeight, this.editorPartView, order);
+
+        const panelPosition = this.layout.getPanelPosition(); // enum Position { LEFT, RIGHT, BOTTOM }
+        if (position === 'editor-bottom' && panelPosition === 2) {
+          this.workbenchGrid.moveView(this.panelPartView, this.workbenchGrid.getViewSize(this.panelPartView), this.editorPartView, 1);
+        }
+
+      } else {
+        this.workbenchGrid.moveViewTo(this.statusBarPartView, [isTop ? 0 : -1]);
+      }
+    }
+
+    updateActivityBar(_isHorizontal) {
+      if (!this.layout?.isVisible(this.Parts.ACTIVITYBAR_PART)) { return; }
+
+      const { size, position, ...config } = this.activityBarConfig;
+
+      const isSideBarVisible = this.layout.isVisible(this.Parts.SIDEBAR_PART);
+      const isHorizontal = typeof _isHorizontal === 'boolean' ? _isHorizontal : config.isHorizontal;
+      this.activitybarPartView.minimumWidth = isHorizontal ? 0 : size;
+      this.activitybarPartView.maximumWidth = isHorizontal ? isSideBarVisible ? Infinity : 0 : size;
+      this.activitybarPartView.minimumHeight = isHorizontal && isSideBarVisible ? size : 0;
+      this.activitybarPartView.maximumHeight = isHorizontal && isSideBarVisible ? size : Infinity;
+
+      const sideBarPosition = this.layout.getSideBarPosition();
+
+      const newPosition = position === 'top' ? 0 : 1;
+      isHorizontal && isSideBarVisible ?
+        this.workbenchGrid.moveView(this.activitybarPartView, this.activitybarPartView.minimumWidth, this.sidebarPartView, newPosition) :
+        this.workbenchGrid.moveViewTo(this.activitybarPartView, [this.statusBarConfig.position === 'top' ? 3 : 2, sideBarPosition ? -1 : 0]);
+
+      this.layout.container.classList[sideBarPosition ? 'add' : 'remove']('sidebar-right');
+
+      const container = this.activitybarPartView.getContainer();
+      container?.querySelectorAll('div.monaco-action-bar').forEach(el => el.classList[isHorizontal ? 'remove' : 'add']('vertical'));
+
+    };
+
+    hideActivityBarSettings() {
+      const content = this.activitybarPartView?.getContainer()?.querySelector('.content');
+
+      if (!this.globalActivitiesContainer) { this.globalActivitiesContainer = content?.childNodes[1]; };
+      const isConnected = this.globalActivitiesContainer?.isConnected;
+      const { hideSettings } = this.activityBarConfig;
+
+      if (hideSettings && isConnected) { content?.removeChild(this.globalActivitiesContainer); }
+      if (!hideSettings && !isConnected) { content?.appendChild(this.globalActivitiesContainer); }
     }
 
     init() {
       const self = this;
 
-      const titleBarStyle = this.configurationService.getValue('window.titleBarStyle');
-      const electronConfig = this.configurationService.getValue('apc.electron') || {};
-      if (electronConfig.titleBarStyle) { document.body.classList.add(`inline-title-bar`); }
+      const isNativeTitleBarStyle = this.configurationService.getValue('window.titleBarStyle') === 'native';
 
-      require(['vs/workbench/browser/parts/statusbar/statusbarPart'], function (statusbarPart) {
-        utils.override(statusbarPart.StatusbarPart, isCodium ? 'registerListeners' : 'ab', function (original) {
-          self.updateStatusBar = () => {
-            const workbenchGrid = isCodium ? self.layout.workbenchGrid : self.layout.s;
-            const { position, height } = self.statusBarConfig;
-            this.minimumHeight = height;
-            this.maximumHeight = height;
+      this.electronConfig = this.configurationService.getValue('apc.electron') || {};
 
-            if (position.includes('editor')) {
-              const editorPartView = isCodium ? self.layout.editorPartView : self.layout.D;
-              const panelPartView = isCodium ? self.layout.panelPartView : self.layout.z;
-
-              const order = position.includes('top') ? 0 : 1;
-              workbenchGrid.moveView(this, height, editorPartView, order);
-
-              const panelPosition = self.layout.getPanelPosition(); // enum Position { LEFT, RIGHT, BOTTOM }
-              if (position === 'editor-bottom' && panelPosition === 2) {
-                workbenchGrid.moveView(panelPartView, workbenchGrid.getViewSize(panelPartView), editorPartView, 1);
-              }
-
-            } else {
-              workbenchGrid.moveViewTo(this, [position.includes('top') ? 0 : -1]);
-            }
-          };
-
-          self.configurationService.onDidChangeConfiguration(e => e.affectsConfiguration('apc.statusBar') && self.updateStatusBar());
-
-          original();
-        });
-      }, error);
+      if (this.electronConfig.titleBarStyle) { document.body.classList.add(`inline-title-bar`); }
+      if (this.electronConfig.frame === false) { document.body.classList.add(`frameless-title-bar`); }
 
       require(['vs/base/browser/ui/list/listView'], function (listView) {
         listView.ListView = class ListView extends listView.ListView {
           constructor(container, virtualDelegate, renderers, options) {
-            const key = isCodium ? 'templateId' : 'c';
-            if (!renderers.find(renderer => renderer[key].match(/(notification|replGroup|rm|extension|settings)/))) {
-              virtualDelegate.getHeight = (element) => element?.element?.placeholder || element?.element?.type === 'actionButton' ? self.listRowConfig.height * 1.5 : self.listRowConfig.height;
+            if (!renderers.find(renderer => renderer.templateId?.match(/(notification|replGroup|rm|extension|settings)/))) {
+              const originalDelegate = getProperty(virtualDelegate, 'getHeight');
+              virtualDelegate.getHeight = function (...args) {
+                return self.listRowConfig.isEnabled ?
+                  args[0]?.element?.placeholder || args[0]?.element?.type === 'actionButton' ? self.listRowConfig.height * 1.5 : self.listRowConfig.height :
+                  originalDelegate?.value?.call(this, ...args);
+              };
               self.configurationService.onDidChangeConfiguration(e => {
                 if (e.affectsConfiguration('apc.listRow')) {
                   const height = self.listRowConfig.height;
-                  (isCodium ? this.items : this.d)?.forEach((e, i) => this.updateElementHeight(i, height));
+                  new Array(this.length ?? 0).fill(undefined).forEach((e, i) => this.updateElementHeight(i, height));
                 }
               });
+
             }
             super(...arguments);
           }
         };
       }, error);
 
+      require(['vs/workbench/services/layout/browser/layoutService'], layoutService => (self.Parts = layoutService.Parts), error);
+
       require(['vs/workbench/browser/layout'], function (layout) {
-
-        utils.override(layout.Layout, isCodium ? 'setSideBarPosition' : 'kb', function (original, args) {
-          original();
-          self.updateActivityBar();
-        });
-
-        utils.override(layout.Layout, isCodium ? 'setSideBarHidden' : 'Ib', function (original, args) {
-          original();
-          self.updateActivityBar();
-        });
-
-        utils.override(layout.Layout, isCodium ? 'setActivityBarHidden' : 'Fb', function (original, args) {
-          original(...args);
-          this.container.classList.toggle('no-activity-bar');
-        });
-
-        utils.override(layout.Layout, isCodium ? 'restoreParts' : 'yb', function (original) {
-          original();
-          self.updateActivityBar();
-          self.updateStatusBar();
-          self.hideActivityBarSettings();
-        });
-
-        utils.override(layout.Layout, isCodium ? 'getInitialEditorsState' : 'tb', function (original) {
+        utils.override(layout.Layout, 'registerPart', function (original, [part]) {
           original();
           self.layout = this;
+          switch (part.getId()) {
+            case self.Parts.STATUSBAR_PART:
+              self.statusBarPartView = part;
+              break;
+            case self.Parts.EDITOR_PART:
+              self.editorPartView = part;
+              break;
+            case self.Parts.PANEL_PART:
+              self.panelPartView = part;
+              break;
+            case self.Parts.SIDEBAR_PART:
+              self.sidebarPartView = part;
+              break;
+            case self.Parts.AUXILIARYBAR_PART:
+              self.auxiliarybarPartView = part;
+              break;
+            case self.Parts.ACTIVITYBAR_PART:
+              self.activitybarPartView = part;
+              break;
+            case self.Parts.TITLEBAR_PART:
+              self.titlebarPartView = part;
+              break;
+            case self.Parts.BANNER_PART:
+              self.bannerPartView = part;
+              break;
+            default:
+              console.log(part);
+              break;
+          }
         });
+
+        // !! only here
+        // const isCodium = platform.globals.location?.href.includes('VSCodium');
+        // utils.override(layout.Layout, isCodium ? 'setSideBarPosition' : 'kb', function (original, args) {
+        //   console.log('ss');
+        //   const isTopStatusBarPosition = self.statusBarConfig.position === 'top';
+        //   isTopStatusBarPosition && self.workbenchGrid.moveViewTo(self.statusBarPartView, [-1]);
+        //   original();
+        //   isTopStatusBarPosition && self.workbenchGrid.moveViewTo(self.statusBarPartView, [0]);
+        //   self.updateActivityBar();
+        // });
+
+        utils.override(layout.Layout, 'toggleZenMode', function (original) {
+          const { isHorizontal } = self.activityBarConfig;
+          isHorizontal && self.updateActivityBar(false);
+          original();
+          isHorizontal && self.updateActivityBar();
+        });
+
+        utils.override(layout.Layout, 'setPartHidden', function (original, [hidden, part]) {
+          if (part !== self.Parts.SIDEBAR_PART) { return original(); }
+          const { isHorizontal } = self.activityBarConfig;
+          isHorizontal && self.updateActivityBar(false);
+          original();
+          self.updateActivityBar();
+        });
+
+        utils.override(layout.Layout, 'setPanelPosition', function (original, args) {
+          original();
+          self.updateStatusBar();
+        });
+
       }, error);
 
-      require(['vs/workbench/browser/parts/compositePart'], function (compositePart) {
-        if (titleBarStyle === 'native') {
-          utils.override(compositePart.CompositePart, isCodium ? 'createTitleArea' : 'G', function (original) {
-            const inlineTitle = original();
-            if (['workbench.parts.sidebar', 'workbench.parts.auxiliarybar'].includes(isCodium ? this.id : this.C)) {
-              inlineTitle.addEventListener('dblclick', () => self.nativeHostService.handleTitleDoubleClick());
-            }
-            if (electronConfig.titleBarStyle && (isCodium ? this.id : this.C) === 'workbench.parts.sidebar') {
-              self.titlebarPlaceholder = document.createElement('div');
-              self.titlebarPlaceholder.classList.add('inline-titlebar-placeholder');
-              inlineTitle.prepend(self.titlebarPlaceholder);
-            }
-            return inlineTitle;
+      const isInline = isNativeTitleBarStyle && (self.electronConfig.titleBarStyle || self.electronConfig.frame === false);
+      if (isInline) {
+        require(['vs/workbench/browser/parts/sidebar/sidebarPart'], function (sidebarPart) {
+          utils.override(sidebarPart.SidebarPart, "create", function (original, [parent]) {
+            original();
+            const inlineTitle = parent.querySelector('.title');
+            inlineTitle?.addEventListener('dblclick', () => {
+              self.activityBarConfig.position !== 'top' && self.statusBarConfig.position !== 'top' && self.nativeHostService.handleTitleDoubleClick();
+            });
+            const titlebarPlaceholder = document.createElement('div');
+            titlebarPlaceholder.classList.add('inline-titlebar-placeholder');
+            inlineTitle?.prepend(titlebarPlaceholder);
           });
-        }
-      }, error);
+        }, error);
+
+        require(['vs/workbench/browser/parts/auxiliarybar/auxiliaryBarPart'], function (auxiliaryBarPart) {
+          utils.override(auxiliaryBarPart.AuxiliaryBarPart, "create", function (original, [parent]) {
+            original();
+            parent?.querySelector('.title')?.addEventListener('dblclick', () => {
+              self.statusBarConfig.position !== 'top' && self.nativeHostService.handleTitleDoubleClick();
+            });
+          });
+        }, error);
+
+        require(['vs/workbench/browser/parts/statusbar/statusbarPart'], function (statusbarPart) {
+          utils.override(statusbarPart.StatusbarPart, "create", function (original, [parent]) {
+            original();
+            parent?.addEventListener('dblclick', () => {
+              self.statusBarConfig.position.includes('top') && self.nativeHostService.handleTitleDoubleClick();
+            });
+          });
+        }, error);
+        require(['vs/base/browser/ui/scrollbar/scrollableElement'], function (scrollableElement) {
+          scrollableElement.ScrollableElement = class ScrollableElement extends scrollableElement.ScrollableElement {
+            constructor(element, options) {
+              super(...arguments);
+              if (self.noTabsNode && !self.noTabsNode.isConnected) {
+                document.body.querySelector('.title.tabs')?.classList.add('inline');
+              }
+              else if (!self.noTabsNode && element.classList.contains('tabs-container')) {
+                const tabsScrollbar = element.parentElement;
+                self.noTabsNode = document.createElement('div');
+                self.noTabsNode.classList.add('no-tabs');
+                self.noTabsNode.addEventListener('dblclick', e => {
+                  e.stopPropagation();
+                  self.nativeHostService.handleTitleDoubleClick();
+                });
+                tabsScrollbar.appendChild(self.noTabsNode);
+                setTimeout(() => {
+                  element.parentElement?.parentElement?.parentElement?.classList.add('inline');
+                }, 0);
+              }
+            }
+          };
+        }, error);
+      }
 
       require(['vs/workbench/browser/parts/activitybar/activitybarPart'], function (activitybarPart) {
-
-        utils.override(activitybarPart.ActivitybarPart, 'layout', function (original, args) {
-          original();
-          if (!self.configurationService.getValue('workbench.activityBar.visible')) { return; }
-          const { orientation, size, hideSettings } = self.activityBarConfig;
-          const [width, height] = args;
-
-          const contentAreaSize = isCodium ? this.layoutContents(width, height)?.contentSize : this.L(width, height)?.contentSize;
-          let availableSize = orientation ? contentAreaSize?.height : contentAreaSize?.width;
-
-          if (this.homeBarContainer) { availableSize -= orientation ? this.homeBarContainer.clientHeight : this.homeBarContainer.clientWidth; }
-          if (isCodium ? this.menuBarContainer : this.R) { availableSize -= orientation ? isCodium ? this.menuBarContainer.clientHeight : this.R.clientHeight : isCodium ? this.menuBarContainer.clientWidth : this.R.clientWidth; }
-          if (!hideSettings) { availableSize -= (isCodium ? this.globalActivityActionBar.viewItems.length : this.X.viewItems.length) * size; }// adjust width for global actions showing 
-          const newDimension = new dom.Dimension(availableSize, orientation ? height : width);
-          isCodium ? this.compositeBar?.layout(newDimension) : this.S?.layout(newDimension);
-        });
-
-        utils.override(activitybarPart.ActivitybarPart, isCodium ? 'createContentArea' : 'I', function (original, args) {
-          const res = original();
-
-          if (!self.layout.isVisible('workbench.parts.activitybar')) { self.layout.container.classList.add('no-activity-bar'); }
-
-          self.updateActivityBar = () => {
-            const { position, size } = self.activityBarConfig;
-            const workbenchGrid = isCodium ? self.layout.workbenchGrid : self.layout.s;
-            const sideBarPartView = isCodium ? self.layout.sideBarPartView : self.layout.y;
-
-            const isBottom = position === 'bottom';
-            const isSideBarVisible = (isCodium ? !self.layout.stateModel.getRuntimeValue({ name: 'sideBar.hidden' }) : !self.layout.bb.getRuntimeValue({ name: 'sideBar.hidden' }));
-
-            this.minimumWidth = isBottom ? 0 : size;
-            this.maximumWidth = isBottom ? isSideBarVisible ? Infinity : 0 : size;
-            this.minimumHeight = isBottom && isSideBarVisible ? size : 0;
-            this.maximumHeight = isBottom && isSideBarVisible ? size : Infinity;
-
-            this.element?.querySelectorAll('div.monaco-action-bar').forEach(el => el.classList[isBottom ? 'remove' : 'add']('vertical'));
-            isBottom && isSideBarVisible ?
-              workbenchGrid.moveView(this, sideBarPartView.minimumHeight, sideBarPartView, 1) :
-              workbenchGrid.moveViewTo(this, [2, 0]);
-
-            self.layout.layout();
-          };
-
-          self.configurationService.onDidChangeConfiguration(e => e.affectsConfiguration('apc.activityBar') && self.updateActivityBar());
-
-          // 
-          if (electronConfig.titleBarStyle) {
-            const parent = args[0];
+        if (isInline) {
+          utils.override(activitybarPart.ActivitybarPart, "create", function (original, [parent]) {
+            original();
+            if (!self.layout.isVisible(self.Parts.ACTIVITYBAR_PART)) { self.layout.container.classList.add('no-activity-bar'); }
             const placeholder = document.createElement('div');
             placeholder.classList.add('activity-bar-placeholder');
             parent.prepend(placeholder);
-          }
-
-          // show/hidde activity bar settings
-          self.hideActivityBarSettings = () => {
-            const globalActivitiesContainer = isCodium ? this.globalActivitiesContainer : this.Y;
-            const isConnected = globalActivitiesContainer.isConnected;
-            const { hideSettings } = self.activityBarConfig || {};
-
-            const content = isCodium ? this.content : this.P;
-            if (hideSettings && isConnected) { content.removeChild(globalActivitiesContainer); }
-            if (!hideSettings && !isConnected) { content.appendChild(globalActivitiesContainer); }
-          };
-          self.configurationService.onDidChangeConfiguration(e => e.affectsConfiguration('apc.activityBar') && self.hideActivityBarSettings());
-          return res;
-        });
-      }, error);
-
-      require(['vs/workbench/browser/parts/editor/tabsTitleControl'], function (titleControl) {
-        utils.override(titleControl.TabsTitleControl, isCodium ? 'create' : 'P', function (original) {
-          original();
-          // !! border
-          const tabsScrollbar = isCodium ? this.tabsScrollbar.getDomNode() : this.rb.getDomNode();
-          const node = document.createElement('div');
-          node.classList.add('no-tabs');
-          node.addEventListener('dblclick', e => {
-            e.stopPropagation();
-            self.nativeHostService.handleTitleDoubleClick();
+            const content = parent.querySelector('.content');
+            content?.addEventListener('dblclick', () => {
+              self.activityBarConfig.position === 'top' && self.statusBarConfig.position !== 'top' && self.nativeHostService.handleTitleDoubleClick();
+            });
           });
-          tabsScrollbar.style.display = 'flex';
-          tabsScrollbar.appendChild(node);
+        }
+
+        utils.override(activitybarPart.ActivitybarPart, "setVisible", function (original) {
+          isInline && self.layout.container.classList.toggle('no-activity-bar');
+          self.updateActivityBar();
+          return original();
         });
+
+        utils.override(activitybarPart.ActivitybarPart, 'layout', function (original, [width, height]) {
+          original();
+          const { orientation, size, position } = self.activityBarConfig;
+          // if (orientation === 1 || !self.layout.isVisible(self.Parts.ACTIVITYBAR_PART) || !width || !height) { return original(); }
+          if (orientation === 1 || !self.layout.isVisible(self.Parts.ACTIVITYBAR_PART)) { return; }
+
+          const padding = position === 'top' && self.electronConfig.titleBarStyle && self.statusBarConfig.position !== 'top' ? 60 : 0;
+          const menuBarContainer = this.getContainer().querySelector('.menubar');
+          const menubar = menuBarContainer?.clientWidth ?? 0;
+
+          const viewItems = (self.globalActivityActionBar?.viewItems?.length ?? 0) * size;
+
+          const availableSize = width - viewItems - menubar - padding;
+          self.activityBarCompositeBar?.layout(new dom.Dimension(height, availableSize));
+        });
+
+        utils.override(activitybarPart.ActivitybarPart, "updateStyles", function (original) {
+          original();
+          const color = self.themeService.getColorTheme().getColor('editorGroupHeader.border')?.toString(); // ??
+          self.layout.container.style.setProperty('--title-border-bottom-color', color);
+          const { isHorizontal } = self.activityBarConfig;
+          const container = this.getContainer();
+          container?.querySelectorAll('div.monaco-action-bar').forEach(el => el.classList[isHorizontal ? 'remove' : 'add']('vertical'));
+        });
+
       }, error);
+
+      require(['vs/base/browser/ui/grid/grid'], function (grid) {
+        const orgDeserialize = grid.SerializableGrid.deserialize;
+        grid.SerializableGrid = class SerializableGrid extends grid.SerializableGrid {
+          static deserialize(json, deserializer, options) {
+            const grid = orgDeserialize(json, deserializer, options);
+            if (grid.element.querySelector('.monaco-grid-view .monaco-grid-view')) {
+              self.workbenchGrid = grid;
+            }
+            else {
+              self.editorGrid = grid;
+            }
+            return grid;
+          }
+        };
+      }, error);
+
+      require(['vs/base/browser/ui/actionbar/actionbar'], function (actionbar) {
+        actionbar.ActionBar = class ActionBar extends actionbar.ActionBar {
+          constructor(container) {
+            super(...arguments);
+            // the only actionbar that has no class
+            if (!container.className) { self.globalActivityActionBar = this; }
+          }
+        };
+      }, error);
+
+      require(['vs/workbench/browser/parts/compositeBar'], function (compositeBar) {
+        compositeBar.CompositeBar = class CompositeBar extends compositeBar.CompositeBar {
+          constructor(items, options) {
+            super(...arguments);
+            if (options.getDefaultCompositeId() === 'workbench.view.explorer') {
+              self.activityBarCompositeBar = this;
+            }
+          }
+        };
+      }, error);
+
+
 
       require(['vs/workbench/contrib/files/browser/views/openEditorsView'], function (openEditorsView) {
-        utils.override(openEditorsView.OpenEditorsView, isCodium ? 'layoutBody' : 'U', function (original) {
-          original();
-          const items = (isCodium ? this.list.anchor.length : this.j.c.c) + 1;
-          const parentNode = isCodium ? this.list.view.domNode.parentNode.parentNode.parentNode : this.j.k.domNode.parentNode.parentNode.parentNode;
-          parentNode.style.height = items * self.listRowConfig.height + 'px';
-        });
+        openEditorsView.OpenEditorsView = class OpenEditorsView extends openEditorsView.OpenEditorsView {
+          constructor(a, b, c, d, editorGroupService) {
+            super(...arguments);
+            self.openEditorsView = this;
+            self.editorGroupService = editorGroupService;
 
-        utils.override(openEditorsView.OpenEditorsView, isCodium ? 'onConfigurationChange' : 'hc', function (original, [e]) {
-          original();
-          if (e.affectsConfiguration('apc.listRow')) {
-            isCodium ? this.updateSize() : this.ic();
-            isCodium ? this.listRefreshScheduler?.schedule() : this.f?.schedule();
+            const getMinimumBodySize = Object.getOwnPropertyDescriptor(this.__proto__.__proto__.__proto__.__proto__, 'minimumBodySize')?.get;
+            const setMinimumBodySize = Object.getOwnPropertyDescriptor(this.__proto__.__proto__.__proto__.__proto__, 'minimumBodySize')?.set;
+            Object.defineProperty(this, 'minimumBodySize', {
+              get() {
+                return getMinimumBodySize.call(this);
+              },
+              set(num) {
+                if (self.listRowConfig.isEnabled) {
+                  const visibleOpenEditors = self.configurationService.getValue('explorer.openEditors.visible') ?? 1;
+                  const size = this.orientation === 0 ? Math.min(Math.max(visibleOpenEditors, 1), this._elementCount) * self.listRowConfig.height : 170;
+                  setMinimumBodySize.call(this, size);
+                }
+                else {
+                  setMinimumBodySize.call(this, num);
+                }
+              },
+              configurable: true,
+            });
           }
-        });
 
-        utils.override(openEditorsView.OpenEditorsView, isCodium ? 'getMaxExpandedBodySize' : 'lc', function (original) {
-          const minVisibleOpenEditors = self.configurationService.getValue('explorer.openEditors.minVisible') ?? 1;
-          const containerModel = isCodium ?
-            this.viewDescriptorService.getViewContainerModel(this.viewDescriptorService.getViewContainerByViewId(this.id)) :
-            this.xb.getViewContainerModel(this.xb.getViewContainerByViewId(this.id));
+          get _elementCount() {
+            return self.editorGroupService.groups.map(g => g.count)
+              .reduce((first, second) => first + second, this.showGroups ? this.editorGroupService.groups.length : 0);
+          }
+        };
 
-          if (containerModel.visibleViewDescriptors.length <= 1) { return Number.POSITIVE_INFINITY; }
-          return Math.max(isCodium ? this.elementCount : this.kc, minVisibleOpenEditors) * self.listRowConfig.height;
-        });
-
-        utils.override(openEditorsView.OpenEditorsView, isCodium ? 'computeMinExpandedBodySize' : 'nc', function (original, [visibleOpenEditors]) {
-          const itemsToShow = Math.min(Math.max(visibleOpenEditors, 1), isCodium ? this.elementCount : this.kc);
-          return itemsToShow * self.listRowConfig.height;
-        });
       }, function (error) { });
 
 
@@ -280,9 +415,24 @@ function customize(exports, utils, configuration, browser, platform, electron, d
       browser.onDidChangeFullscreen(this.update.bind(this));
 
       this.configurationService.onDidChangeConfiguration(e => {
-        if (e.affectsConfiguration('apc.listRow') || e.affectsConfiguration('apc.header') || e.affectsConfiguration('apc.activityBar') || e.affectsConfiguration('apc.statusBar') || e.affectsConfiguration('apc.stylesheet')) {
-          this.update();
+        if (e.affectsConfiguration('workbench.sideBar.location')) {
+          const isTopStatusBarPosition = this.statusBarConfig.position === 'top';
+          isTopStatusBarPosition && this.workbenchGrid.moveViewTo(this.statusBarPartView, [-1]);
+          queueMicrotask(() => {
+            isTopStatusBarPosition && this.workbenchGrid.moveViewTo(this.statusBarPartView, [0]);
+            this.updateActivityBar();
+          });
         }
+        // if (e.affectsConfiguration('apc.listRow')) {}
+        // if (e.affectsConfiguration('apc.header')) {}
+        if (e.affectsConfiguration('apc.activityBar')) {
+          this.updateActivityBar();
+          this.hideActivityBarSettings();
+        }
+        if (e.affectsConfiguration('apc.statusBar')) {
+          this.updateStatusBar();
+        }
+
         if (e.affectsConfiguration('apc.stylesheet')) {
           if (!this.customStyle) {
             const style = document.createElement('style');
@@ -306,6 +456,8 @@ function customize(exports, utils, configuration, browser, platform, electron, d
               .join('\n');
           }
         }
+
+        Array.from(e.affectedKeys.values()).find(key => key.startsWith('apc.')) && this.update();
       });
 
       this.update();
@@ -316,10 +468,21 @@ function customize(exports, utils, configuration, browser, platform, electron, d
       const headerConfig = this.headerConfig;
       const activityBarConfig = this.activityBarConfig;
       const statusBarConfig = this.statusBarConfig;
-      const electronConfig = this.configurationService.getValue('apc.electron') || {};
-      const { x = 10 } = electronConfig?.trafficLightPosition || {};
+      const electronConfig = this.electronConfig?.trafficLightPosition || {};
+      const isActivityBarVisible = this.layout?.isVisible(this.Parts.ACTIVITYBAR_PART) ?? true;
+      const sidebarTitlebarConfig = this.sidebarTitlebarConfig;
 
-      document.body.classList[activityBarConfig.position === 'bottom' ? 'add' : 'remove']('activity-bar-at-bottom');
+      document.body.classList[statusBarConfig.position === 'top' ? 'add' : 'remove']('statusbar-top');
+      document.body.classList[statusBarConfig.position === 'editor-top' ? 'add' : 'remove']('statusbar-editor-top');
+
+      document.body.classList[isActivityBarVisible && activityBarConfig.position ? 'add' : 'remove']('horizontal-activitybar');
+      document.body.classList[isActivityBarVisible && activityBarConfig.position === 'bottom' ? 'add' : 'remove']('activitybar-bottom');
+      document.body.classList[isActivityBarVisible && activityBarConfig.position === 'top' ? 'add' : 'remove']('activitybar-top'); // ifVisible
+      document.body.classList[isActivityBarVisible && activityBarConfig.isEnabled ? 'add' : 'remove']('custom-activitybar');
+      document.body.classList[headerConfig.isEnabled ? 'add' : 'remove']('custom-header');
+      document.body.classList[sidebarTitlebarConfig.isEnabled ? 'add' : 'remove']('custom-sidebar-titlebar');
+      document.body.classList[listRowConfig.isEnabled ? 'add' : 'remove']('custom-list-row');
+      document.body.classList[statusBarConfig.isEnabled ? 'add' : 'remove']('custom-statusbar');
 
       if (!this.styleTextNode) {
         const style = document.createElement('style');
@@ -334,15 +497,34 @@ function customize(exports, utils, configuration, browser, platform, electron, d
         --row-font-size: ${listRowConfig.fontSize}px;
         --header-height: ${headerConfig.height}px;
         --header-font-size: ${headerConfig.fontSize}px;
+        --titlebar-height: ${sidebarTitlebarConfig.height}px;
+        --titlebar-font-size: ${sidebarTitlebarConfig.fontSize}px;
         --activity-bar-action-size: ${activityBarConfig.size}px;
         --status-bar-font-size: ${statusBarConfig.fontSize}px;
-        --traffic-X: ${x}px;
+        --traffic-X: ${electronConfig.x ?? 10}px;
         `;
     }
   }
 
+  let customizeService;
+
+  utils.override(workbench.Workbench, "startup", function (original, [parent]) {
+    const res = original();
+    customizeService.updateActivityBar();
+    customizeService.updateStatusBar();
+    customizeService.hideActivityBarSettings();
+    return res;
+  });
+
   exports.run = function (instantiationService) {
-    instantiationService.createInstance(utils.decorate([utils.param(0, configuration.IConfigurationService), utils.param(1, electron.INativeHostService)], Customize));
+    customizeService = instantiationService.createInstance(utils.decorate([
+      utils.param(0, configuration.IConfigurationService),
+      utils.param(1, electron.INativeHostService),
+      utils.param(2, themeService.IThemeService),
+    ], Customize));
+
+    // utils.param(3, storage.IStorageService),
+    // utils.param(2, workspace.IWorkspaceContextService),
   };
 }
 define([
@@ -352,5 +534,9 @@ define([
   'vs/base/browser/browser',
   'vs/base/common/platform',
   'vs/platform/native/common/native',
-  'vs/base/browser/dom'
+  'vs/base/browser/dom',
+  'vs/platform/theme/common/themeService',
+  'vs/workbench/browser/workbench',
 ], customize);
+// 'vs/platform/storage/common/storage',
+// 'vs/platform/workspace/common/workspace'

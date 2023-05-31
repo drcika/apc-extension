@@ -10,16 +10,6 @@ define(['exports'], function (exports) {
     })(where.prototype[name]);
   };
 
-  exports.addStyleSheet = function (url) {
-    const head = document.getElementsByTagName('head')[0];
-    const link = document.createElement('link');
-    link.rel = 'stylesheet';
-    link.type = 'text/css';
-    link.href = url;
-    link.media = 'all';
-    head.appendChild(link);
-  };
-
   exports.decorate =
     (this && this.__decorate) ||
     function (decorators, target, key, desc) {

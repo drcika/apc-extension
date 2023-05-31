@@ -2,143 +2,88 @@ div.monaco-workbench {
   background-color: var(--background-color);
 }
 
-.extensions-viewlet>div.header {
-  padding-left: 11px;
-}
-
-.editor-container {
-  padding-top: 0.25rem;
-}
-
-.monaco-workbench .part {
-  height: 100%;
-}
-
-.monaco-workbench .part.sidebar>div.title {
-  padding: 0;
-}
-
-.monaco-editor .scroll-decoration,
-.monaco-workbench .part.editor>.content .editor-group-container>.title>.tabs-and-actions-container.tabs-border-bottom:after {
-  height: 0;
-}
-
-.monaco-workbench .part>.title>.title-actions a.action-label.codicon {
-  color: var(--vscode-icon-foreground)
-}
-
-/* scrollbars */
-.monaco-scrollable-element .scrollbar>.slider {
-  border-radius: 5px;
-}
-
-.monaco-scrollable-element .scrollbar.horizontal {
-  margin-bottom: -5px;
-}
-
-.monaco-scrollable-element .scrollbar.horizontal>.slider {
-  height: 5px !important;
-}
-
-.monaco-scrollable-element .scrollbar.vertical>.slider {
-  width: 5px !important;
-  margin-left: 5px;
-}
-
-/* list row */
-.scm-view .scm-editor-placeholder {
+.custom-list-row .scm-view .scm-editor-placeholder {
   font-size: var(--row-font-size) !important;
 }
 
-/* .quick-input-widget {
-  display: block !important;
-} */
-
-.quick-input-list .monaco-list-row,
-.monaco-workbench .monaco-list-row .codicon[class*=codicon-],
-.monaco-workbench .part>.content {
+.custom-list-row .quick-input-list .monaco-list-row,
+.custom-list-row .monaco-workbench .monaco-list-row .codicon[class*=codicon-],
+.custom-list-row .monaco-workbench .part>.content {
   font-size: var(--row-font-size);
 }
 
-.quick-input-list .monaco-list-row,
-.debug-viewlet .monaco-list-row,
-.scm-view .monaco-list-row,
-div.search-view .filematch,
-div.search-view .foldermatch,
-div.search-view .linematch,
-.scm-view .monaco-list-row .resource>.name>.monaco-icon-label>.actions .action-label.codicon {
+.custom-list-row .quick-input-list .monaco-list-row,
+.custom-list-row .debug-viewlet .monaco-list-row,
+.custom-list-row .scm-view .monaco-list-row,
+.custom-list-row div.search-view .filematch,
+.custom-list-row div.search-view .foldermatch,
+.custom-list-row div.search-view .linematch,
+.custom-list-row .scm-view .monaco-list-row .resource>.name>.monaco-icon-label>.actions .action-label.codicon {
   line-height: var(--row-height);
 }
 
-.customview-tree .monaco-tree .monaco-tree-row .custom-view-tree-node-item>.custom-view-tree-node-item-icon,
-.monaco-panel-view .panel>.panel-header>.actions .action-label.icon,
-.customview-tree .monaco-tree .monaco-tree-row .custom-view-tree-node-item>.custom-view-tree-node-item-icon,
-.monaco-pane-view .pane>.pane-header,
-.monaco-pane-view .pane>.pane-header>.actions .action-label.icon,
-.monaco-pane-view .pane>.pane-header>.actions .action-label.codicon {
+.custom-list-row .customview-tree .monaco-tree .monaco-tree-row .custom-view-tree-node-item>.custom-view-tree-node-item-icon,
+.custom-list-row .monaco-panel-view .panel>.panel-header>.actions .action-label.icon,
+.custom-list-row .customview-tree .monaco-tree .monaco-tree-row .custom-view-tree-node-item>.custom-view-tree-node-item-icon,
+.custom-list-row .monaco-pane-view .pane>.pane-header,
+.custom-list-row .monaco-pane-view .pane>.pane-header>.actions .action-label.icon,
+.custom-list-row .monaco-pane-view .pane>.pane-header>.actions .action-label.codicon {
   height: var(--row-height);
 }
 
-.customview-tree .monaco-list .monaco-list-row div.custom-view-tree-node-item,
-.customview-tree .monaco-tree .monaco-tree-row div.custom-view-tree-node-item,
-.explorer-viewlet .open-editor,
-.explorer-viewlet .editor-group,
-.explorer-viewlet .explorer-item,
-.explorer-viewlet .explorer-item::before {
+.custom-list-row .customview-tree .monaco-list .monaco-list-row div.custom-view-tree-node-item,
+.custom-list-row .customview-tree .monaco-tree .monaco-tree-row div.custom-view-tree-node-item,
+.custom-list-row .explorer-viewlet .open-editor,
+.custom-list-row .explorer-viewlet .editor-group,
+.custom-list-row .explorer-viewlet .explorer-item,
+.custom-list-row .explorer-viewlet .explorer-item::before {
   height: var(--row-height);
   line-height: var(--row-height);
 }
 
-.timeline-tree-view .monaco-list .monaco-list-row .custom-view-tree-node-item>div.custom-view-tree-node-item-icon,
-.customview-tree .monaco-list .monaco-list-row .custom-view-tree-node-item>.custom-view-tree-node-item-resourceLabel>div.custom-view-tree-node-item-icon,
-.monaco-list-rows div.monaco-icon-label:before,
-.search-view div.monaco-icon-label:before {
+.custom-list-row .timeline-tree-view .monaco-list .monaco-list-row .custom-view-tree-node-item>div.custom-view-tree-node-item-icon,
+.custom-list-row .customview-tree .monaco-list .monaco-list-row .custom-view-tree-node-item>.custom-view-tree-node-item-resourceLabel>div.custom-view-tree-node-item-icon,
+.custom-list-row .monaco-list-rows div.monaco-icon-label:before,
+.custom-list-row .search-view div.monaco-icon-label:before {
   background-size: var(--row-font-size);
   width: var(--row-font-size);
   height: var(--row-height);
 }
 
-.search-view div.monaco-icon-label:before {
+.custom-list-row .search-view div.monaco-icon-label:before {
   padding-right: calc(var(--row-font-size) * 0.3);
 }
 
-/* activity bar */
-.monaco-workbench .activitybar>.content :not(.monaco-menu)>.monaco-action-bar .action-item {
-  border-radius: 5px;
+/*  */
+.horizontal-activitybar.activitybar-top .monaco-workbench .activitybar.bordered {
+  border-bottom-style: solid;
+  border-bottom-width: 1px;
 }
 
-.monaco-workbench .monaco-action-bar:not(.vertical) a.action-label:not(.disabled):hover {
-  background-color: transparent;
-}
-
-.monaco-workbench .activitybar>.content :not(.monaco-menu)>.monaco-action-bar .action-item:hover {
-  background-color: var(--vscode-toolbar-hoverBackground);
-}
-
-.monaco-workbench .activitybar>.content :not(.monaco-menu)>.monaco-action-bar .action-item:hover .action-label:not(.codicon) {
-  background-color: var(--vscode-icon-foreground) !important;
-}
-
-.activity-bar-at-bottom .monaco-workbench .activitybar.left.bordered {
+.horizontal-activitybar.activitybar-bottom .monaco-workbench .activitybar.bordered {
   border-top-style: solid;
   border-top-width: 1px;
 }
 
-.activity-bar-at-bottom .monaco-workbench .part.activitybar {
+.horizontal-activitybar .monaco-workbench .part.activitybar {
   width: 100%;
 }
 
-.activity-bar-at-bottom .monaco-workbench .activitybar>.content {
+.horizontal-activitybar .monaco-workbench .activitybar>.content {
   flex-direction: row;
 }
 
-.monaco-workbench .activitybar>.content :not(.monaco-menu)>.monaco-action-bar .badge div.badge-content,
-.activity-bar-at-bottom .monaco-workbench .activitybar>.content .monaco-action-bar .badge .badge-content {
+.horizontal-activitybar .monaco-workbench .activitybar>.content .monaco-action-bar .badge .badge-content {
   right: 0;
+  top: 0;
+}
+
+.custom-activitybar:not(.horizontal-activitybar) .monaco-workbench .activitybar>.content :not(.monaco-menu)>.monaco-action-bar .badge div.badge-content {
+  right: calc(var(--activity-bar-action-size) / 6);
   top: calc(var(--activity-bar-action-size) / 2);
 }
 
-div.monaco-workbench div.activitybar>div.content div.monaco-action-bar ul.actions-container li.action-item a.action-label {
+.custom-activitybar div.monaco-workbench div.activitybar>div.content div.monaco-action-bar ul.actions-container li.action-item a.action-label {
   height: var(--activity-bar-action-size);
   width: var(--activity-bar-action-size);
   font-size: calc(var(--activity-bar-action-size) * 0.6);
@@ -146,130 +91,67 @@ div.monaco-workbench div.activitybar>div.content div.monaco-action-bar ul.action
   padding: 0;
 }
 
-body:not(.activity-bar-at-bottom) div.monaco-workbench div.activitybar>div.content div.monaco-action-bar ul.actions-container li.action-item {
+.custom-activitybar:not(.horizontal-activitybar) div.monaco-workbench div.activitybar>div.content div.monaco-action-bar ul.actions-container li.action-item {
   margin-top: 3px;
 }
 
-.activity-bar-at-bottom div.monaco-workbench div.activitybar>div.content div.monaco-action-bar ul.actions-container li.action-item {
+.horizontal-activitybar div.monaco-workbench div.activitybar>div.content div.monaco-action-bar ul.actions-container li.action-item {
   margin-left: 3px;
 }
 
-/* Inline Title bar / header */
-
-.monaco-action-bar .action-item .codicon,
-.monaco-action-bar li.action-item.menu-entry .action-label.icon,
-.part:not(.panel) .monaco-workbench .part>.title>.title-actions .action-label {
-  --size: calc(var(--header-font-size) * 1.25);
-  background-size: var(--size);
-  width: var(--size);
-  height: var(--size);
-  font-size: var(--size);
+.inline-title-bar:not(.horizontal-activitybar) .monaco-workbench:not(.fullscreen) .activitybar:not(.right) .content {
+  height: calc(100% - var(--titlebar-height)) !important;
+  width: calc(var(--activity-bar-action-size) - 1px) !important;
 }
 
-.tab .monaco-icon-description-container {
-  position: absolute;
-}
-
-.inline-title-bar:not(.activity-bar-at-bottom) .monaco-workbench:not(.fullscreen) .activitybar:not(.right) .content {
-  height: calc(100% - var(--header-height)) !important;
-}
-
-.monaco-workbench .part>.title>div.title-label {
-  line-height: var(--header-height);
-}
-
-.monaco-workbench .part.basepanel>.composite.title>.panel-switcher-container>.monaco-action-bar li.action-item {
-  height: 100%;
-  padding: 0;
-  margin-right: 6px;
-}
-
-.monaco-workbench .part.basepanel>.composite.title>.panel-switcher-container>.monaco-action-bar .action-item .active-item-indicator {
-  width: 100%;
-  left: 0;
-}
-
-div.monaco-workbench .part.editor>.content .editor-group-container>.title .tabs-container>div.tab.sizing-fit,
-div.monaco-workbench .part.editor>.content .editor-group-container>.title div.tabs-container>div.tab {
-  padding-left: 3px;
-  width: auto;
-}
-
-.monaco-workbench .part.basepanel>.composite.title>.panel-switcher-container>div.monaco-action-bar,
-.monaco-workbench .part.editor>.content .editor-group-container>.title div.tabs-container,
-.monaco-workbench .part.editor>.content .editor-group-container>.title div.tabs-container>div.tab,
-.monaco-workbench .part.editor>.content .editor-group-container>.title .editor-actions {
-  height: var(--header-height);
-  line-height: var(--header-height);
-}
-
-.monaco-workbench .part.basepanel>.composite.title>.panel-switcher-container>.monaco-action-bar .action-item.checked .action-label,
-.monaco-workbench .part.sidebar>.title>.title-label h2 {
-  line-height: var(--header-height);
-  font-size: var(--header-font-size)
-}
-
-.monaco-workbench .part.editor>.content .editor-group-container>.title .tabs-container>.tab>.tab-actions>.monaco-action-bar,
-.monaco-workbench .part.editor>.content .editor-group-container>.title .tabs-container>.tab>div.tab-actions {
-  margin: unset;
-  width: 20px;
-}
-
-.monaco-workbench .part.editor>.content .editor-group-container.active>.title .tabs-container>.tab>.tab-actions a.action-label.codicon {
-  --size: calc(var(--header-height) / 2);
-  font-size: var(--size);
-  width: var(--size);
-  height: var(--size);
-}
-
-.monaco-workbench .part.editor>.content .editor-group-container>.title div.monaco-icon-label:before {
-  padding-right: calc(var(--header-height) / 6);
-  background-size: calc(var(--header-height) / 2);
-}
-
-.monaco-workbench .part.activitybar {
+.custom-activitybar .monaco-workbench .part.activitybar {
   width: unset;
 }
 
-.inline-title-bar .monaco-workbench:not(.fullscreen) .inline-titlebar-placeholder {
+/*  */
+.inline-title-bar:not(.horizontal-activitybar):not(.activitybar-top):not(.statusbar-top) .monaco-workbench:not(.fullscreen) .inline-titlebar-placeholder {
   min-width: calc(var(--traffic-X) + 46px - var(--activity-bar-action-size));
 }
 
-body.activity-bar-at-bottom.inline-title-bar .monaco-workbench:not(.fullscreen) .inline-titlebar-placeholder,
+.inline-title-bar.statusbar-top .statusbar,
+.inline-title-bar.statusbar-editor-top .monaco-workbench.nosidebar:not(.sidebar-right):not(.fullscreen) .statusbar,
+.inline-title-bar.statusbar-editor-top .monaco-workbench.sidebar-right.noauxiliarybar:not(.fullscreen) .statusbar,
+.inline-title-bar:not(.statusbar-top) .monaco-workbench:not(.fullscreen) .auxiliarybar.left .composite.title,
+.inline-title-bar.activitybar-top:not(.statusbar-top) .monaco-workbench:not(.fullscreen) .activitybar.left .content .composite-bar {
+  padding-left: calc(var(--traffic-X) + 52px);
+}
+
+.activitybar-bottom.inline-title-bar .monaco-workbench:not(.sidebar-right):not(.fullscreen) .inline-titlebar-placeholder,
 .inline-title-bar .monaco-workbench.no-activity-bar .inline-titlebar-placeholder {
   min-width: calc(var(--traffic-X) + 46px);
 }
 
-body.inline-title-bar .monaco-workbench.nosidebar:not(.fullscreen) .tabs-and-actions-container {
+.inline-title-bar.statusbar-editor-top:not(.horizontal-activitybar) .monaco-workbench.nosidebar:not(.sidebar-right):not(.fullscreen) .statusbar,
+.inline-title-bar:not(.statusbar-top):not(.statusbar-editor-top) .monaco-workbench.nosidebar:not(.fullscreen):not(.sidebar-right) .inline .tabs-and-actions-container {
   padding-left: calc(var(--traffic-X) + 60px - var(--activity-bar-action-size));
 }
 
-body.inline-title-bar.activity-bar-at-bottom .monaco-workbench.nosidebar:not(.fullscreen) .tabs-and-actions-container,
-body.inline-title-bar .monaco-workbench.nosidebar.no-activity-bar:not(.fullscreen) .tabs-and-actions-container {
+.inline-title-bar.horizontal-activitybar:not(.statusbar-top):not(.statusbar-editor-top) .monaco-workbench.nosidebar:not(.sidebar-right):not(.fullscreen) .inline .tabs-and-actions-container,
+.inline-title-bar.activitybar-bottom:not(.statusbar-top):not(.statusbar-editor-top) .monaco-workbench.nosidebar:not(.sidebar-right):not(.fullscreen) .inline .tabs-and-actions-container,
+.inline-title-bar:not(.statusbar-top):not(.statusbar-editor-top) .monaco-workbench.nosidebar.no-activity-bar:not(.fullscreen) .inline .tabs-and-actions-container {
   padding-left: calc(var(--traffic-X) + 60px);
 }
 
-body:not(.activity-bar-at-bottom) .monaco-workbench div.activitybar.bordered:before {
+.inline-title-bar:not(.activitybar-bottom) .monaco-workbench div.activitybar.bordered.left:before {
   border-color: transparent;
 }
 
-body:not(.activity-bar-at-bottom) .monaco-workbench div.activitybar.bordered.left .content {
+.inline-title-bar:not(.horizontal-activitybar) .monaco-workbench div.activitybar.bordered.left .content {
   border-color: inherit;
   border-right-width: 1px;
   border-right-style: solid;
 }
 
-body:not(.activity-bar-at-bottom) .monaco-workbench div.activitybar.bordered.right .content {
-  border-color: inherit;
-  border-left-width: 1px;
-  border-left-style: solid;
-}
-
-body.activity-bar-at-bottom .monaco-workbench .activitybar>.content :not(.monaco-menu)>.monaco-action-bar .action-item.checked .active-item-indicator {
+body.horizontal-activitybar .monaco-workbench .activitybar>.content :not(.monaco-menu)>.monaco-action-bar .action-item.checked .active-item-indicator {
   border-bottom-color: var(--vscode-activityBar-activeBorder)
 }
 
-body.activity-bar-at-bottom .monaco-workbench .activitybar>.content :not(.monaco-menu)>.monaco-action-bar .action-item.checked .active-item-indicator:before {
+body.horizontal-activitybar .monaco-workbench .activitybar>.content :not(.monaco-menu)>.monaco-action-bar .action-item.checked .active-item-indicator:before {
   border-left: unset;
   border-bottom-style: solid;
   border-bottom-width: 2px;
@@ -280,40 +162,45 @@ body.activity-bar-at-bottom .monaco-workbench .activitybar>.content :not(.monaco
   height: 0;
 }
 
-body.inline-title-bar:not(.activity-bar-at-bottom) .activity-bar-placeholder {
-  height: var(--header-height);
-  /* border-bottom: 1px solid var(--header-border); */
+.inline-title-bar:not(.horizontal-activitybar):not(.statusbar-top) .activitybar.left .activity-bar-placeholder {
+  height: calc(var(--titlebar-height) - 1px);
+  border-bottom: 1px solid var(--title-border-bottom-color);
 }
 
-.monaco-workbench .part.editor>.content .editor-group-container>.title div.monaco-icon-label:before,
-.monaco-workbench .part>div.composite.title,
-.monaco-workbench .part>div.composite.title>div.title-actions {
-  height: calc(var(--header-height) + 1px);
-}
-
-.monaco-workbench .part.editor>.content .editor-group-container>.title .tabs-container>.tab .tab-label {
-  line-height: var(--header-height);
-  margin: unset;
-}
-
-.monaco-workbench .part.editor>.content .editor-group-container>.title .tabs-container>.tab .tab-label a.label-name {
-  font-size: var(--header-font-size);
-  display: flex;
-}
-
-/* Allow dragging on side-bar title... */
-.no-tabs {
+/*  */
+.frameless-title-bar:not(.statusbar-top):not(.statusbar-editor-top) .no-tabs,
+.inline-title-bar:not(.statusbar-top):not(.statusbar-editor-top) .no-tabs {
   -webkit-app-region: drag;
-  flex: 1
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
 }
 
-.monaco-workbench:not(.fullscreen) .auxiliarybar .composite.title,
-.monaco-workbench:not(.fullscreen) .sidebar .composite.title {
+.inline-title-bar .part.editor .editor-group-container .tabs-container>div,
+.frameless-title-bar .part.editor .editor-group-container .tabs-container>div {
+  z-index: 1;
+  /* position: relative; */
+}
+
+.frameless-title-bar.statusbar-top .monaco-workbench:not(.fullscreen) .statusbar,
+.frameless-title-bar.statusbar-editor-top .monaco-workbench:not(.fullscreen) .statusbar,
+.inline-title-bar.statusbar-top .monaco-workbench:not(.fullscreen) .statusbar,
+.inline-title-bar.statusbar-editor-top .monaco-workbench:not(.fullscreen) .statusbar,
+/**/
+.frameless-title-bar:not(.statusbar-top) .monaco-workbench:not(.fullscreen) .auxiliarybar .title-actions,
+.inline-title-bar:not(.statusbar-top) .monaco-workbench:not(.fullscreen) .auxiliarybar .title-actions,
+/**/
+.activitybar-top:not(.statusbar-top) .monaco-workbench:not(.fullscreen) .activitybar.left .content,
+/**/
+.frameless-title-bar:not(.activitybar-top):not(.statusbar-top) .monaco-workbench:not(.fullscreen) .sidebar .composite.title,
+.inline-title-bar:not(.activitybar-top):not(.statusbar-top) .monaco-workbench:not(.fullscreen) .sidebar .composite.title {
   -webkit-app-region: drag;
 }
 
-/* Inline titlebar, no tabs */
-.monaco-workbench .part.editor>.content div.editor-group-container.empty>div.tabs {
+.frameless-title-bar .monaco-workbench .part.editor>.content div.editor-group-container.empty>div.tabs.inline,
+.inline-title-bar .monaco-workbench .part.editor>.content div.editor-group-container.empty>div.tabs.inline {
   display: block;
   width: 100%;
   height: var(--header-height);
@@ -321,16 +208,184 @@ body.inline-title-bar:not(.activity-bar-at-bottom) .activity-bar-placeholder {
   top: 0;
 }
 
-.monaco-workbench .part.statusbar>.items-container>div.statusbar-item span.codicon {
+/*  */
+.statusbar-editor-top .monaco-workbench .part.statusbar.status-border-top:after,
+.statusbar-top .monaco-workbench .part.statusbar.status-border-top:after {
+  top: unset;
+  bottom: 0;
+}
+
+.custom-statusbar .monaco-workbench .part.statusbar>.items-container>div.statusbar-item span.codicon {
   font-size: calc(var(--status-bar-font-size) * 1.3);
 }
 
-.monaco-workbench .part.statusbar .statusbar-item-label {
+.custom-statusbar .monaco-workbench .part.statusbar .statusbar-item-label {
   font-size: var(--status-bar-font-size);
 }
 
-/* status bar */
-/* .monaco-workbench .part.statusbar>.items-container>.statusbar-item>a.statusbar-item-label {
-  font-size: 25px;
-  color: red !important;
-}  */
+/*  */
+.custom-sidebar-titlebar .auxiliarybar,
+.custom-sidebar-titlebar .sidebar {
+  height: 100%;
+}
+
+.custom-sidebar-titlebar .auxiliarybar content,
+.custom-sidebar-titlebar .sidebar content {
+  height: 100% !important;
+}
+
+.custom-sidebar-titlebar .monaco-workbench .part.basepanel>.composite.title>.panel-switcher-container>.monaco-action-bar .action-item.checked .action-label,
+.custom-sidebar-titlebar .monaco-workbench .part.sidebar>.title>.title-label h2 {
+  line-height: var(--titlebar-height);
+  font-size: var(--titlebar-font-size);
+}
+
+.custom-sidebar-titlebar .monaco-workbench .auxiliarybar>div.composite.title,
+.custom-sidebar-titlebar .monaco-workbench .auxiliarybar>div.composite.title>div.title-actions,
+.custom-sidebar-titlebar .monaco-workbench .sidebar>div.composite.title,
+.custom-sidebar-titlebar .monaco-workbench .sidebar>div.composite.title>div.title-actions {
+  height: var(--titlebar-height);
+}
+
+.custom-sidebar-titlebar .monaco-workbench .part.sidebar>.title>div.title-label {
+  line-height: var(--titlebar-height);
+}
+
+.custom-sidebar-titlebar .auxiliarybar .composite.title,
+.custom-sidebar-titlebar .sidebar .composite.title {
+  border-bottom: 1px solid var(--title-border-bottom-color);
+}
+
+/* :not(.extension-action) */
+.custom-sidebar-titlebar .auxiliarybar .title .monaco-action-bar .action-item .codicon,
+.custom-sidebar-titlebar .sidebar .title .monaco-action-bar .action-item .codicon {
+  --size: calc(var(--titlebar-font-size) * 1.25);
+  background-size: var(--size);
+  width: var(--size);
+  height: var(--size);
+  font-size: var(--size);
+}
+
+.custom-sidebar-titlebar .monaco-workbench .part.auxiliarybar>.composite.title>.panel-switcher-container>div.monaco-action-bar {
+  height: var(--titlebar-height);
+  line-height: var(--titlebar-height);
+}
+
+.monaco-workbench .part.editor>.content .editor-group-container>.title .tabs-container>.tab {
+  padding: 0 calc(var(--header-height) * 0.2);
+}
+
+.custom-header .monaco-workbench .part.panel>.composite.title>.panel-switcher-container>div.monaco-action-bar,
+.custom-header .monaco-workbench .part.editor>.content .editor-group-container>.title div.tabs-container,
+.custom-header .monaco-workbench .part.editor>.content .editor-group-container>.title div.tabs-container>div.tab,
+.custom-header .monaco-workbench .part.editor>.content .editor-group-container>.title .editor-actions {
+  height: var(--header-height);
+  line-height: var(--header-height);
+}
+
+.custom-header .monaco-workbench .part.panel>.composite.title>.panel-switcher-container>.monaco-action-bar li.action-item {
+  height: 100%;
+  padding: 0;
+  margin-right: 6px;
+}
+
+.custom-header .monaco-workbench .part.panel>.composite.title>.panel-switcher-container>.monaco-action-bar .action-item .active-item-indicator {
+  width: 100%;
+  left: 0;
+}
+
+.custom-header .part.panel .monaco-action-bar .action-item .codicon:not(.extension-action),
+.custom-header .part.editor .monaco-action-bar .action-item .codicon:not(.extension-action) {
+  --size: calc(var(--header-font-size) * 1.25);
+  background-size: var(--size);
+  width: var(--size);
+  height: var(--size);
+  font-size: var(--size);
+}
+
+.custom-header .monaco-workbench .part.editor>.content .editor-group-container>.title div.monaco-icon-label:before {
+  height: var(--header-height);
+  padding-right: calc(var(--header-height) / 6);
+  background-size: calc(var(--header-height) / 2);
+}
+
+.custom-header .monaco-workbench .part.editor>.content .editor-group-container>.title .tabs-container>.tab .tab-label {
+  line-height: var(--header-height);
+  margin: unset;
+}
+
+.custom-header .monaco-workbench .part.editor>.content .editor-group-container>.title .tabs-container>.tab .tab-label a.label-name {
+  font-size: var(--header-font-size);
+  display: flex;
+}
+
+.custom-header .monaco-workbench .part.editor>.content .editor-group-container>.title .tabs-container>.tab>.tab-actions>.monaco-action-bar,
+.custom-header .monaco-workbench .part.editor>.content .editor-group-container>.title .tabs-container>.tab>div.tab-actions {
+  width: calc(var(--header-height) * 0.6);
+}
+
+/* ?? */
+/* .monaco-action-bar li.action-item.menu-entry .action-label.icon,
+.part:not(.panel) .monaco-workbench .part>.title>.title-actions .action-label {
+  background-color: purple;
+  color: purple;
+  font-size: 30px;
+  width: 30px;
+  height: 30px;
+}
+
+.tab .monaco-icon-description-container {
+  position: absolute;
+  background-color: purple;
+  color: purple;
+} */
+
+/*  ---------- -------------- */
+
+/* .monaco-workbench .part.sidebar>div.title {
+  padding: 0;
+} */
+
+/* .monaco-editor .scroll-decoration,
+.monaco-workbench .part.editor>.content .editor-group-container>.title>.tabs-and-actions-container.tabs-border-bottom:after {
+  height: 0;
+} */
+
+/* .monaco-workbench .part>.title>.title-actions a.action-label.codicon {
+  color: var(--vscode-icon-foreground)
+} */
+
+/* scrollbars */
+/* .monaco-scrollable-element .scrollbar>.slider {
+  border-radius: 5px;
+}
+
+.monaco-scrollable-element .scrollbar.horizontal {
+  margin-bottom: -5px;
+}
+
+.monaco-scrollable-element .scrollbar.horizontal>.slider {
+  height: 5px !important;
+} */
+
+/* .monaco-scrollable-element .scrollbar.vertical>.slider {
+  width: 5px !important;
+  margin-left: 5px;
+} */
+
+/* activity bar */
+/* .monaco-workbench .activitybar>.content :not(.monaco-menu)>.monaco-action-bar .action-item {
+  border-radius: 5px;
+} */
+
+/* .monaco-workbench .monaco-action-bar:not(.vertical) a.action-label:not(.disabled):hover {
+  background-color: transparent;
+} */
+
+/* .monaco-workbench .activitybar>.content :not(.monaco-menu)>.monaco-action-bar .action-item:hover {
+  background-color: var(--vscode-toolbar-hoverBackground);
+} */
+
+/* .monaco-workbench .activitybar>.content :not(.monaco-menu)>.monaco-action-bar .action-item:hover .action-label:not(.codicon) {
+  background-color: var(--vscode-icon-foreground) !important;
+} */

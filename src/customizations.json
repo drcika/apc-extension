@@ -11,6 +11,7 @@
         "sideBarSectionHeader.border",
         "sideBarSectionHeader.background",
         "sideBar.border",
+        "editorGroupHeader.border",
         "editor.background",
         "editorIndentGuide.background",
         "peekViewEditor.background",

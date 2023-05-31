@@ -1,28 +1,28 @@
-function apc(module, require, insantiationService, utils, patch) {
-  try {
-    let url = require.toUrl(module.id) + '.css';
-    if (!url.startsWith('file://') && !url.startsWith('vscode-file://')) {
-      url = 'file://' + url;
-    }
-    utils.addStyleSheet(url);
+function addStyleSheet(url) {
+  const link = document.createElement('link');
+  link.rel = 'stylesheet';
+  link.href = url;
+  document.querySelector('head')?.appendChild(link);
+};
 
+function apc(module, r, insantiationService, patch) {
+  try {
+    const  url = r.toUrl(module.id) + '.css';
+    addStyleSheet(!url.startsWith('file://') && !url.startsWith('vscode-file://') ?'file://' + url :url);
+    
     class InstantiationService extends insantiationService.InstantiationService {
       constructor() {
         super(...arguments);
-        const service = this;
-        const run = function (what) {
-          try {
-            what.run(service);
-          } catch (e) {
+        try {
+          patch.run(this);
+        } catch (error) {
             console.error(e);
-          }
-        };
-
-        run(patch);
+        }
       }
     }
 
     insantiationService.InstantiationService = InstantiationService;
+    
   } catch (e) {
     console.error("Couldn't initialize apc", e);
   }
@@ -32,6 +32,5 @@ define([
   'module',
   'require',
   'vs/platform/instantiation/common/instantiationService',
-  'apc/utils',
   'apc/patch',
 ], apc);

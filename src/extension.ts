@@ -18,8 +18,7 @@ function changeTheme(context: vscode.ExtensionContext) {
   config.update('workbench.colorCustomizations', colorCustomizations, true);
 }
 
-export function activate(context: vscode.ExtensionContext) {
-
+export function activate(context: vscode.ExtensionContext) {  
   const isRunned = context.globalState.get('isRunned');
   const isEnabled = context.globalState.get('isEnabled');
 
@@ -73,4 +72,5 @@ export function activate(context: vscode.ExtensionContext) {
 }
 
 export function deactivate() {
+  // uninstallPatch();
 }

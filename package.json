@@ -53,14 +53,15 @@
         },
         "apc.listRow": {
           "type": "object",
-          "fontSize": {
-            "type": "number",
-            "default": 13
-          },
-          "height": {
-            "type": "number",
-            "default": 22
-          }
+          "properties": {
+            "fontSize": {
+              "type": "number",
+              "default": 13
+            },
+            "height": {
+              "type": "number",
+              "default": 22
+            } }
         },
         "apc.stylesheet": {
           "type": "object",
@@ -99,11 +100,12 @@
             },
             "size": {
               "type": "number",
-              "default": 35
+              "default": 48
             },
             "position": {
               "type": "string",
               "enum": [
+                "top",
                 "bottom"
               ]
             }
@@ -165,6 +167,19 @@
             "height": {
               "type": "number",
               "default": 37
+            }
+          }
+        },
+        "apc.sidebar.titlebar": {
+          "type": "object",
+          "properties": {
+            "fontSize": {
+              "type": "number",
+              "default": 11
+            },
+            "height": {
+              "type": "number",
+              "default": 35
             }
           }
         },

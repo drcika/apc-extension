@@ -131,6 +131,7 @@ div.monaco-workbench {
   padding-left: calc(var(--traffic-X) + 60px - var(--activity-bar-action-size));
 }
 
+.inline-title-bar:not(.statusbar-top):not(.statusbar-editor-top) .monaco-workbench.sidebar-right.noauxiliarybar:not(.fullscreen) .inline .tabs-and-actions-container,
 .inline-title-bar.horizontal-activitybar:not(.statusbar-top):not(.statusbar-editor-top) .monaco-workbench.nosidebar:not(.sidebar-right):not(.fullscreen) .inline .tabs-and-actions-container,
 .inline-title-bar.activitybar-bottom:not(.statusbar-top):not(.statusbar-editor-top) .monaco-workbench.nosidebar:not(.sidebar-right):not(.fullscreen) .inline .tabs-and-actions-container,
 .inline-title-bar:not(.statusbar-top):not(.statusbar-editor-top) .monaco-workbench.nosidebar.no-activity-bar:not(.fullscreen) .inline .tabs-and-actions-container {

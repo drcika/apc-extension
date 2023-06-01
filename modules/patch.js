@@ -3,7 +3,7 @@ function getProperty(obj, key) {
   return Object.getOwnPropertyDescriptor(obj, key) || (obj.__proto__ ? getProperty(obj.__proto__, key) : undefined);
 }
 
-function customize(exports, utils, configuration, browser, platform, electron, dom, themeService, workbench) {
+function customize(exports, utils, configuration, browser, electron, dom, themeService, workbench) {
 
   class Customize {
     constructor(configurationService, nativeHostService, themeService) {
@@ -62,16 +62,16 @@ function customize(exports, utils, configuration, browser, platform, electron, d
         position: position || 'bottom',
         height: (height ?? 22) * factor,
         fontSize: (fontSize ?? 12) * factor,
-        isEnabled: !!fontSize
+        isEnabled: !!(fontSize || height || position)
       };
     }
 
     updateStatusBar() {
       if (!this.layout?.isVisible(this.Parts?.STATUSBAR_PART)) { return; }
-
       const { position, height, isEnabled } = this.statusBarConfig;
-      this.statusBarPartView.minimumHeight = isEnabled ? height : this.statusBarPartView.minimumHeight;
-      this.statusBarPartView.maximumHeight = isEnabled ? height : this.statusBarPartView.minimumHeight;
+
+      this.statusBarPartView.minimumHeight = isEnabled ? height : 22;
+      this.statusBarPartView.maximumHeight = isEnabled ? height : 22;
 
       const isTop = position.includes('top');
       const isEditor = position.includes('editor');
@@ -80,7 +80,7 @@ function customize(exports, utils, configuration, browser, platform, electron, d
         const order = isTop ? 0 : 1;
         this.workbenchGrid.moveView(this.statusBarPartView, this.statusBarPartView.minimumHeight, this.editorPartView, order);
 
-        const panelPosition = this.layout.getPanelPosition(); // enum Position { LEFT, RIGHT, BOTTOM }
+        const panelPosition = this.layout.getPanelPosition();
         if (position === 'editor-bottom' && panelPosition === 2) {
           this.workbenchGrid.moveView(this.panelPartView, this.workbenchGrid.getViewSize(this.panelPartView), this.editorPartView, 1);
         }
@@ -91,11 +91,11 @@ function customize(exports, utils, configuration, browser, platform, electron, d
     }
 
     updateActivityBar(_isHorizontal) {
-      if (!this.layout?.isVisible(this.Parts.ACTIVITYBAR_PART)) { return; }
+      if (!this.layout?.isVisible(this.Parts?.ACTIVITYBAR_PART)) { return; }
 
       const { size, position, ...config } = this.activityBarConfig;
 
-      const isSideBarVisible = this.layout.isVisible(this.Parts.SIDEBAR_PART);
+      const isSideBarVisible = this.layout.isVisible(this.Parts?.SIDEBAR_PART);
       const isHorizontal = typeof _isHorizontal === 'boolean' ? _isHorizontal : config.isHorizontal;
       this.activitybarPartView.minimumWidth = isHorizontal ? 0 : size;
       this.activitybarPartView.maximumWidth = isHorizontal ? isSideBarVisible ? Infinity : 0 : size;
@@ -109,11 +109,11 @@ function customize(exports, utils, configuration, browser, platform, electron, d
         this.workbenchGrid.moveView(this.activitybarPartView, this.activitybarPartView.minimumWidth, this.sidebarPartView, newPosition) :
         this.workbenchGrid.moveViewTo(this.activitybarPartView, [this.statusBarConfig.position === 'top' ? 3 : 2, sideBarPosition ? -1 : 0]);
 
-      this.layout.container.classList[sideBarPosition ? 'add' : 'remove']('sidebar-right');
+      this.layout.container?.classList[sideBarPosition ? 'add' : 'remove']('sidebar-right');
 
       const container = this.activitybarPartView.getContainer();
       container?.querySelectorAll('div.monaco-action-bar').forEach(el => el.classList[isHorizontal ? 'remove' : 'add']('vertical'));
-
+      this.layout.layout();
     };
 
     hideActivityBarSettings() {
@@ -197,17 +197,6 @@ function customize(exports, utils, configuration, browser, platform, electron, d
           }
         });
 
-        // !! only here
-        // const isCodium = platform.globals.location?.href.includes('VSCodium');
-        // utils.override(layout.Layout, isCodium ? 'setSideBarPosition' : 'kb', function (original, args) {
-        //   console.log('ss');
-        //   const isTopStatusBarPosition = self.statusBarConfig.position === 'top';
-        //   isTopStatusBarPosition && self.workbenchGrid.moveViewTo(self.statusBarPartView, [-1]);
-        //   original();
-        //   isTopStatusBarPosition && self.workbenchGrid.moveViewTo(self.statusBarPartView, [0]);
-        //   self.updateActivityBar();
-        // });
-
         utils.override(layout.Layout, 'toggleZenMode', function (original) {
           const { isHorizontal } = self.activityBarConfig;
           isHorizontal && self.updateActivityBar(false);
@@ -215,15 +204,15 @@ function customize(exports, utils, configuration, browser, platform, electron, d
           isHorizontal && self.updateActivityBar();
         });
 
-        utils.override(layout.Layout, 'setPartHidden', function (original, [hidden, part]) {
-          if (part !== self.Parts.SIDEBAR_PART) { return original(); }
+        utils.override(layout.Layout, 'setPartHidden', function (original, [_, part]) {
+          if (part !== self.Parts?.SIDEBAR_PART) { return original(); }
           const { isHorizontal } = self.activityBarConfig;
           isHorizontal && self.updateActivityBar(false);
           original();
           self.updateActivityBar();
         });
 
-        utils.override(layout.Layout, 'setPanelPosition', function (original, args) {
+        utils.override(layout.Layout, 'setPanelPosition', function (original) {
           original();
           self.updateStatusBar();
         });
@@ -264,12 +253,10 @@ function customize(exports, utils, configuration, browser, platform, electron, d
         }, error);
         require(['vs/base/browser/ui/scrollbar/scrollableElement'], function (scrollableElement) {
           scrollableElement.ScrollableElement = class ScrollableElement extends scrollableElement.ScrollableElement {
-            constructor(element, options) {
+            constructor(element) {
               super(...arguments);
-              if (self.noTabsNode && !self.noTabsNode.isConnected) {
-                document.body.querySelector('.title.tabs')?.classList.add('inline');
-              }
-              else if (!self.noTabsNode && element.classList.contains('tabs-container')) {
+              if (self.noTabsNode && !self.noTabsNode.isConnected) { document.body.querySelector('.title.tabs')?.classList.add('inline'); }
+              else if (!self.noTabsNode && element?.classList?.contains('tabs-container')) {
                 const tabsScrollbar = element.parentElement;
                 self.noTabsNode = document.createElement('div');
                 self.noTabsNode.classList.add('no-tabs');
@@ -278,9 +265,7 @@ function customize(exports, utils, configuration, browser, platform, electron, d
                   self.nativeHostService.handleTitleDoubleClick();
                 });
                 tabsScrollbar.appendChild(self.noTabsNode);
-                setTimeout(() => {
-                  element.parentElement?.parentElement?.parentElement?.classList.add('inline');
-                }, 0);
+                queueMicrotask(() => element.parentElement?.parentElement?.parentElement?.classList.add('inline'));
               }
             }
           };
@@ -291,7 +276,7 @@ function customize(exports, utils, configuration, browser, platform, electron, d
         if (isInline) {
           utils.override(activitybarPart.ActivitybarPart, "create", function (original, [parent]) {
             original();
-            if (!self.layout.isVisible(self.Parts.ACTIVITYBAR_PART)) { self.layout.container.classList.add('no-activity-bar'); }
+            if (!self.layout?.isVisible(self.Parts.ACTIVITYBAR_PART)) { self.layout?.container?.classList.add('no-activity-bar'); }
             const placeholder = document.createElement('div');
             placeholder.classList.add('activity-bar-placeholder');
             parent.prepend(placeholder);
@@ -303,7 +288,7 @@ function customize(exports, utils, configuration, browser, platform, electron, d
         }
 
         utils.override(activitybarPart.ActivitybarPart, "setVisible", function (original) {
-          isInline && self.layout.container.classList.toggle('no-activity-bar');
+          isInline && self.layout?.container?.classList.toggle('no-activity-bar');
           self.updateActivityBar();
           return original();
         });
@@ -311,11 +296,10 @@ function customize(exports, utils, configuration, browser, platform, electron, d
         utils.override(activitybarPart.ActivitybarPart, 'layout', function (original, [width, height]) {
           original();
           const { orientation, size, position } = self.activityBarConfig;
-          // if (orientation === 1 || !self.layout.isVisible(self.Parts.ACTIVITYBAR_PART) || !width || !height) { return original(); }
-          if (orientation === 1 || !self.layout.isVisible(self.Parts.ACTIVITYBAR_PART)) { return; }
+          if (orientation === 1 || !self.layout?.isVisible(self.Parts.ACTIVITYBAR_PART)) { return; }
 
-          const padding = position === 'top' && self.electronConfig.titleBarStyle && self.statusBarConfig.position !== 'top' ? 60 : 0;
-          const menuBarContainer = this.getContainer().querySelector('.menubar');
+          const padding = position === 'top' && self.electronConfig?.titleBarStyle && self.statusBarConfig?.position !== 'top' ? 60 : 0;
+          const menuBarContainer = this.getContainer()?.querySelector('.menubar');
           const menubar = menuBarContainer?.clientWidth ?? 0;
 
           const viewItems = (self.globalActivityActionBar?.viewItems?.length ?? 0) * size;
@@ -326,11 +310,12 @@ function customize(exports, utils, configuration, browser, platform, electron, d
 
         utils.override(activitybarPart.ActivitybarPart, "updateStyles", function (original) {
           original();
-          const color = self.themeService.getColorTheme().getColor('editorGroupHeader.border')?.toString(); // ??
-          self.layout.container.style.setProperty('--title-border-bottom-color', color);
+          const color = self.themeService?.getColorTheme()?.getColor('editorGroupHeader.border')?.toString();
+          self.layout?.container?.style?.setProperty('--title-border-bottom-color', color);
           const { isHorizontal } = self.activityBarConfig;
           const container = this.getContainer();
-          container?.querySelectorAll('div.monaco-action-bar').forEach(el => el.classList[isHorizontal ? 'remove' : 'add']('vertical'));
+          const action = isHorizontal ? 'remove' : 'add';
+          container?.querySelectorAll('div.monaco-action-bar').forEach(el => el.classList[action]('vertical'));
         });
 
       }, error);
@@ -340,7 +325,7 @@ function customize(exports, utils, configuration, browser, platform, electron, d
         grid.SerializableGrid = class SerializableGrid extends grid.SerializableGrid {
           static deserialize(json, deserializer, options) {
             const grid = orgDeserialize(json, deserializer, options);
-            if (grid.element.querySelector('.monaco-grid-view .monaco-grid-view')) {
+            if (grid?.element?.querySelector('.monaco-grid-view .monaco-grid-view')) {
               self.workbenchGrid = grid;
             }
             else {
@@ -372,8 +357,6 @@ function customize(exports, utils, configuration, browser, platform, electron, d
         };
       }, error);
 
-
-
       require(['vs/workbench/contrib/files/browser/views/openEditorsView'], function (openEditorsView) {
         openEditorsView.OpenEditorsView = class OpenEditorsView extends openEditorsView.OpenEditorsView {
           constructor(a, b, c, d, editorGroupService) {
@@ -402,12 +385,12 @@ function customize(exports, utils, configuration, browser, platform, electron, d
           }
 
           get _elementCount() {
-            return self.editorGroupService.groups.map(g => g.count)
-              .reduce((first, second) => first + second, this.showGroups ? this.editorGroupService.groups.length : 0);
+            return self.editorGroupService.groups?.map(g => g.count)
+              .reduce((first, second) => first + second, this.showGroups ? self.editorGroupService.groups?.length ?? 0 : 0);
           }
         };
 
-      }, function (error) { });
+      }, error);
 
 
       if (browser.PixelRatio) { browser.PixelRatio.onDidChange(this.update.bind(this)); }
@@ -423,8 +406,6 @@ function customize(exports, utils, configuration, browser, platform, electron, d
             this.updateActivityBar();
           });
         }
-        // if (e.affectsConfiguration('apc.listRow')) {}
-        // if (e.affectsConfiguration('apc.header')) {}
         if (e.affectsConfiguration('apc.activityBar')) {
           this.updateActivityBar();
           this.hideActivityBarSettings();
@@ -461,6 +442,8 @@ function customize(exports, utils, configuration, browser, platform, electron, d
       });
 
       this.update();
+
+      // /Users/aleksandarpopovic/work/test.css
     }
 
     update() {
@@ -477,7 +460,7 @@ function customize(exports, utils, configuration, browser, platform, electron, d
 
       document.body.classList[isActivityBarVisible && activityBarConfig.position ? 'add' : 'remove']('horizontal-activitybar');
       document.body.classList[isActivityBarVisible && activityBarConfig.position === 'bottom' ? 'add' : 'remove']('activitybar-bottom');
-      document.body.classList[isActivityBarVisible && activityBarConfig.position === 'top' ? 'add' : 'remove']('activitybar-top'); // ifVisible
+      document.body.classList[isActivityBarVisible && activityBarConfig.position === 'top' ? 'add' : 'remove']('activitybar-top');
       document.body.classList[isActivityBarVisible && activityBarConfig.isEnabled ? 'add' : 'remove']('custom-activitybar');
       document.body.classList[headerConfig.isEnabled ? 'add' : 'remove']('custom-header');
       document.body.classList[sidebarTitlebarConfig.isEnabled ? 'add' : 'remove']('custom-sidebar-titlebar');
@@ -508,7 +491,7 @@ function customize(exports, utils, configuration, browser, platform, electron, d
 
   let customizeService;
 
-  utils.override(workbench.Workbench, "startup", function (original, [parent]) {
+  utils.override(workbench.Workbench, "startup", function (original) {
     const res = original();
     customizeService.updateActivityBar();
     customizeService.updateStatusBar();
@@ -522,9 +505,6 @@ function customize(exports, utils, configuration, browser, platform, electron, d
       utils.param(1, electron.INativeHostService),
       utils.param(2, themeService.IThemeService),
     ], Customize));
-
-    // utils.param(3, storage.IStorageService),
-    // utils.param(2, workspace.IWorkspaceContextService),
   };
 }
 define([
@@ -532,11 +512,8 @@ define([
   'apc/utils',
   'vs/platform/configuration/common/configuration',
   'vs/base/browser/browser',
-  'vs/base/common/platform',
   'vs/platform/native/common/native',
   'vs/base/browser/dom',
   'vs/platform/theme/common/themeService',
   'vs/workbench/browser/workbench',
 ], customize);
-// 'vs/platform/storage/common/storage',
-// 'vs/platform/workspace/common/workspace'

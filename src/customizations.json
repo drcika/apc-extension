@@ -3,6 +3,7 @@
     {
       "color": "#00000000",
       "tokens": [
+        "activityBar.border",
         "tab.activeBorderTop",
         "editorGroupHeader.tabsBorder",
         "editorIndentGuide.activeBackground",

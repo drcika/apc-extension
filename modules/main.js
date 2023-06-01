@@ -7,22 +7,22 @@ function addStyleSheet(url) {
 
 function apc(module, r, insantiationService, patch) {
   try {
-    const  url = r.toUrl(module.id) + '.css';
-    addStyleSheet(!url.startsWith('file://') && !url.startsWith('vscode-file://') ?'file://' + url :url);
-    
+    const url = r.toUrl(module.id) + '.css';
+    addStyleSheet(!url.startsWith('file://') && !url.startsWith('vscode-file://') ? 'file://' + url : url);
+
     class InstantiationService extends insantiationService.InstantiationService {
       constructor() {
         super(...arguments);
         try {
           patch.run(this);
         } catch (error) {
-            console.error(e);
+          console.error(e);
         }
       }
     }
 
     insantiationService.InstantiationService = InstantiationService;
-    
+
   } catch (e) {
     console.error("Couldn't initialize apc", e);
   }

@@ -1,11 +1,13 @@
 {
   "apc.stylesheet": {
     "body": {
+      // other panels should be transparent see "workbench.colorCustomizations"
       "background-image": "url(/Users/aleksandarpopovic/imgs/19.png), linear-gradient(to top,rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.2))",
       "background-size": "cover",
       "background-blend-mode": "multiply",
       "background-repeat": "no-repeat"
     }
+
   },
   "apc.activityBar": {
     "position": "bottom",

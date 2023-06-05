@@ -113,10 +113,10 @@ div.monaco-workbench {
   min-width: calc(var(--traffic-X) + 46px - var(--activity-bar-action-size));
 }
 
+.inline-title-bar .monaco-workbench.sidebar-right.noauxiliarybar:not(.fullscreen) .part.editor>.content .editor-group-container>.title:not(.tabs),
 .inline-title-bar.statusbar-top .statusbar,
 .inline-title-bar.statusbar-editor-top .monaco-workbench.nosidebar:not(.sidebar-right):not(.fullscreen) .statusbar,
 .inline-title-bar.statusbar-editor-top .monaco-workbench.sidebar-right.noauxiliarybar:not(.fullscreen) .statusbar,
-.inline-title-bar:not(.statusbar-top) .monaco-workbench:not(.fullscreen) .auxiliarybar.left .composite.title,
 .inline-title-bar.activitybar-top:not(.statusbar-top) .monaco-workbench:not(.fullscreen) .activitybar.left .content .composite-bar {
   padding-left: calc(var(--traffic-X) + 52px);
 }
@@ -131,6 +131,7 @@ div.monaco-workbench {
   padding-left: calc(var(--traffic-X) + 60px - var(--activity-bar-action-size));
 }
 
+.inline-title-bar:not(.statusbar-top) .monaco-workbench:not(.fullscreen) .auxiliarybar.left .composite.title,
 .inline-title-bar:not(.statusbar-top):not(.statusbar-editor-top) .monaco-workbench.sidebar-right.noauxiliarybar:not(.fullscreen) .inline .tabs-and-actions-container,
 .inline-title-bar.horizontal-activitybar:not(.statusbar-top):not(.statusbar-editor-top) .monaco-workbench.nosidebar:not(.sidebar-right):not(.fullscreen) .inline .tabs-and-actions-container,
 .inline-title-bar.activitybar-bottom:not(.statusbar-top):not(.statusbar-editor-top) .monaco-workbench.nosidebar:not(.sidebar-right):not(.fullscreen) .inline .tabs-and-actions-container,
@@ -168,23 +169,9 @@ body.horizontal-activitybar .monaco-workbench .activitybar>.content :not(.monaco
   border-bottom: 1px solid var(--title-border-bottom-color);
 }
 
+
+.tabs-container,
 /*  */
-.frameless-title-bar:not(.statusbar-top):not(.statusbar-editor-top) .no-tabs,
-.inline-title-bar:not(.statusbar-top):not(.statusbar-editor-top) .no-tabs {
-  -webkit-app-region: drag;
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  top: 0;
-  left: 0;
-}
-
-.inline-title-bar .part.editor .editor-group-container .tabs-container>div,
-.frameless-title-bar .part.editor .editor-group-container .tabs-container>div {
-  z-index: 1;
-  /* position: relative; */
-}
-
 .frameless-title-bar.statusbar-top .monaco-workbench:not(.fullscreen) .statusbar,
 .frameless-title-bar.statusbar-editor-top .monaco-workbench:not(.fullscreen) .statusbar,
 .inline-title-bar.statusbar-top .monaco-workbench:not(.fullscreen) .statusbar,
@@ -324,69 +311,3 @@ body.horizontal-activitybar .monaco-workbench .activitybar>.content :not(.monaco
 .custom-header .monaco-workbench .part.editor>.content .editor-group-container>.title .tabs-container>.tab>div.tab-actions {
   width: calc(var(--header-height) * 0.6);
 }
-
-/* ?? */
-/* .monaco-action-bar li.action-item.menu-entry .action-label.icon,
-.part:not(.panel) .monaco-workbench .part>.title>.title-actions .action-label {
-  background-color: purple;
-  color: purple;
-  font-size: 30px;
-  width: 30px;
-  height: 30px;
-}
-
-.tab .monaco-icon-description-container {
-  position: absolute;
-  background-color: purple;
-  color: purple;
-} */
-
-/*  ---------- -------------- */
-
-/* .monaco-workbench .part.sidebar>div.title {
-  padding: 0;
-} */
-
-/* .monaco-editor .scroll-decoration,
-.monaco-workbench .part.editor>.content .editor-group-container>.title>.tabs-and-actions-container.tabs-border-bottom:after {
-  height: 0;
-} */
-
-/* .monaco-workbench .part>.title>.title-actions a.action-label.codicon {
-  color: var(--vscode-icon-foreground)
-} */
-
-/* scrollbars */
-/* .monaco-scrollable-element .scrollbar>.slider {
-  border-radius: 5px;
-}
-
-.monaco-scrollable-element .scrollbar.horizontal {
-  margin-bottom: -5px;
-}
-
-.monaco-scrollable-element .scrollbar.horizontal>.slider {
-  height: 5px !important;
-} */
-
-/* .monaco-scrollable-element .scrollbar.vertical>.slider {
-  width: 5px !important;
-  margin-left: 5px;
-} */
-
-/* activity bar */
-/* .monaco-workbench .activitybar>.content :not(.monaco-menu)>.monaco-action-bar .action-item {
-  border-radius: 5px;
-} */
-
-/* .monaco-workbench .monaco-action-bar:not(.vertical) a.action-label:not(.disabled):hover {
-  background-color: transparent;
-} */
-
-/* .monaco-workbench .activitybar>.content :not(.monaco-menu)>.monaco-action-bar .action-item:hover {
-  background-color: var(--vscode-toolbar-hoverBackground);
-} */
-
-/* .monaco-workbench .activitybar>.content :not(.monaco-menu)>.monaco-action-bar .action-item:hover .action-label:not(.codicon) {
-  background-color: var(--vscode-icon-foreground) !important;
-} */

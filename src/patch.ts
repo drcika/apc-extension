@@ -6,38 +6,40 @@ import { promptRestart } from './utils';
 
 const bkpName = '.apc.extension.backup';
 const bootstrapName = 'bootstrap-amd.js';
+const modules = 'modules';
+const patch = 'patch';
+const mainJsName = 'main.js';
+const mainProcessJsName = 'process.main.js';
+const workbenchHtmlName = 'workbench.html';
+const browserMain = 'browser.main.js';
+
 const installationPath = path.dirname(require.main!.filename);
 const bootstrapPath = path.join(installationPath, bootstrapName);
 const bootstrapBackupPath = bootstrapPath + bkpName;
-const modules = 'modules';
-const mainJsName = 'main.js';
-const mainProcessJsName = 'process.main.js';
 const mainJsPath = path.join(installationPath, mainJsName);
 const mainJsBackupPath = mainJsPath + bkpName;
-const workbenchHtmlName = 'workbench.html';
 const workbenchHtmldir = path.join(installationPath, 'vs/code/electron-sandbox/workbench');
 const workbenchHtmlPath = path.join(workbenchHtmldir, workbenchHtmlName);
 const workbenchHtmlReplacementPath = workbenchHtmlPath.replace(workbenchHtmlName, "workbench-apc-extension.html");
-const patchPath = path.join(installationPath, modules);
+const patchPath = path.join(installationPath, patch);
+const modulesPath = path.join(installationPath, modules);
+const browserEntrypointPath = path.join(patchPath, browserMain);
+
 const isWin = os.platform() === 'win32';
-const browserMain = 'browser.main.js';
 
 function fixPath(path: string) {
   return isWin ? "file://./" + path.replace(/\\/g, "/") : path;
 }
 
 const fixedPatchPath = fixPath(patchPath);
+const fixedModulesPath = fixPath(modulesPath);
 
 export async function ensurePatch(context: vscode.ExtensionContext) {
-  const browserEntrypointPath = path.join(patchPath, browserMain);
-  const generatedScriptsPathRelative = path.join(path.relative(installationPath, context.extensionPath), modules).replace(/\\/g, '/');
-  
   if (
     !fs.existsSync(bootstrapBackupPath) ||
     !fs.existsSync(workbenchHtmlReplacementPath) ||
-    !fs.readFileSync(bootstrapPath, "utf8")?.includes('$apcExtensionBootstrapToken$') || 
-    !fs.existsSync(browserEntrypointPath) ||
-    !fs.readFileSync(browserEntrypointPath, "utf8")?.includes(generatedScriptsPathRelative)
+    !fs.readFileSync(bootstrapPath, "utf8")?.includes('$apcExtensionBootstrapToken$') ||
+    !fs.existsSync(browserEntrypointPath)
   ) {
     await install(context);
   }
@@ -83,8 +85,6 @@ function restoreBootstrap() {
 }
 
 function patchMain(extensionPath: string) {
-  const generatedPath = fixPath(path.join(extensionPath, modules));
-
   const proccesMainPath = path.join(extensionPath, "resources", mainProcessJsName);
   const processEntrypointPath = path.join(patchPath, mainJsName);
   const processMainSourcePath = path.join(patchPath, mainProcessJsName);
@@ -93,7 +93,7 @@ function patchMain(extensionPath: string) {
   const patchModule = 'apc-patch';
 
   const files = `["${patchModule}/process.main", "${moduleName}/patch.main", "${moduleName}/utils"]`;
-  const data = `require.config({\n\tpaths: {\n\t\t"${moduleName}": "${generatedPath}",\n\t\t"${patchModule}": "${fixedPatchPath}"\n\t}\n});\ndefine(${files}, () => { });`;
+  const data = `require.config({\n\tpaths: {\n\t\t"${moduleName}": "${fixedModulesPath}",\n\t\t"${patchModule}": "${fixedPatchPath}"\n\t}\n});\ndefine(${files}, () => { });`;
 
   const patchedMainJs = fs.readFileSync(mainJsPath, 'utf8').replace('require_bootstrap_amd()', 'require("./bootstrap-amd")');
 
@@ -107,6 +107,10 @@ function patchMain(extensionPath: string) {
   fs.writeFileSync(processMainSourcePath, fs.readFileSync(proccesMainPath));
   // patched modules/main.js
   fs.writeFileSync(processEntrypointPath, data, "utf8");
+
+  // cp patch
+  if (!fs.existsSync(modulesPath)) { fs.mkdirSync(modulesPath); }
+  fs.cpSync(path.join(extensionPath, modules), modulesPath, { "recursive": true });
 }
 
 function restoreMain() {
@@ -114,20 +118,21 @@ function restoreMain() {
   fs.renameSync(mainJsBackupPath, mainJsPath);
   // remove bkp file
   fs.rm(mainJsBackupPath, () => { });
+
   // remove pached modules
   fs.rmSync(patchPath, { recursive: true, force: true });
+  fs.rmSync(modulesPath, { recursive: true, force: true });
 }
 
 function patchWorkbench(extensionPath: string) {
   const workbenchHtmldirRelative = path.relative(workbenchHtmldir, patchPath).replace(/\\/g, '/');
+
   const browserEntrypointPathRelative = path.join(workbenchHtmldirRelative, browserMain).replace(/\\/g, '/');
 
   const patchedWorkbenchHtml = fs.readFileSync(workbenchHtmlPath, 'utf8')
     .replace('<script src="workbench.js"></script>', `<script src="${browserEntrypointPathRelative}"></script>\n\t<script src="workbench.js"></script>`);
   fs.writeFileSync(workbenchHtmlReplacementPath, patchedWorkbenchHtml, 'utf8');
 
-  const generatedScriptsPathRelative = path.join(path.relative(installationPath, extensionPath), modules).replace(/\\/g, '/');
-  const browserEntrypointPath = path.join(patchPath, browserMain);
 
   const data = `\
   'use strict';
@@ -140,7 +145,7 @@ function patchWorkbench(extensionPath: string) {
         if (typeof prevBeforeLoaderConfig === 'function') prevBeforeLoaderConfig(configuration, loaderConfig);
         if (loaderConfig.amdModulesPattern) loaderConfig.amdModulesPattern = new RegExp(loaderConfig.amdModulesPattern.toString().slice(1, -1) + /|^apc\\//.toString().slice(1, -1));
         Object.assign(loaderConfig.paths, {
-          "apc": "${generatedScriptsPathRelative}",
+          "apc": "${modules}",
         });
         require.define("apc-patch", { load: (name, req, onload, config) => req([name], (value) => req(["apc/main"], () => onload(value), error => (console.error(error), onload(value)))) });
       };

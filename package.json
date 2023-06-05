@@ -61,7 +61,8 @@
             "height": {
               "type": "number",
               "default": 22
-            } }
+            }
+          }
         },
         "apc.css": {
           "type": "array",
@@ -144,21 +145,32 @@
               "description": "see https://www.electronjs.org/docs/latest/tutorial/window-customization",
               "type": "object",
               "properties": {
-                "x": { "type": "number" },
-                "y": { "type": "number" }
+                "x": {
+                  "type": "number"
+                },
+                "y": {
+                  "type": "number"
+                }
               }
             },
             "titleBarOverlay": {
               "description": "see https://www.electronjs.org/docs/latest/tutorial/window-customization",
-              "type": [ "object", "boolean" ],
+              "type": [
+                "object",
+                "boolean"
+              ],
               "properties": {
                 "color": {
                   "type": "string",
-                  "format": "color" },
+                  "format": "color"
+                },
                 "symbolColor": {
                   "type": "string",
-                  "format": "color" },
-                "height": { "type": "number" }
+                  "format": "color"
+                },
+                "height": {
+                  "type": "number"
+                }
               }
             }
           }
@@ -276,6 +288,5 @@
     "ts-loader": "^9.4.2",
     "typescript": "^4.9.5",
     "vsce": "^2.15.0"
-  },
-  "dependencies": { }
+  }
 }

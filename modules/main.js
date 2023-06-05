@@ -2,7 +2,7 @@ function addStyleSheet(url) {
   const link = document.createElement('link');
   link.rel = 'stylesheet';
   link.href = url;
-  document.querySelector('head')?.appendChild(link);
+  document?.head?.appendChild(link);
 };
 
 function apc(module, r, insantiationService, patch) {

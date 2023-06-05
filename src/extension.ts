@@ -18,7 +18,19 @@ function changeTheme(context: vscode.ExtensionContext) {
   config.update('workbench.colorCustomizations', colorCustomizations, true);
 }
 
-export function activate(context: vscode.ExtensionContext) {  
+function registerCommands(context: vscode.ExtensionContext) {
+  context.subscriptions.push(vscode.commands.registerCommand('apc.extension.enable', () => {
+    install(context);
+    context.globalState.update('isEnabled', true);
+  }));
+  context.subscriptions.push(vscode.commands.registerCommand('apc.extension.disable', () => {
+    uninstallPatch();
+    context.globalState.update('isEnabled', false);
+  }));
+
+}
+
+export function activate(context: vscode.ExtensionContext) {
   const isRunned = context.globalState.get('isRunned');
   const isEnabled = context.globalState.get('isEnabled');
 
@@ -27,23 +39,13 @@ export function activate(context: vscode.ExtensionContext) {
     context.globalState.update('isRunned', true);
     install(context);
   }
-  context.subscriptions.push(vscode.commands.registerCommand('apc.extension.enable', () => {
-    install(context);
-    context.globalState.update('isEnabled', true);
 
-  }));
-  context.subscriptions.push(vscode.commands.registerCommand('apc.extension.disable', () => {
-    uninstallPatch();
-    context.globalState.update('isEnabled', false);
-  }));
+  registerCommands(context);
 
   async function onDidChangeConfiguration(e: vscode.ConfigurationChangeEvent) {
-    if (e.affectsConfiguration('apc.theme')) {
-      changeTheme(context);
-    }
-    if (e.affectsConfiguration('apc.buttons')) {
-      applyButtons(context);
-    }
+    e.affectsConfiguration('apc.theme') && isEnabled && changeTheme(context);
+    e.affectsConfiguration('apc.buttons') && isEnabled && applyButtons(context);
+
     if (e.affectsConfiguration('apc.electron')) {
       const newState: any = vscode.workspace.getConfiguration().get('apc.electron') || {};
 

@@ -47,6 +47,17 @@ VSCode commands:
     }
     }
 ```
+### `apc.css`
+
+**Only VSCodium**
+
+***vscode won't work (for now)***
+
+```jsonc
+    "apc.css": [ "/Users/aleksandarpopovic/.dotfiles/.vsCodeCustom/style.css" ]
+    // Windows
+    "apc.css": [ "C:\Users\path\style.css" ]
+```
 
 ### `apc.activityBar`
 

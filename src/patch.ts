@@ -39,7 +39,9 @@ export async function ensurePatch(context: vscode.ExtensionContext) {
     !fs.existsSync(bootstrapBackupPath) ||
     !fs.existsSync(workbenchHtmlReplacementPath) ||
     !fs.readFileSync(bootstrapPath, "utf8")?.includes('$apcExtensionBootstrapToken$') ||
-    !fs.existsSync(browserEntrypointPath)
+    !fs.existsSync(browserEntrypointPath) ||
+    !fs.existsSync(modulesPath) ||
+    fs.readFileSync(path.join(modulesPath, 'patch.js'), "utf8") !== fs.readFileSync(path.join(context.extensionPath, modules, 'patch.js'), "utf8")
   ) {
     await install(context);
   }
@@ -78,6 +80,7 @@ function patchBootstrap(extensionPath: string) {
 }
 
 function restoreBootstrap() {
+  if (!fs.existsSync(bootstrapBackupPath)) { return; }
   // restore bootstrap-amd.js
   fs.renameSync(bootstrapBackupPath, bootstrapPath);
   // remove bkp bootstrap-amd.js
@@ -114,14 +117,15 @@ function patchMain(extensionPath: string) {
 }
 
 function restoreMain() {
-  // restore main.js
-  fs.renameSync(mainJsBackupPath, mainJsPath);
-  // remove bkp file
-  fs.rm(mainJsBackupPath, () => { });
-
+  if (fs.existsSync(mainJsBackupPath)) {
+    // restore main.js
+    fs.renameSync(mainJsBackupPath, mainJsPath);
+    // remove bkp file
+    fs.rm(mainJsBackupPath, () => { });
+  }
   // remove pached modules
-  fs.rmSync(patchPath, { recursive: true, force: true });
-  fs.rmSync(modulesPath, { recursive: true, force: true });
+  fs.existsSync(patchPath) && fs.rmSync(patchPath, { recursive: true, force: true });
+  fs.existsSync(modulesPath) && fs.rmSync(modulesPath, { recursive: true, force: true });
 }
 
 function patchWorkbench(extensionPath: string) {
@@ -174,7 +178,7 @@ function patchWorkbench(extensionPath: string) {
 }
 
 function restoreWorkbench() {
-  fs.rm(workbenchHtmlReplacementPath, () => { });
+  fs.existsSync(workbenchHtmlReplacementPath) && fs.rm(workbenchHtmlReplacementPath, () => { });
 }
 
 export async function install(context: vscode.ExtensionContext) {

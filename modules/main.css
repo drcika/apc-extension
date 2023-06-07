@@ -108,12 +108,32 @@ div.monaco-workbench {
   width: unset;
 }
 
+.no-activity-bar.noauxiliarybar.sidebar-right .inline-tabs-placeholder,
+.no-activity-bar.nosidebar:not(.sidebar-right):not(.nosidebar) .inline-tabs-placeholder,
+body:not(.frameless-title-bar) .monaco-workbench.sidebar-right.noauxiliarybar .split-view-view:nth-child(1) .split-view-view:nth-child(1) .tabs-and-actions-container .inline-tabs-placeholder,
+.horizontal-activitybar:not(.frameless-title-bar) .monaco-workbench:not(.sidebar-right).nosidebar .inline-tabs-placeholder,
+.horizontal-activitybar:not(.frameless-title-bar) .monaco-workbench.sidebar-right.noauxiliarybar .inline-tabs-placeholder {
+  width: calc(var(--traffic-X) + 60px);
+}
+
+body:not(.horizontal-activitybar) .nosidebar:not(.sidebar-right):not(.no-activity-bar) .inline-tabs-placeholder {
+  width: calc(var(--traffic-X) + 60px - var(--activity-bar-action-size));
+}
+
+.monaco-workbench .split-view-view:nth-child(2) .tabs-and-actions-container .inline-tabs-placeholder {
+  width: 0;
+}
+
 /*  */
 .inline-title-bar:not(.horizontal-activitybar):not(.activitybar-top):not(.statusbar-top) .monaco-workbench:not(.fullscreen) .inline-titlebar-placeholder {
   min-width: calc(var(--traffic-X) + 46px - var(--activity-bar-action-size));
 }
 
-.inline-title-bar .monaco-workbench.sidebar-right.noauxiliarybar:not(.fullscreen) .part.editor>.content .editor-group-container>.title:not(.tabs),
+.inline-title-bar:not(.horizontal-activitybar):not(.activitybar-top):not(.statusbar-top) .monaco-workbench.no-activity-bar:not(.sidebar-right):not(.fullscreen) .inline-titlebar-placeholder,
+.horizontal-activitybar:not(.statusbar-editor-top):not(.statusbar-top) .monaco-workbench.sidebar-right.noauxiliarybar:not(.fullscreen) .part.editor>.content .editor-group-container>.title:not(.tabs),
+.horizontal-activitybar:not(.frameless-title-bar):not(.statusbar-editor-top):not(.statusbar-top) .monaco-workbench:not(.sidebar-right).nosidebar:not(.fullscreen) .part.editor>.content .editor-group-container>.title:not(.tabs),
+.inline-title-bar:not(.statusbar-editor-top):not(.statusbar-top) .monaco-workbench.no-activity-bar:not(.sidebar-right).nosidebar:not(.fullscreen) .part.editor>.content .editor-group-container>.title:not(.tabs),
+.inline-title-bar:not(.statusbar-editor-top):not(.statusbar-top) .monaco-workbench.no-activity-bar.sidebar-right.noauxiliarybar:not(.fullscreen) .part.editor>.content .editor-group-container>.title:not(.tabs),
 .inline-title-bar.statusbar-top .statusbar,
 .inline-title-bar.statusbar-editor-top .monaco-workbench.nosidebar:not(.sidebar-right):not(.fullscreen) .statusbar,
 .inline-title-bar.statusbar-editor-top .monaco-workbench.sidebar-right.noauxiliarybar:not(.fullscreen) .statusbar,
@@ -126,16 +146,16 @@ div.monaco-workbench {
   min-width: calc(var(--traffic-X) + 46px);
 }
 
-.inline-title-bar.statusbar-editor-top:not(.horizontal-activitybar) .monaco-workbench.nosidebar:not(.sidebar-right):not(.fullscreen) .statusbar,
-.inline-title-bar:not(.statusbar-top):not(.statusbar-editor-top) .monaco-workbench.nosidebar:not(.fullscreen):not(.sidebar-right) .inline .tabs-and-actions-container {
+/* .inline-title-bar:not(.statusbar-top):not(.statusbar-editor-top) .monaco-workbench.nosidebar:not(.fullscreen):not(.sidebar-right) .inline .tabs-and-actions-container , */
+.inline-title-bar.statusbar-editor-top:not(.horizontal-activitybar) .monaco-workbench.nosidebar:not(.sidebar-right):not(.fullscreen) .statusbar {
   padding-left: calc(var(--traffic-X) + 60px - var(--activity-bar-action-size));
 }
 
-.inline-title-bar:not(.statusbar-top) .monaco-workbench:not(.fullscreen) .auxiliarybar.left .composite.title,
-.inline-title-bar:not(.statusbar-top):not(.statusbar-editor-top) .monaco-workbench.sidebar-right.noauxiliarybar:not(.fullscreen) .inline .tabs-and-actions-container,
+/* .inline-title-bar:not(.statusbar-top):not(.statusbar-editor-top) .monaco-workbench.sidebar-right.noauxiliarybar:not(.fullscreen) .inline .tabs-and-actions-container,
 .inline-title-bar.horizontal-activitybar:not(.statusbar-top):not(.statusbar-editor-top) .monaco-workbench.nosidebar:not(.sidebar-right):not(.fullscreen) .inline .tabs-and-actions-container,
 .inline-title-bar.activitybar-bottom:not(.statusbar-top):not(.statusbar-editor-top) .monaco-workbench.nosidebar:not(.sidebar-right):not(.fullscreen) .inline .tabs-and-actions-container,
-.inline-title-bar:not(.statusbar-top):not(.statusbar-editor-top) .monaco-workbench.nosidebar.no-activity-bar:not(.fullscreen) .inline .tabs-and-actions-container {
+.inline-title-bar:not(.statusbar-top):not(.statusbar-editor-top) .monaco-workbench.nosidebar.no-activity-bar:not(.fullscreen) .inline .tabs-and-actions-container, */
+.inline-title-bar:not(.statusbar-top) .monaco-workbench:not(.fullscreen) .auxiliarybar.left .composite.title {
   padding-left: calc(var(--traffic-X) + 60px);
 }
 
@@ -162,6 +182,7 @@ body.horizontal-activitybar .monaco-workbench .activitybar>.content :not(.monaco
   bottom: 2px;
   width: 100%;
   height: 0;
+  z-index: 8;
 }
 
 .inline-title-bar:not(.horizontal-activitybar):not(.statusbar-top) .activitybar.left .activity-bar-placeholder {
@@ -169,8 +190,17 @@ body.horizontal-activitybar .monaco-workbench .activitybar>.content :not(.monaco
   border-bottom: 1px solid var(--title-border-bottom-color);
 }
 
+.inline-drag-placeholder {
+  position: absolute;
+  width: 100%;
+  height: calc(var(--header-height) * .33);
+  min-height: 10px;
+  top: 0;
+  cursor: move;
+  -webkit-app-region: drag;
+}
 
-.tabs-container,
+/* .tabs-container, */
 /*  */
 .frameless-title-bar.statusbar-top .monaco-workbench:not(.fullscreen) .statusbar,
 .frameless-title-bar.statusbar-editor-top .monaco-workbench:not(.fullscreen) .statusbar,

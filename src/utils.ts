@@ -1,10 +1,9 @@
 import * as vscode from 'vscode';
 
+const configKey = 'update.mode';
 export async function promptRestart() {
-  const nativeTabs = vscode.workspace.getConfiguration().inspect("window.nativeTabs");
-  if (nativeTabs !== undefined) {
-    const value = vscode.workspace.getConfiguration().get("window.nativeTabs");
-    await vscode.workspace.getConfiguration().update("window.nativeTabs", !value, vscode.ConfigurationTarget.Global);
-    vscode.workspace.getConfiguration().update("window.nativeTabs", nativeTabs.globalValue, vscode.ConfigurationTarget.Global);
-  }
+  const config = vscode.workspace.getConfiguration();
+  const value = config.inspect(configKey);
+  await config.update(configKey, config.get(configKey) === 'default' ? 'manual' : 'default', vscode.ConfigurationTarget.Global);
+  config.update(configKey, value?.globalValue, vscode.ConfigurationTarget.Global);
 }

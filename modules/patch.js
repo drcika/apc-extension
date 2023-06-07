@@ -114,6 +114,16 @@ function customize(exports, utils, configuration, browser, electron, dom, themeS
     }
 
     updateActivityBar(_isHorizontal) {
+      const { size, position, ...config } = this.activityBarConfig;
+
+      const sideBarPosition = this.layout?.getSideBarPosition && this.layout.getSideBarPosition();
+      this.layout?.container?.classList[sideBarPosition ? 'add' : 'remove']('sidebar-right');
+
+      const isHorizontal = typeof _isHorizontal === 'boolean' ? _isHorizontal : config.isHorizontal;
+
+      const container = this.activitybarPartView?.getContainer && this.activitybarPartView.getContainer();
+      container?.querySelectorAll('div.monaco-action-bar').forEach(el => el.classList[isHorizontal ? 'remove' : 'add']('vertical'));
+
       if (
         !this.layout?.isVisible(this.Parts?.ACTIVITYBAR_PART) ||
         !this.activitybarPartView ||
@@ -123,33 +133,24 @@ function customize(exports, utils, configuration, browser, electron, dom, themeS
         !this.workbenchGrid?.moveViewTo
       ) { return; }
 
-      const { size, position, ...config } = this.activityBarConfig;
-
       const isSideBarVisible = this.isVisible(this.Parts?.SIDEBAR_PART);
-      const isHorizontal = typeof _isHorizontal === 'boolean' ? _isHorizontal : config.isHorizontal;
       this.activitybarPartView.minimumWidth = isHorizontal ? 0 : size;
       this.activitybarPartView.maximumWidth = isHorizontal ? isSideBarVisible ? Infinity : 0 : size;
       this.activitybarPartView.minimumHeight = isHorizontal && isSideBarVisible ? size : 0;
       this.activitybarPartView.maximumHeight = isHorizontal && isSideBarVisible ? size : Infinity;
-
-      const sideBarPosition = this.layout.getSideBarPosition();
 
       const newPosition = position === 'top' ? 0 : 1;
       isHorizontal && isSideBarVisible ?
         this.workbenchGrid.moveView(this.activitybarPartView, this.activitybarPartView.minimumWidth, this.sidebarPartView, newPosition) :
         this.workbenchGrid.moveViewTo(this.activitybarPartView, [this.statusBarConfig.position === 'top' ? 3 : 2, sideBarPosition ? -1 : 0]);
 
-      this.layout?.container?.classList[sideBarPosition ? 'add' : 'remove']('sidebar-right');
-
-      const container = this.activitybarPartView.getContainer && this.activitybarPartView.getContainer();
-      container?.querySelectorAll('div.monaco-action-bar').forEach(el => el.classList[isHorizontal ? 'remove' : 'add']('vertical'));
       this.layout?.layout && this.layout.layout();
     };
 
     hideActivityBarSettings() {
       const content = this.activitybarPartView?.getContainer()?.querySelector('.content');
 
-      if (!this.globalActivitiesContainer) { this.globalActivitiesContainer = content?.childNodes instanceof Array && content.childNodes[1]; };
+      if (!this.globalActivitiesContainer) { this.globalActivitiesContainer = content?.childNodes && content.childNodes[1]; };
       const isConnected = this.globalActivitiesContainer?.isConnected;
       const { hideSettings } = this.activityBarConfig;
 
@@ -287,29 +288,29 @@ function customize(exports, utils, configuration, browser, electron, dom, themeS
           }));
         }, error);
 
-        require(['vs/base/browser/ui/scrollbar/scrollableElement'], function (scrollableElement) {
-          scrollableElement.ScrollableElement && (scrollableElement.ScrollableElement = class ScrollableElement extends scrollableElement.ScrollableElement {
-            constructor(element) {
+        require(['vs/workbench/browser/parts/editor/tabsTitleControl'], function (tabsTitleControl) {
+          tabsTitleControl.TabsTitleControl = class TabsTitleControl extends tabsTitleControl.TabsTitleControl {
+            constructor(parent, accessor) {
               super(...arguments);
-              function patchTabsContainer(element) {
-                self.tabsContainer = element;
-                element.addEventListener('dblclick', e => {
+              if (accessor?.element) {
+                const dragPlaceholder = document.createElement('div');
+                dragPlaceholder.classList.add('inline-drag-placeholder');
+                accessor.element.style.position = 'relative';
+
+                accessor.element.appendChild && accessor.element.appendChild(dragPlaceholder);
+                dragPlaceholder.addEventListener('dblclick', e => {
                   e.stopPropagation();
                   e.stopImmediatePropagation();
                   self.nativeHostService.handleTitleDoubleClick && self.nativeHostService.handleTitleDoubleClick();
                 });
               }
-              if (!element?.addEventListener) { return; }
-              if (self.tabsContainer && !self.tabsContainer.isConnected) {
-                patchTabsContainer(element);
-                document?.body?.querySelector('.title.tabs')?.classList.add('inline');
-              }
-              else if (!self.noTabsNode && element?.classList?.contains('tabs-container')) {
-                patchTabsContainer(element);
-                queueMicrotask(() => element?.parentElement?.parentElement?.parentElement?.classList.add('inline'));
+              if (parent.querySelector) {
+                const tabsPlaceholder = document.createElement('div');
+                tabsPlaceholder.classList.add('inline-tabs-placeholder');
+                parent.querySelector('.tabs-and-actions-container')?.prepend(tabsPlaceholder);
               }
             }
-          });
+          };
         }, error);
       }
 
@@ -332,7 +333,7 @@ function customize(exports, utils, configuration, browser, electron, dom, themeS
         utils.override(activitybarPart.ActivitybarPart, "setVisible", function (original) {
           isInline && self.layout?.container?.classList.toggle('no-activity-bar');
           self.updateActivityBar();
-          return original();
+          original();
         });
 
         utils.override(activitybarPart.ActivitybarPart, 'layout', function (original, [width, height]) {
@@ -437,10 +438,7 @@ function customize(exports, utils, configuration, browser, electron, dom, themeS
       this.loadStyles();
       this.loadUserFiles();
 
-      // !! TODO
-      setTimeout(() => {
-        self.subscribe();
-      }, 1000);
+      self.subscribe();
     }
 
     loadUserFiles() {
@@ -528,7 +526,8 @@ function customize(exports, utils, configuration, browser, electron, dom, themeS
       document.body.classList[statusBarConfig.position === 'top' ? 'add' : 'remove']('statusbar-top');
       document.body.classList[statusBarConfig.position === 'editor-top' ? 'add' : 'remove']('statusbar-editor-top');
 
-      document.body.classList[isActivityBarVisible && activityBarConfig.position ? 'add' : 'remove']('horizontal-activitybar');
+      // document.body.classList[isActivityBarVisible && activityBarConfig.position ? 'add' : 'remove']('horizontal-activitybar');
+      document.body.classList[activityBarConfig.position ? 'add' : 'remove']('horizontal-activitybar');
       document.body.classList[isActivityBarVisible && activityBarConfig.position === 'bottom' ? 'add' : 'remove']('activitybar-bottom');
       document.body.classList[isActivityBarVisible && activityBarConfig.position === 'top' ? 'add' : 'remove']('activitybar-top');
       document.body.classList[isActivityBarVisible && activityBarConfig.isEnabled ? 'add' : 'remove']('custom-activitybar');

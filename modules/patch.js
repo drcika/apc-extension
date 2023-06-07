@@ -125,7 +125,6 @@ function customize(exports, utils, configuration, browser, electron, dom, themeS
       container?.querySelectorAll('div.monaco-action-bar').forEach(el => el.classList[isHorizontal ? 'remove' : 'add']('vertical'));
 
       if (
-        !this.layout?.isVisible(this.Parts?.ACTIVITYBAR_PART) ||
         !this.activitybarPartView ||
         !this.sidebarPartView ||
         !this.layout.getSideBarPosition ||
@@ -134,13 +133,14 @@ function customize(exports, utils, configuration, browser, electron, dom, themeS
       ) { return; }
 
       const isSideBarVisible = this.isVisible(this.Parts?.SIDEBAR_PART);
+      const isActivityBarVisible = this.layout?.isVisible(this.Parts?.ACTIVITYBAR_PART);
       this.activitybarPartView.minimumWidth = isHorizontal ? 0 : size;
       this.activitybarPartView.maximumWidth = isHorizontal ? isSideBarVisible ? Infinity : 0 : size;
-      this.activitybarPartView.minimumHeight = isHorizontal && isSideBarVisible ? size : 0;
-      this.activitybarPartView.maximumHeight = isHorizontal && isSideBarVisible ? size : Infinity;
+      this.activitybarPartView.minimumHeight = isHorizontal && isActivityBarVisible ? size : 0;
+      this.activitybarPartView.maximumHeight = isHorizontal && isActivityBarVisible ? size : Infinity;
 
       const newPosition = position === 'top' ? 0 : 1;
-      isHorizontal && isSideBarVisible ?
+      isHorizontal && isSideBarVisible && isActivityBarVisible ?
         this.workbenchGrid.moveView(this.activitybarPartView, this.activitybarPartView.minimumWidth, this.sidebarPartView, newPosition) :
         this.workbenchGrid.moveViewTo(this.activitybarPartView, [this.statusBarConfig.position === 'top' ? 3 : 2, sideBarPosition ? -1 : 0]);
 
@@ -160,6 +160,13 @@ function customize(exports, utils, configuration, browser, electron, dom, themeS
 
     getProperty(obj, key) {
       return Object.getOwnPropertyDescriptor(obj, key) || (obj.__proto__ ? this.getProperty(obj.__proto__, key) : undefined);
+    }
+
+    updateActivityBarItemSize(options) {
+      // relies on reference
+      const size = this.activityBarConfig.size;
+      options.overflowActionSize = size;
+      options.compositeSize = size + 3; // 3 margine
     }
 
     init() {
@@ -316,6 +323,7 @@ function customize(exports, utils, configuration, browser, electron, dom, themeS
 
       require(['vs/workbench/browser/parts/activitybar/activitybarPart'], function (activitybarPart) {
         if (!activitybarPart?.ActivitybarPart) { return; }
+
         if (isInline) {
           utils.override(activitybarPart.ActivitybarPart, "create", function (original, [parent]) {
             original();
@@ -392,9 +400,14 @@ function customize(exports, utils, configuration, browser, electron, dom, themeS
       require(['vs/workbench/browser/parts/compositeBar'], function (compositeBar) {
         compositeBar.CompositeBar && (compositeBar.CompositeBar = class CompositeBar extends compositeBar.CompositeBar {
           constructor(items, options) {
-            super(...arguments);
             if (options?.getDefaultCompositeId() === 'workbench.view.explorer') {
+              self.updateActivityBarItemSize(options);
+              super(...arguments);
+              this.activityBarOptions = options;
               self.activityBarCompositeBar = this;
+            }
+            else {
+              super(...arguments);
             }
           }
         });
@@ -498,8 +511,14 @@ function customize(exports, utils, configuration, browser, electron, dom, themeS
         e.affectsConfiguration('apc.css') && this.loadUserFiles();
         e.affectsConfiguration('apc.statusBar') && this.updateStatusBar();
         e.affectsConfiguration('apc.stylesheet') && this.loadStyles();
-        e.affectsConfiguration('apc.activityBar') && (this.updateActivityBar(), this.hideActivityBarSettings());
-
+        if (e.affectsConfiguration('apc.activityBar')) {
+          if (this.activityBarCompositeBar?.activityBarOptions) {
+            this.updateActivityBarItemSize(this.activityBarCompositeBar.activityBarOptions);
+            this.activityBarCompositeBar?.recomputeSizes();
+          }
+          this.updateActivityBar();
+          this.hideActivityBarSettings();
+        }
         if (e.affectsConfiguration('workbench.sideBar.location')) {
           const isTopStatusBarPosition = this.statusBarConfig.position === 'top';
           isTopStatusBarPosition && this.workbenchGrid.moveViewTo(this.statusBarPartView, [-1]);
@@ -520,17 +539,16 @@ function customize(exports, utils, configuration, browser, electron, dom, themeS
       const activityBarConfig = this.activityBarConfig;
       const statusBarConfig = this.statusBarConfig;
       const electronConfig = this.electronConfig?.trafficLightPosition || {};
-      const isActivityBarVisible = this.layout?.isVisible(this.Parts.ACTIVITYBAR_PART) ?? true;
+      // const isActivityBarVisible = this.layout?.isVisible(this.Parts.ACTIVITYBAR_PART) ?? true;
       const sidebarTitlebarConfig = this.sidebarTitlebarConfig;
 
       document.body.classList[statusBarConfig.position === 'top' ? 'add' : 'remove']('statusbar-top');
       document.body.classList[statusBarConfig.position === 'editor-top' ? 'add' : 'remove']('statusbar-editor-top');
 
-      // document.body.classList[isActivityBarVisible && activityBarConfig.position ? 'add' : 'remove']('horizontal-activitybar');
       document.body.classList[activityBarConfig.position ? 'add' : 'remove']('horizontal-activitybar');
-      document.body.classList[isActivityBarVisible && activityBarConfig.position === 'bottom' ? 'add' : 'remove']('activitybar-bottom');
-      document.body.classList[isActivityBarVisible && activityBarConfig.position === 'top' ? 'add' : 'remove']('activitybar-top');
-      document.body.classList[isActivityBarVisible && activityBarConfig.isEnabled ? 'add' : 'remove']('custom-activitybar');
+      document.body.classList[activityBarConfig.position === 'bottom' ? 'add' : 'remove']('activitybar-bottom');
+      document.body.classList[activityBarConfig.position === 'top' ? 'add' : 'remove']('activitybar-top');
+      document.body.classList[activityBarConfig.isEnabled ? 'add' : 'remove']('custom-activitybar');
       document.body.classList[headerConfig.isEnabled ? 'add' : 'remove']('custom-header');
       document.body.classList[sidebarTitlebarConfig.isEnabled ? 'add' : 'remove']('custom-sidebar-titlebar');
       document.body.classList[listRowConfig.isEnabled ? 'add' : 'remove']('custom-list-row');

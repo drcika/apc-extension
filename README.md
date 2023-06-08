@@ -53,10 +53,12 @@ VSCode commands:
 ```jsonc
     "apc.imports": [ 
       "/Users/aleksandarpopovic/.dotfiles/.vsCodeCustom/style.css",
+      "file:///Users/aleksandarpopovic/.dotfiles/.vsCodeCustom/style2.css",
       "/Users/aleksandarpopovic/.dotfiles/.vsCodeCustom/script.js"
+      
       ]
     // Windows
-    "apc.imports": [ "C:\Users\path\style.css" ]
+    "apc.imports": [ "file:///C:/Users/path/style.css" ]
 ```
 
 ### `apc.activityBar`

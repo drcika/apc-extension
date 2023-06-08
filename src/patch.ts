@@ -133,8 +133,15 @@ function patchWorkbench(extensionPath: string) {
 
   const browserEntrypointPathRelative = path.join(workbenchHtmldirRelative, browserMain).replace(/\\/g, '/');
 
-  const patchedWorkbenchHtml = fs.readFileSync(workbenchHtmlPath, 'utf8')
-    .replace('<script src="workbench.js"></script>', `<script src="${browserEntrypointPathRelative}"></script>\n\t<script src="workbench.js"></script>`);
+  // const patchedWorkbenchHtml = fs.readFileSync(workbenchHtmlPath, 'utf8')
+  const patchedWorkbenchHtml = `<!DOCTYPE html>
+  <html>
+    <head><meta charset="utf-8" /></head>
+    <body aria-label=""></body>
+    <!-- Startup (do not modify order of script tags!) -->
+    <script src="${browserEntrypointPathRelative}"></script>
+    <script src="workbench.js"></script>
+  </html>`;
   fs.writeFileSync(workbenchHtmlReplacementPath, patchedWorkbenchHtml, 'utf8');
 
 

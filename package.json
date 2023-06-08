@@ -64,8 +64,9 @@
             }
           }
         },
-        "apc.css": {
+        "apc.imports": {
           "type": "array",
+          "description": "Css files are watched in real time, no need to restart the application",
           "items": {
             "type": "string"
           }
@@ -222,7 +223,7 @@
         "apc.buttons": {
           "type": "array",
           "description": "Views to include on the status bar with associated icons",
-          "default": [],
+          "default": [ ],
           "uniqueItems": true,
           "items": {
             "type": "object",

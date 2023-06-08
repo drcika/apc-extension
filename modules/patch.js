@@ -2,7 +2,7 @@ function error(error) {
   console.trace(error);
 }
 
-function customize(exports, utils, configuration, browser, electron, dom, themeService, workbench) {
+function customize(exports, utils, configuration, browser, electron, dom, themeService, workbench, fileService) {
 
   class Customize {
     constructor(configurationService, nativeHostService, themeService) {
@@ -136,8 +136,8 @@ function customize(exports, utils, configuration, browser, electron, dom, themeS
       const isActivityBarVisible = this.layout?.isVisible(this.Parts?.ACTIVITYBAR_PART);
       this.activitybarPartView.minimumWidth = isHorizontal ? 0 : size;
       this.activitybarPartView.maximumWidth = isHorizontal ? isSideBarVisible ? Infinity : 0 : size;
-      this.activitybarPartView.minimumHeight = isHorizontal && isActivityBarVisible ? size : 0;
-      this.activitybarPartView.maximumHeight = isHorizontal && isActivityBarVisible ? size : Infinity;
+      this.activitybarPartView.minimumHeight = isHorizontal && isSideBarVisible && isActivityBarVisible ? size : 0;
+      this.activitybarPartView.maximumHeight = isHorizontal && isSideBarVisible && isActivityBarVisible ? size : Infinity;
 
       const newPosition = position === 'top' ? 0 : 1;
       isHorizontal && isSideBarVisible && isActivityBarVisible ?
@@ -448,17 +448,32 @@ function customize(exports, utils, configuration, browser, electron, dom, themeS
       }, error);
 
       this.updateCssClasses();
-      this.loadStyles();
       this.loadUserFiles();
+      this.loadStyles();
 
       self.subscribe();
     }
 
-    loadUserFiles() {
-      // in vscode won't work, only in vscodium
+    async loadUserFiles() {
+
       try {
-        const fs = require('fs').promises;
-        const imports = this.configurationService.getValue('apc.css');
+        const imports = this.configurationService?.getValue('apc.imports');
+        const uri = require('vs/base/common/uri');
+        const paths = (imports instanceof Array ? imports : []).filter(path => typeof path === 'string' && path.match(/(\.css|\.js)$/));
+
+        // !! if path removed from config
+        if (!uri?.URI?.parse || !globalThis?.fileService) { return; }
+        if (!this.watchedFiles) {
+          this.watchedFiles = new Map();
+          globalThis?.fileService.onDidFilesChange(event => {
+            // event.rawAdded;
+            // event.rawDeleted;
+            // event.rawUpdated;
+            if (event.rawUpdated.some(config => this.watchedFiles.has(config.path))) {
+              this.loadUserFiles();
+            }
+          });
+        }
         if (!this.customStyleImports) {
           const style = document.createElement('style');
           style.rel = 'stylesheet';
@@ -467,13 +482,39 @@ function customize(exports, utils, configuration, browser, electron, dom, themeS
           document.head.appendChild(style);
         }
 
-        Promise.all((imports instanceof Array ? imports : []).filter(file => file.endsWith('.css')).map(file => fs.readFile(file, 'utf8'))).then(styles => {
-          this.customStyleImports.textContent = styles.filter(Boolean).join('\n');
-        });
+        if (!this.customScriptImports) {
+          this.customScriptImports = document.createElement('script');
+          this.customScriptImports.type = 'text/javascript';
+          document.body.appendChild(this.customScriptImports);
+        }
 
-        console.log(this.customStyleImports.textContent);
+        let newCss = '';
+        let newJs = '';
+
+        for await (const path of paths) {
+          try {
+            const URI = uri.URI.parse(path);
+            const data = await globalThis.fileService.readFile(URI);
+
+            path.endsWith('.css') && this.watchedFiles.set(path, globalThis.fileService.watch(URI));
+
+            if (data.value) {
+              const value = data.value.toString();
+              if (path.endsWith('.css')) {
+                newCss += value;
+              }
+              else { newJs += value; }
+            }
+          } catch (err) {
+            error(err);
+          }
+        }
+
+        this.customStyleImports.textContent = newCss;
+        this.customScriptImports.textContent = newJs;
+
       } catch (err) {
-        // error(err);
+        error(err);
       }
 
     }
@@ -508,7 +549,7 @@ function customize(exports, utils, configuration, browser, electron, dom, themeS
       browser.onDidChangeFullscreen(this.updateCssClasses.bind(this));
 
       this.configurationService.onDidChangeConfiguration(e => {
-        e.affectsConfiguration('apc.css') && this.loadUserFiles();
+        e.affectsConfiguration('apc.imports') && this.loadUserFiles();
         e.affectsConfiguration('apc.statusBar') && this.updateStatusBar();
         e.affectsConfiguration('apc.stylesheet') && this.loadStyles();
         if (e.affectsConfiguration('apc.activityBar')) {
@@ -539,7 +580,6 @@ function customize(exports, utils, configuration, browser, electron, dom, themeS
       const activityBarConfig = this.activityBarConfig;
       const statusBarConfig = this.statusBarConfig;
       const electronConfig = this.electronConfig?.trafficLightPosition || {};
-      // const isActivityBarVisible = this.layout?.isVisible(this.Parts.ACTIVITYBAR_PART) ?? true;
       const sidebarTitlebarConfig = this.sidebarTitlebarConfig;
 
       document.body.classList[statusBarConfig.position === 'top' ? 'add' : 'remove']('statusbar-top');
@@ -578,6 +618,13 @@ function customize(exports, utils, configuration, browser, electron, dom, themeS
 
   let customizeService;
 
+  fileService.FileService && (fileService.FileService = class ListView extends fileService.FileService {
+    constructor() {
+      super(...arguments);
+      globalThis.fileService = this;
+    }
+  });
+
   utils.override(workbench.Workbench, "startup", function (original) {
     const res = original();
     customizeService.updateActivityBar();
@@ -603,4 +650,5 @@ define([
   'vs/base/browser/dom',
   'vs/platform/theme/common/themeService',
   'vs/workbench/browser/workbench',
+  'vs/platform/files/common/fileService',
 ], customize);

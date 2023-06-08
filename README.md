@@ -47,16 +47,16 @@ VSCode commands:
     }
     }
 ```
-### `apc.css`
+### `apc.imports`
 
-**Only VSCodium**
-
-***vscode won't work (for now)***
-
+***Css files are watched in real time, no need to restart the application***
 ```jsonc
-    "apc.css": [ "/Users/aleksandarpopovic/.dotfiles/.vsCodeCustom/style.css" ]
+    "apc.imports": [ 
+      "/Users/aleksandarpopovic/.dotfiles/.vsCodeCustom/style.css",
+      "/Users/aleksandarpopovic/.dotfiles/.vsCodeCustom/script.js"
+      ]
     // Windows
-    "apc.css": [ "C:\Users\path\style.css" ]
+    "apc.imports": [ "C:\Users\path\style.css" ]
 ```
 
 ### `apc.activityBar`

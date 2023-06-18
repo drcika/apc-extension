@@ -34,14 +34,19 @@ function fixPath(path: string) {
 const fixedPatchPath = fixPath(patchPath);
 const fixedModulesPath = fixPath(modulesPath);
 
+function isFilesChanges(context: vscode.ExtensionContext): boolean {
+  return fs.readdirSync(modulesPath).some(name => fs.readFileSync(path.join(modulesPath, name), "utf8") !== fs.readFileSync(path.join(context.extensionPath, modules, name), "utf8"));
+}
+
 export async function ensurePatch(context: vscode.ExtensionContext) {
+
   if (
     !fs.existsSync(bootstrapBackupPath) ||
     !fs.existsSync(workbenchHtmlReplacementPath) ||
     !fs.readFileSync(bootstrapPath, "utf8")?.includes('$apcExtensionBootstrapToken$') ||
     !fs.existsSync(browserEntrypointPath) ||
     !fs.existsSync(modulesPath) ||
-    fs.readFileSync(path.join(modulesPath, 'patch.js'), "utf8") !== fs.readFileSync(path.join(context.extensionPath, modules, 'patch.js'), "utf8")
+    isFilesChanges(context)
   ) {
     await install(context);
   }

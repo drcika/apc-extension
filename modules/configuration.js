@@ -161,7 +161,7 @@ define(['exports', 'apc/auxiliary'], function (exports, auxiliary) {
       },
 
       getColor(config) {
-        try { return store.themeService.getColorTheme().getColor(config).toString(); }
+        try { return store.themeService.getColorTheme().getColor(config)?.toString(); }
         catch (error) { traceError(error); }
       }
 

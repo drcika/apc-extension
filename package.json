@@ -119,6 +119,11 @@
             }
           }
         },
+        "apc.menubar.compact": {
+          "type": "boolean",
+          "default": false,
+          "description": "Enables compact menu bar on macos"
+        },
         "apc.electron": {
           "type": "object",
           "description": "see https://www.electronjs.org/docs/latest/tutorial/window-customization",
@@ -223,7 +228,7 @@
         "apc.buttons": {
           "type": "array",
           "description": "Views to include on the status bar with associated icons",
-          "default": [],
+          "default": [ ],
           "uniqueItems": true,
           "items": {
             "type": "object",

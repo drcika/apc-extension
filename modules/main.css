@@ -71,6 +71,11 @@ div.monaco-workbench {
 
 .horizontal-activitybar .monaco-workbench .activitybar>.content {
   flex-direction: row;
+  justify-content: unset;
+}
+
+.horizontal-activitybar .global-activity-actionbar {
+  margin-left: auto;
 }
 
 .horizontal-activitybar .monaco-workbench .activitybar>.content .monaco-action-bar .badge .badge-content {
@@ -83,6 +88,7 @@ div.monaco-workbench {
   top: calc(var(--activity-bar-action-size) / 2);
 }
 
+.horizontal-activitybar .monaco-workbench .activitybar .menubar,
 .custom-activitybar div.monaco-workbench div.activitybar>div.content div.monaco-action-bar ul.actions-container li.action-item a.action-label {
   height: var(--activity-bar-action-size);
   width: var(--activity-bar-action-size);
@@ -129,6 +135,8 @@ body:not(.horizontal-activitybar) .nosidebar:not(.sidebar-right):not(.no-activit
   min-width: calc(var(--traffic-X) + 46px - var(--activity-bar-action-size));
 }
 
+/* .inline-title-bar.activitybar-top:not(.statusbar-top) .monaco-workbench:not(.fullscreen) .activitybar.left .content .composite-bar  */
+/* .inline-title-bar.activitybar-top:not(.statusbar-top) .monaco-workbench:not(.fullscreen) .activitybar.left .content */
 .inline-title-bar:not(.horizontal-activitybar):not(.activitybar-top):not(.statusbar-top) .monaco-workbench.no-activity-bar:not(.sidebar-right):not(.fullscreen) .inline-titlebar-placeholder,
 .horizontal-activitybar:not(.statusbar-editor-top):not(.statusbar-top) .monaco-workbench.sidebar-right.noauxiliarybar:not(.fullscreen) .part.editor>.content .editor-group-container>.title:not(.tabs),
 .horizontal-activitybar:not(.frameless-title-bar):not(.statusbar-editor-top):not(.statusbar-top) .monaco-workbench:not(.sidebar-right).nosidebar:not(.fullscreen) .part.editor>.content .editor-group-container>.title:not(.tabs),
@@ -136,8 +144,7 @@ body:not(.horizontal-activitybar) .nosidebar:not(.sidebar-right):not(.no-activit
 .inline-title-bar:not(.statusbar-editor-top):not(.statusbar-top) .monaco-workbench.no-activity-bar.sidebar-right.noauxiliarybar:not(.fullscreen) .part.editor>.content .editor-group-container>.title:not(.tabs),
 .inline-title-bar.statusbar-top .statusbar,
 .inline-title-bar.statusbar-editor-top .monaco-workbench.nosidebar:not(.sidebar-right):not(.fullscreen) .statusbar,
-.inline-title-bar.statusbar-editor-top .monaco-workbench.sidebar-right.noauxiliarybar:not(.fullscreen) .statusbar,
-.inline-title-bar.activitybar-top:not(.statusbar-top) .monaco-workbench:not(.fullscreen) .activitybar.left .content .composite-bar {
+.inline-title-bar.statusbar-editor-top .monaco-workbench.sidebar-right.noauxiliarybar:not(.fullscreen) .statusbar {
   padding-left: calc(var(--traffic-X) + 52px);
 }
 
@@ -148,6 +155,10 @@ body:not(.horizontal-activitybar) .nosidebar:not(.sidebar-right):not(.no-activit
 
 .inline-title-bar.statusbar-editor-top:not(.horizontal-activitybar) .monaco-workbench.nosidebar:not(.sidebar-right):not(.fullscreen) .statusbar {
   padding-left: calc(var(--traffic-X) + 60px - var(--activity-bar-action-size));
+}
+
+.inline-title-bar.activitybar-top:not(.statusbar-top) .monaco-workbench:not(.fullscreen) .activitybar.left .content>div:first-child {
+  margin-left: calc(var(--traffic-X) + 60px);
 }
 
 .inline-title-bar:not(.statusbar-top) .monaco-workbench:not(.fullscreen) .auxiliarybar.left .composite.title {

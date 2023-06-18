@@ -1,13 +1,15 @@
 define(['exports'], function (exports) {
   exports.override = function (where, name, cb) {
     (function (original) {
-      where.prototype[name] = function () {
-        const t = this;
-        const a = arguments;
-        const res = cb.apply(this, [() => original?.apply(t, a), a]);
-        return res;
-      };
-    })(where.prototype[name]);
+      if (where?.prototype) {
+        where.prototype[name] = function () {
+          const t = this;
+          const a = arguments;
+          const res = cb.apply(this, [() => original?.apply(t, a), a]);
+          return res;
+        };
+      }
+    })(where?.prototype[name]);
   };
 
   exports.decorate =
@@ -32,7 +34,7 @@ define(['exports'], function (exports) {
     (this && this.__param) ||
     function (paramIndex, decorator) {
       return function (target, key) {
-        decorator(target, key, paramIndex);
+        typeof decorator === 'function' && decorator(target, key, paramIndex);
       };
     };
 });

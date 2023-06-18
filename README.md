@@ -27,6 +27,33 @@ VSCode commands:
   
 ## Supported configuration options
 
+### `apc.imports`
+
+***Css files are watched in real time, no need to restart the application***
+```jsonc
+    "apc.imports": [ 
+      "/Users/some/path/style.css",
+      "/Users/some/path/script.js",
+      "/C:/Users/path/style.css", // windows
+      // or
+      // see https://developer.mozilla.org/en-US/docs/Web/HTML/Element/link
+      // local file imported like this is not watched in real time
+      {
+        "rel": "stylesheet",
+        "href": "https://fonts.googleapis.com/css?family=Sofia"
+      },
+      // or
+      // see https://developer.mozilla.org/en-US/docs/Web/HTML/Element/script
+      {
+        "async":"async",
+        "type":"text/javascript", 
+        "src": "https://some/path.js"
+      }
+      ]
+    // Windows
+    "apc.imports": [ ]
+```
+
 ### `apc.stylesheet`
 
 ```jsonc
@@ -46,19 +73,6 @@ VSCode commands:
       ...etc
     }
     }
-```
-### `apc.imports`
-
-***Css files are watched in real time, no need to restart the application***
-```jsonc
-    "apc.imports": [ 
-      "/Users/aleksandarpopovic/.dotfiles/.vsCodeCustom/style.css",
-      "file:///Users/aleksandarpopovic/.dotfiles/.vsCodeCustom/style2.css",
-      "/Users/aleksandarpopovic/.dotfiles/.vsCodeCustom/script.js"
-      
-      ]
-    // Windows
-    "apc.imports": [ "file:///C:/Users/path/style.css" ]
 ```
 
 ### `apc.activityBar`

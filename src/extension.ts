@@ -60,8 +60,10 @@ export function activate(context: vscode.ExtensionContext) {
         }
       }
 
-      promptRestart();
+      return promptRestart();
     }
+
+    e.affectsConfiguration('apc.menubar.compact') && isEnabled && promptRestart(); // reload
   }
   function onDidChangeWorkspaceFolders(e: vscode.WorkspaceFoldersChangeEvent) {
     applyButtons(context);

@@ -96,9 +96,45 @@ VSCode commands:
 
 ### `apc.electron`
 
-see https://www.electronjs.org/docs/latest/tutorial/window-customization
+see 
 
+https://www.electronjs.org/docs/latest/api/browser-window#new-browserwindowoptions
+
+*vibrancy requires other panels to be transparent*
+
+see demo https://github.com/drcika/apc-extension/blob/production/demo/vibrancy.settings.json
+
+# Disclaimer #
+
+this extension only allows configuring electron / vscode 
+
+I didn't develop anything or provide support for possible bugs
+
+I'm just providing a bridge to configure electron / vscode
+
+all possible configuration
+
+https://www.electronjs.org/docs/latest/api/browser-window#new-browserwindowoptions
+
+### be careful with the "apc.electron" configuration if you put not a valid parameter the vscode/vscodium won't start ###
 ```jsonc
+    // requires other panels to be transparent
+    // see demo https://github.com/drcika/apc-extension/blob/production/demo/vibrancy.settings.json
+    "apc.electron": {
+      "vibrancy": "ultra-dark"
+    }
+    
+    // or
+    "apc.electron": {
+      "backgroundColor": "rgba(123, 123, 123, 0.5)",
+      "frame": false,
+      "transparent": true,
+      "titleBarStyle": "hiddenInset",
+      "vibrancy": "ultra-dark",
+      "opacity": 0.98, // range 0-1 if value 0 full transparent and you won't see 
+      "visualEffectState": "active"
+    }
+    // or
     "apc.electron": {
       "frame": false,
     }
@@ -150,6 +186,13 @@ see https://www.electronjs.org/docs/latest/tutorial/window-customization
       "height": number,
       "fontSize": number
     }
+```
+
+### `apc.menubar.compact`
+
+```jsonc
+    // "Enables compact menu bar on macos"
+    "apc.menubar.compact": true
 ```
 
 <div style="text-align:center">

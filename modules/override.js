@@ -141,7 +141,7 @@ define(['exports', 'apc/auxiliary', 'apc/configuration', 'apc/layout', 'apc/ui']
       const sideBarPosition = store.layoutService.getSideBarPosition();
 
       const padding = sideBarPosition !== store.Position.RIGHT && position === 'top' && config.electron.titleBarStyle && config.statusBar.position !== 'top' ? 55 : 0;
-      const menubar = store.menubarControlContainer.isConnected ? size : 0;
+      const menubar = store.menubarControlContainer?.isConnected ? size : 0;
       const viewItems = store.globalActivityActionBar?.domNode?.isConnected ? (store.globalActivityActionBar.viewItems.length) * size : 0;
       const availableSize = width - viewItems - menubar - padding;
 

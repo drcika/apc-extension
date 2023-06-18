@@ -6,7 +6,7 @@ define(['vs/platform/windows/electron-main/windowImpl', 'vs/platform/theme/elect
 
   if (codeWindowKey) {
     windowImpl[codeWindowKey] = class CodeWindow extends windowImpl[codeWindowKey] {
-      constructor(logService, loggerMainService, environmentMainService, policyService, userDataProfilesService, fileService, applicationStorageMainService, storageMainService,
+      constructor(_config, logService, loggerMainService, environmentMainService, policyService, userDataProfilesService, fileService, applicationStorageMainService, storageMainService,
         configurationService, themeMainService, workspacesManagementMainService, backupMainService, telemetryService, dialogMainService, lifecycleMainService, productService,
         protocolMainService, windowsMainService, stateService) {
         const config = configurationService.getValue('apc.electron');

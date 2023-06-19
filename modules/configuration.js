@@ -18,10 +18,10 @@ define(['exports', 'apc/auxiliary'], function (exports, auxiliary) {
   };
 
   try {
-    const { store, findOwnPrototype, traceError } = auxiliary;
+    const { store, findOwnProperty, traceError } = auxiliary;
 
-    const [, DisposableStore] = findOwnPrototype(require('vs/base/common/lifecycle'), 'DisposableStore', 'DISABLE_DISPOSED_WARNING');
-    const [, Dimension] = findOwnPrototype(require('vs/base/browser/dom'), 'Dimension', 'equals');
+    const [, DisposableStore] = findOwnProperty(require('vs/base/common/lifecycle'), 'DisposableStore', 'DISABLE_DISPOSED_WARNING');
+    const [, Dimension] = findOwnProperty(require('vs/base/browser/dom'), 'Dimension', 'equals');
 
     store.Dimension = Dimension;
 

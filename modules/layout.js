@@ -97,7 +97,7 @@ define(['exports', 'apc/auxiliary', 'apc/configuration'], (exports, auxiliary, c
         store.activitybarPartView.minimumWidth = width;
         store.activitybarPartView.maximumWidth = width;
 
-        store.workbenchGrid.addView(store.activitybarPartView, width, store.dummActivitybarPartView, store.Direction?.Left ?? 2);
+        store.workbenchGrid.addView(store.activitybarPartView, width, store.dummActivitybarPartView, store.Direction?.Left);
         store.workbenchGrid.removeView(store.dummActivitybarPartView);
 
         updateActivityBarClassList(isHorizontal);
@@ -140,7 +140,9 @@ define(['exports', 'apc/auxiliary', 'apc/configuration'], (exports, auxiliary, c
         }
         // top <--> bottom
         else if (store.previousActivityBarConfig.position && position && store.previousActivityBarConfig.position !== position) {
-          store.workbenchGrid.moveView && store.workbenchGrid.moveView(store.activitybarPartView, size, store.sidebarPartView, position === 'top' ? 0 : 1);
+          // !! direction ?? TOP BOTTOM
+          // !! same as status bar
+          store.workbenchGrid.moveView(store.activitybarPartView, size, store.sidebarPartView, position === 'top' ? 0 : 1);
           store.previousActivityBarConfig.position = position;
         }
         else if (store.previousActivityBarConfig.size !== size) {
@@ -233,13 +235,14 @@ define(['exports', 'apc/auxiliary', 'apc/configuration'], (exports, auxiliary, c
     function updateStatusBar() {
       try {
         const { position, height } = config.statusBar;
-        if (position === 'bottom' && store.previousStatusBarConfig.position !== 'bottom') {
+        const prevPosition = store.previousStatusBarConfig.position;
+        if (position === 'bottom' && prevPosition !== 'bottom') {
           restoreStatusbar();
         }
-        else if (position !== 'bottom' && store.previousStatusBarConfig.position === 'bottom') {
+        else if (position !== 'bottom' && prevPosition === 'bottom') {
           moveStatusBar();
         }
-        else if (store.previousStatusBarConfig.position !== position) {
+        else if (prevPosition !== position) {
           switchStatusbarPosition();
         }
         else if (store.previousStatusBarConfig.height !== height) {

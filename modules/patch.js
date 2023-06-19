@@ -1,7 +1,7 @@
 define(
   ['exports', 'apc/utils', 'apc/auxiliary', 'apc/configuration', 'apc/classes', 'apc/ui', 'apc/layout'],
   (exports, utils, auxiliary, { config }, classes, ui, layout) => {
-    const { traceError, findOwnPrototype, store } = auxiliary;
+    const { traceError, findOwnProperty, store } = auxiliary;
 
     try {
       // store.dev = true;
@@ -42,8 +42,8 @@ define(
 
       exports.run = (instantiationService) => {
         try {
-          const [, INativeHostServiceClass] = findOwnPrototype(require('vs/platform/native/common/native'), 'INativeHostService', 'toString'); // the only one
-          const [, IConfigurationService] = findOwnPrototype(require('vs/platform/configuration/common/configuration'), 'IConfigurationService', 'toString'); // len 3, toString
+          const [, INativeHostServiceClass] = findOwnProperty(require('vs/platform/native/common/native'), 'INativeHostService', 'toString'); // the only one
+          const [, IConfigurationService] = findOwnProperty(require('vs/platform/configuration/common/configuration'), 'IConfigurationService', 'toString'); // len 3, toString
 
           instantiationService.createInstance(utils.decorate([utils.param(0, INativeHostServiceClass), utils.param(1, IConfigurationService)], Patch));
 

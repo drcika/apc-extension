@@ -2,7 +2,7 @@ define(
   ['exports', 'apc/utils', 'apc/auxiliary', 'apc/configuration', 'apc/override', 'apc/layout', 'apc/ui'],
   function (exports, utils, auxiliary, { config }, override, layout, UI) {
     try {
-      const { traceError, findInPrototype, findOwnPrototype, store, getProperty, storeReference, Part } = auxiliary;
+      const { traceError, findInPrototype, findOwnProperty, store, getProperty, storeReference, Part } = auxiliary;
 
       exports.fileService = function (fileService) {
         const [fileServiceKey, FileServiceClass] = findInPrototype(fileService, 'FileService', 'readFile'); // the only one
@@ -25,7 +25,7 @@ define(
 
       exports.grid = function (grid) {
         try {
-          const [serializableGridKey, SerializableGridClass] = findOwnPrototype(grid, 'SerializableGrid', 'deserialize');
+          const [serializableGridKey, SerializableGridClass] = findOwnProperty(grid, 'SerializableGrid', 'deserialize');
           store.Direction = grid.Direction;
           store.Orientation = grid.Orientation;
           const orgDeserialize = grid[serializableGridKey].deserialize;

@@ -36,11 +36,12 @@ define(['exports'], function (exports) {
   exports.getProperty = getProperty;
 
   exports.findInPrototype = function (obj, original, property) {
+    if (obj[original]) { return [original, obj[original]]; }
     for (const key in obj) { if (obj[key] instanceof Function && property in obj[key].prototype) { return [key, obj[key]]; } }
     return [];
   };
 
-  exports.findOwnPrototype = function (obj, original, property) {
+  exports.findOwnProperty = function (obj, original, property) {
     if (obj[original]) { return [original, obj[original]]; }
     for (const key in obj) { if (obj[key] instanceof Function && obj[key].hasOwnProperty(property)) { return [key, obj[key]]; } }
     return [];

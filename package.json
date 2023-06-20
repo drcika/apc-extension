@@ -2,7 +2,7 @@
   "name": "apc-extension",
   "displayName": "Apc Customize UI++",
   "description": "Advanced VSCode user interface customizations. Very experimental.",
-  "version": "0.1.4",
+  "version": "0.1.5",
   "repository": "https://github.com/drcika/apc-extension",
   "publisher": "drcika",
   "license": "MIT",
@@ -271,7 +271,7 @@
         "apc.buttons": {
           "type": "array",
           "description": "Views to include on the status bar with associated icons",
-          "default": [ ],
+          "default": [],
           "uniqueItems": true,
           "items": {
             "type": "object",

@@ -15,18 +15,25 @@ define(['exports', 'apc/auxiliary', 'apc/configuration'], (exports, auxiliary, c
     }
     exports.appendStyleElement = appendStyleElement;
 
-    function prependDiv(parent, classList = '') {
+    function createDiv(classList) {
       const div = document.createElement('div');
       div.classList.add(classList);
-      parent?.prepend && parent.prepend(div);
+      return div;
+    }
+    exports.createDiv = createDiv;
+
+    function prependDiv(parent, classList = '') {
+      const div = createDiv(classList);
+      try { parent.prepend(div); }
+      catch (error) { traceError(error); }
       return div;
     }
     exports.prependDiv = prependDiv;
 
     function appendDiv(parent, classList = '') {
-      const div = document.createElement('div');
-      div.classList.add(classList);
-      parent?.appendChild && parent.appendChild(div);
+      const div = createDiv(classList);
+      try { parent.appendChild(div); }
+      catch (error) { traceError(error); }
       return div;
     }
     exports.appendDiv = appendDiv;
@@ -63,7 +70,7 @@ define(['exports', 'apc/auxiliary', 'apc/configuration'], (exports, auxiliary, c
         --titlebar-font-size: ${sidebarTitlebarConfig.fontSize}px;
         --activity-bar-action-size: ${activityBarConfig.size}px;
         --status-bar-font-size: ${statusBarConfig.fontSize}px;
-        --traffic-X: ${trafficLightPosition?.x ?? 10}px;
+        --traffic-X: ${trafficLightPosition.x}px;
         `;
     };
     exports.updateClasses = updateClasses;
@@ -103,19 +110,23 @@ define(['exports', 'apc/auxiliary', 'apc/configuration'], (exports, auxiliary, c
     }
     exports.createExternal = createExternal;
 
+    function onDidFilesChange(event) {
+      const isFilesChanged = [event.rawUpdated, event.rawAdded, event.rawDeleted].some(changes => changes.some(config => store.watchedFiles.has(config.path)));
+      if (isFilesChanged) { appendFiles(); }
+    }
+
     async function appendFiles() {
       try {
         const imports = config.getConfiguration('apc.imports');
         const paths = (imports instanceof Array ? imports : []);
 
-        if (!store.watchedFiles) {
-          store.watchedFiles = new Map();
-          const disposable = store.fileService.onDidFilesChange(event => [event.rawUpdated, event.rawAdded, event.rawDeleted].some(changes => changes.some(config => store.watchedFiles.has(config.path))) && appendFiles());
-          config.disposables.add(disposable);
-        }
-        else {
+        if (store.watchedFiles) {
           store.watchedFiles.forEach(file => file.dispose());
           store.watchedFiles.clear();
+        }
+        else {
+          store.watchedFiles = new Map();
+          config.disposables.add(store.fileService.onDidFilesChange(onDidFilesChange));
         }
 
         if (store.externalLinks) {
@@ -152,7 +163,7 @@ define(['exports', 'apc/auxiliary', 'apc/configuration'], (exports, auxiliary, c
               if (isCss) {
                 const disposable = store.fileService.watch(URI);
                 config.disposables.add(disposable);
-                store.watchedFiles.set(path, disposable);
+                store.watchedFiles.set(URI.path, disposable);
               }
               const source = isCss ? store.customFileImports : store.customScriptImports;
               source.textContent = data?.value?.toString ? `${data.value.toString()}\n` : '';
@@ -171,14 +182,13 @@ define(['exports', 'apc/auxiliary', 'apc/configuration'], (exports, auxiliary, c
 
     exports.run = function () {
       try {
-        if (config.electron.titleBarStyle) { document.body.classList.add(`inline-title-bar`); }
-        if (config.electron.frame === false) { document.body.classList.add(`frameless-title-bar`); }
+        if (store.isMacintosh && config.electron.titleBarStyle) { document.body.classList.add(`inline-title-bar`); }
+        if (store.isMacintosh && config.electron.frame === false) { document.body.classList.add(`frameless-title-bar`); }
 
         updateClasses();
         appendFiles();
         appendStyles();
 
-        // config.addDisposable(store.PixelRatio.onDidChange(() => updateClasses()));
       } catch (error) { traceError(error); }
     };
   } catch (error) { traceError(error); }

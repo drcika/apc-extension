@@ -31,12 +31,9 @@ define(['exports', 'apc/auxiliary'], function (exports, auxiliary) {
         const original = browser[key];
         browser[key] = function (arg) {
           if (typeof arg === 'number') { store.zoomFactor = arg; }
-          // if(typeof arg === 'boolean') {} fullscreen
           original(arg);
         };
       }
-      // else if (browser[key] instanceof Object && 'onDidChange' in browser[key]) { store.PixelRatio = browser[key]; }
-      // else if (browser[key] instanceof Function && browser[key].length === 3) { store.onDidChangeFullscreen = browser[key]; }
     }
 
     exports.config = {
@@ -124,10 +121,12 @@ define(['exports', 'apc/auxiliary'], function (exports, auxiliary) {
         };
       },
 
-      // !! default value
       get electron() {
         if (!this._electronConfig) {
           this._electronConfig = this.getConfiguration('apc.electron') || {};
+          if (!this._electronConfig.trafficLightPosition) { this._electronConfig.trafficLightPosition = {}; }
+          if (!this._electronConfig.trafficLightPosition.x !== undefined) { this._electronConfig.trafficLightPosition.x = 6; }
+          if (!this._electronConfig.trafficLightPosition.y !== undefined) { this._electronConfig.trafficLightPosition.y = 6; }
         }
         return this._electronConfig;
       },
@@ -163,8 +162,13 @@ define(['exports', 'apc/auxiliary'], function (exports, auxiliary) {
       getColor(config) {
         try { return store.themeService.getColorTheme().getColor(config)?.toString(); }
         catch (error) { traceError(error); }
-      }
+      },
 
+      isVisible(part) {
+        try { return store.layoutService.isVisible(part); }
+        catch (error) { traceError(error); }
+        return false;
+      }
     };
   } catch (error) { traceError(error); }
 

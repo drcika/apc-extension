@@ -1,11 +1,10 @@
 define(
-  ['exports', 'apc/utils', 'apc/auxiliary', 'apc/configuration', 'apc/classes', 'apc/ui', 'apc/layout'],
-  (exports, utils, auxiliary, { config }, classes, ui, layout) => {
+  ['exports', 'apc/utils', 'apc/auxiliary', 'apc/configuration', 'apc/classes', 'apc/ui', 'apc/layout', 'apc/layout.statusbar', 'apc/layout.activitybar'],
+  (exports, utils, auxiliary, { config }, classes, ui, layout, statusbar, activitybar) => {
     const { traceError, findOwnProperty, store } = auxiliary;
 
     try {
       // store.dev = true;
-      // src/vs/platform/commands/common/commands.ts
 
       require(['vs/platform/files/common/fileService'], classes.fileService, traceError);
       require(['vs/base/browser/ui/grid/grid'], classes.grid, traceError);
@@ -50,15 +49,19 @@ define(
           ui.run();
 
           config.addDisposable(config.onDidChangeConfiguration(e => {
-            if (!store.initialised) { return store.initialised = true; }
+            if (Array.from(e.affectedKeys.values()).find(key => key.startsWith('apc.'))) {
+              if (!store.initialised) { return (store.initialised = true); }
+              ui.updateClasses();
+            };
 
-            e.affectsConfiguration('workbench.sideBar.location') && layout.onChangeSideBarPosition();
-            e.affectsConfiguration('apc.statusBar') && layout.updateStatusBar();
-            e.affectsConfiguration('apc.activityBar') && layout.updateActivityBar();
+            e.affectsConfiguration('workbench.activityBar.visible') && activitybar.onChangeVisibility();
+            e.affectsConfiguration('workbench.sideBar.location') && layout.onChangeSidebarPosition();
+            e.affectsConfiguration('workbench.statusBar.visible') && statusbar.onChangeVisibility();
+            e.affectsConfiguration('apc.statusBar') && statusbar.update();
+            e.affectsConfiguration('apc.activityBar') && activitybar.update();
             e.affectsConfiguration('apc.imports') && ui.appendFiles();
             e.affectsConfiguration('apc.stylesheet') && ui.appendStyles();
 
-            Array.from(e.affectedKeys.values()).find(key => key.startsWith('apc.')) && ui.updateClasses();
           }));
 
         } catch (error) { traceError(error); }

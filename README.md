@@ -49,9 +49,7 @@ VSCode commands:
         "type":"text/javascript", 
         "src": "https://some/path.js"
       }
-      ]
-    // Windows
-    "apc.imports": [ ]
+    ]
 ```
 
 ### `apc.stylesheet`

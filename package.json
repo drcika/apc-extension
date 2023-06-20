@@ -138,6 +138,49 @@
               "type": "boolean",
               "default": false
             },
+            "opacity": {
+              "type": "number",
+              "default": 1,
+              "description": "Set the initial opacity of the window, between 0.0 (fully transparent) and 1.0 (fully opaque). This is only implemented on Windows and macOS."
+            },
+            "vibrancy": {
+              "description": "macos - Adds a vibrancy effect to the browser window. Passing null or an empty string will remove the vibrancy effect on the window. Note that appearance-based, light, dark, medium-light, and ultra-dark have been deprecated and will be removed in an upcoming version of macOS.",
+              "type": "string",
+              "enum": [
+                "appearance-based",
+                "light",
+                "dark",
+                "titlebar",
+                "selection",
+                "menu",
+                "popover",
+                "sidebar",
+                "medium-light",
+                "ultra-dark",
+                "header",
+                "sheet",
+                "window",
+                "hud",
+                "fullscreen-ui",
+                "tooltip",
+                "content",
+                "under-window",
+                "under-page"
+              ]
+            },
+            "visualEffectState": {
+              "description": "macos - Specify how the material appearance should reflect window activity state on macOS. Must be used with the vibrancy property.",
+              "type": "string",
+              "enum": [
+                "followWindow",
+                "active",
+                "inactive"
+              ]
+            },
+            "backgroundColor": {
+              "description": "Color in Hex, RGB, RGBA, HSL, HSLA or named CSS color format. The alpha channel is optional for the hex type. default light theme #fff, dark theme #000",
+              "type": "string"
+            },
             "titleBarStyle": {
               "description": "see https://www.electronjs.org/docs/latest/tutorial/window-customization",
               "type": "string",
@@ -228,7 +271,7 @@
         "apc.buttons": {
           "type": "array",
           "description": "Views to include on the status bar with associated icons",
-          "default": [],
+          "default": [ ],
           "uniqueItems": true,
           "items": {
             "type": "object",

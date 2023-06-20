@@ -1,6 +1,6 @@
 define(
-  ['exports', 'apc/utils', 'apc/auxiliary', 'apc/configuration', 'apc/override', 'apc/layout', 'apc/ui'],
-  function (exports, utils, auxiliary, { config }, override, layout, UI) {
+  ['exports', 'apc/utils', 'apc/auxiliary', 'apc/configuration', 'apc/override', 'apc/ui', 'apc/layout.activitybar'],
+  function (exports, utils, auxiliary, { config }, override, UI, activitybar) {
     try {
       const { traceError, findInPrototype, findOwnProperty, store, getProperty, storeReference, Part } = auxiliary;
 
@@ -66,36 +66,38 @@ define(
 
       exports.menu = function (menu) {
         try {
-          // store.MenuDirection = menu.Direction; // ??
-          const [menuKey, MenuClass] = findInPrototype(menu, 'Menu', 'trigger'); // the only one type class
-          menu[menuKey] = class Menu extends MenuClass {
-            constructor(menuHolder) {
-              super(...arguments);
-              try {
-                const { position, isHorizontal } = config.activityBar;
-                if (isHorizontal) {
-                  const sideBarPosition = store.layoutService.getSideBarPosition();
-                  const isTop = position === 'top';
-                  const isLeft = sideBarPosition === store.Position.LEFT;
-                  if (!isTop) {
-                    const menuElement = store.menubarControlContainer.querySelector('.monaco-menu');
-                    const maxHeight = `${menuElement.querySelector('.monaco-action-bar').clientHeight}px`;
-                    menuElement.style.maxHeight = maxHeight;
-                    const slider = store.menubarControlContainer.querySelector('.scrollbar.vertical > .slider');
-                    slider.style.height = 0;
+          if (store.isMacintosh) {
+            const [menuKey, MenuClass] = findInPrototype(menu, 'Menu', 'trigger'); // the only one type class
+            menu[menuKey] = class Menu extends MenuClass {
+              constructor(menuHolder) {
+                super(...arguments);
+                try {
+                  if (!config.getConfiguration('apc.menubar.compact')) { retur; }
+                  const { position, isHorizontal } = config.activityBar;
+                  if (isHorizontal) {
+                    const sideBarPosition = store.layoutService.getSideBarPosition();
+                    const isTop = position === 'top';
+                    const isLeft = sideBarPosition === store.Position.LEFT;
+                    if (!isTop) {
+                      const menuElement = store.menubarControlContainer.querySelector('.monaco-menu');
+                      const maxHeight = `${menuElement.querySelector('.monaco-action-bar').clientHeight}px`;
+                      menuElement.style.maxHeight = maxHeight;
+                      const slider = store.menubarControlContainer.querySelector('.scrollbar.vertical > .slider');
+                      slider.style.height = 0;
+                    }
+
+                    const titleBoundingRect = store.menubarControlContainer.querySelector('.menubar-menu-title').getBoundingClientRect();
+                    const menuHolderBoundingRect = menuHolder.getBoundingClientRect();
+
+                    menuHolder.style.top = isTop ? `${titleBoundingRect.top}px` : `${titleBoundingRect.bottom - menuHolderBoundingRect.height}px`;
+                    menuHolder.style.left = isLeft ? `${titleBoundingRect.left + titleBoundingRect.width}px` : `${titleBoundingRect.left - menuHolderBoundingRect.width}px`;
+                    menuHolder.style.right = 'auto';
+                    menuHolder.style.bottom = 'auto';
                   }
-
-                  const titleBoundingRect = store.menubarControlContainer.querySelector('.menubar-menu-title').getBoundingClientRect();
-                  const menuHolderBoundingRect = menuHolder.getBoundingClientRect();
-
-                  menuHolder.style.top = isTop ? `${titleBoundingRect.top}px` : `${titleBoundingRect.bottom - menuHolderBoundingRect.height}px`;
-                  menuHolder.style.left = isLeft ? `${titleBoundingRect.left + titleBoundingRect.width}px` : `${titleBoundingRect.left - menuHolderBoundingRect.width}px`;
-                  menuHolder.style.right = 'auto';
-                  menuHolder.style.bottom = 'auto';
-                }
-              } catch (error) { traceError(error); }
-            }
-          };
+                } catch (error) { traceError(error); }
+              }
+            };
+          }
         } catch (error) { traceError(error); }
       };
 
@@ -199,20 +201,26 @@ define(
               super(...arguments);
               storeReference({ configurationService, fileService, themeService, notificationService, editorGroupService, editorPartView: accessor });
               if (!config.isInline) { return; }
-              // ?? on every editor view
               try {
-                const dragPlaceholder = UI.appendDiv(accessor.element, 'inline-drag-placeholder');
-                accessor.element.style.position = 'relative';
-                config.handleDblclick(dragPlaceholder, e => {
-                  e.stopPropagation(); // ??
-                  e.stopImmediatePropagation(); // ??
-                  config.handleTitleDoubleClick();
-                });
-                UI.prependDiv(parent.querySelector('.tabs-and-actions-container'), 'inline-tabs-placeholder');
+                if (!store.dragPlaceholder) {
+                  const dragPlaceholder = UI.appendDiv(accessor.element, 'inline-drag-placeholder');
+                  accessor.element.style.position = 'relative';
+                  config.handleDblclick(dragPlaceholder, e => {
+                    e.stopPropagation(); // ??
+                    e.stopImmediatePropagation(); // ??
+                    config.handleTitleDoubleClick();
+                  });
+                }
+                if (!store.inlineTabsPlaceholder) {
+                  store.inlineTabsPlaceholder = UI.createDiv('inline-tabs-placeholder');
+                  parent.querySelector('.tabs-and-actions-container').prepend(store.inlineTabsPlaceholder);
+                }
               }
               catch (error) { traceError(error); }
             }
           };
+
+          utils.override(TabsTitleControlClass, 'dispose', override.onTabsGroupClose);
 
         } catch (error) { traceError(error); }
       };
@@ -238,18 +246,15 @@ define(
 
       exports.statusbarPart = function (statusbarPart) {
         try {
-          // ?? can be used for custom btn
           const [, StatusbarPartClass] = findInPrototype(statusbarPart, 'StatusbarPart', 'addEntry'); // the only one
-          // constructor do not fire
-          utils.override(StatusbarPartClass, 'create', override.statusbarPartCreate);
+          utils.override(StatusbarPartClass, 'create', override.statusbarPartCreate); // ?? service 
         } catch (error) { traceError(error); }
       };
 
       exports.editorPart = function (editorPart) {
         try {
           const [, EditorPartClass] = findInPrototype(editorPart, 'EditorPart', 'addGroup'); // the only one
-          // constructor do not fire
-          utils.override(EditorPartClass, 'create', override.editorPartCreate);
+          utils.override(EditorPartClass, 'create', override.editorPartCreate); // ?? service 
         } catch (error) { traceError(error); }
       };
 
@@ -286,7 +291,7 @@ define(
           compositeBar[compositeBarKey] = class CompositeBar extends CompositeBarClass {
             constructor(items, options) {
               if (options.getDefaultCompositeId() === 'workbench.view.explorer') {
-                layout.updateActivityBarItemSize(options);
+                // activitybar.updateActivityBarItemSize(options);
                 super(...arguments);
                 this.activityBarOptions = options;
                 store.activityBarCompositeBar = this;
@@ -322,15 +327,10 @@ define(
       };
 
       exports.workbench = function (workbench) {
-        const [, Workbench] = findInPrototype(workbench, 'Workbench', 'startup');
         try {
-          utils.override(Workbench, 'startup', function (original) {
-            const res = original();
-            layout.init();
-            return res;
-          });
+          const [, Workbench] = findInPrototype(workbench, 'Workbench', 'startup');
+          utils.override(Workbench, 'startup', override.startup);
         } catch (error) { traceError(error); }
-
       };
 
       exports.window = function (win) {

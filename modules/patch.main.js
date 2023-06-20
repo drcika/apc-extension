@@ -1,4 +1,4 @@
-define(['vs/platform/windows/electron-main/windowImpl', 'vs/platform/theme/electron-main/themeMainService', 'electron', 'apc-main/utils'], (windowImpl, themeMainService, electron, utils) => {
+define(['vs/platform/windows/electron-main/windowImpl', 'electron', 'apc-main/utils'], (windowImpl, electron, utils) => {
   function findeCodeWindow() {
     for (const key in windowImpl) { if (windowImpl[key] instanceof Function) { return key; } }
   }
@@ -6,12 +6,34 @@ define(['vs/platform/windows/electron-main/windowImpl', 'vs/platform/theme/elect
 
   if (codeWindowKey) {
     windowImpl[codeWindowKey] = class CodeWindow extends windowImpl[codeWindowKey] {
-      constructor(_config, logService, loggerMainService, environmentMainService, policyService, userDataProfilesService, fileService, applicationStorageMainService, storageMainService,
-        configurationService, themeMainService, workspacesManagementMainService, backupMainService, telemetryService, dialogMainService, lifecycleMainService, productService,
-        protocolMainService, windowsMainService, stateService) {
+      constructor(
+        appConfig,
+        logService,
+        loggerMainService,
+        environmentMainService,
+        policyService,
+        userDataProfilesService,
+        fileService,
+        applicationStorageMainService,
+        storageMainService,
+        configurationService,
+        themeMainService,
+        workspacesManagementMainService,
+        backupMainService,
+        telemetryService,
+        dialogMainService,
+        lifecycleMainService,
+        productService,
+        protocolMainService,
+        windowsMainService,
+        stateService) {
         try {
-          const config = configurationService.getValue('apc.electron') || {};
-          themeMainService.getBackgroundColor = () => config.backgroundColor ?? 'rgba(0, 0, 0, 0)';
+          const config = (configurationService.getValue && configurationService.getValue('apc.electron')) || {};
+          const originalGetBackgroundColor = themeMainService?.getBackgroundColor?.bind(themeMainService);
+          if (originalGetBackgroundColor) {
+            themeMainService.getBackgroundColor = () => config.backgroundColor ?? originalGetBackgroundColor();
+            utils.override(electron.BrowserWindow, "setBackgroundColor", function (original, [color]) { });
+          }
 
           for (const key in config) {
             Object.defineProperty(Object.prototype, key, {
@@ -21,11 +43,6 @@ define(['vs/platform/windows/electron-main/windowImpl', 'vs/platform/theme/elect
             });
           }
           super(...arguments);
-          // this.win.setBackgroundColor(config.backgroundColor ?? 'rgba(0, 0, 0, 0)');
-          // this.win.setTitleBarOverlay(options)
-          // this.win.setVibrancy('ultra-dark');
-          // this.win.setOpacity(0.5);
-          // utils.override(electron.BrowserWindow, "setBackgroundColor", function (original, args) { });
           for (const key in config) { delete Object.prototype[key]; }
         } catch (error) {
           console.log('***************');

@@ -46,7 +46,7 @@ define(
       };
 
       exports.actionbar = function (actionbar) {
-        store.ActionsOrientation = actionbar.ActionsOrientation; // ??
+        store.ActionsOrientation = actionbar.ActionsOrientation;
         const [actionBarKey, ActionBarClass] = findInPrototype(actionbar, 'ActionBar', 'getAction'); // the only one type class
         try {
           actionbar[actionBarKey] = class ActionBar extends ActionBarClass {
@@ -72,7 +72,7 @@ define(
               constructor(menuHolder) {
                 super(...arguments);
                 try {
-                  if (!config.getConfiguration('apc.menubar.compact')) { retur; }
+                  if (!config.getConfiguration('apc.menubar.compact')) { return; }
                   const { position, isHorizontal } = config.activityBar;
                   if (isHorizontal) {
                     const sideBarPosition = store.layoutService.getSideBarPosition();
@@ -192,39 +192,6 @@ define(
         } catch (error) { traceError(erorr); }
       };
 
-      exports.tabsTitleControl = function (tabsTitleControl) {
-        const [tabsTitleControlKey, TabsTitleControlClass] = findInPrototype(tabsTitleControl, 'TabsTitleControl', 'beforeCloseEditor'); // the only one
-
-        try {
-          tabsTitleControl[tabsTitleControlKey] = class TabsTitleControl extends TabsTitleControlClass {
-            constructor(parent, accessor, a, b, c, d, e, notificationService, f, g, themeService, configurationService, fileService, i, j, editorGroupService, k) {
-              super(...arguments);
-              storeReference({ configurationService, fileService, themeService, notificationService, editorGroupService, editorPartView: accessor });
-              if (!config.isInline) { return; }
-              try {
-                if (!store.dragPlaceholder) {
-                  const dragPlaceholder = UI.appendDiv(accessor.element, 'inline-drag-placeholder');
-                  accessor.element.style.position = 'relative';
-                  config.handleDblclick(dragPlaceholder, e => {
-                    e.stopPropagation(); // ??
-                    e.stopImmediatePropagation(); // ??
-                    config.handleTitleDoubleClick();
-                  });
-                }
-                if (!store.inlineTabsPlaceholder) {
-                  store.inlineTabsPlaceholder = UI.createDiv('inline-tabs-placeholder');
-                  parent.querySelector('.tabs-and-actions-container').prepend(store.inlineTabsPlaceholder);
-                }
-              }
-              catch (error) { traceError(error); }
-            }
-          };
-
-          utils.override(TabsTitleControlClass, 'dispose', override.onTabsGroupClose);
-
-        } catch (error) { traceError(error); }
-      };
-
       exports.layout = function (layout) {
         try {
           const [, Layout] = findInPrototype(layout, 'Layout', 'registerPart'); // the only one
@@ -254,10 +221,12 @@ define(
       exports.editorPart = function (editorPart) {
         try {
           const [, EditorPartClass] = findInPrototype(editorPart, 'EditorPart', 'addGroup'); // the only one
-          utils.override(EditorPartClass, 'create', override.editorPartCreate); // ?? service 
+          utils.override(EditorPartClass, 'removeGroup', override.editorPartRemoveGroup);
+          utils.override(EditorPartClass, 'create', override.editorPartCreate);
+          utils.override(EditorPartClass, 'applyLayout', override.editorApplyLayout);
         } catch (error) { traceError(error); }
       };
-
+      // razdvojiti css i primeniti samo ako je inline
       exports.sidebarPart = function (sidebarPart) {
         const [sidebarPartKey, SidebarPartClass] = findInPrototype(sidebarPart, 'SidebarPart', 'getPaneComposite'); // the only one
         try {
@@ -305,8 +274,8 @@ define(
       };
 
       exports.activitybarPart = function (activitybarPart) {
-        const [activitybarPartKey, ActivitybarPartClass] = findInPrototype(activitybarPart, 'ActivitybarPart', 'getVisiblePaneCompositeIds'); // the only one
         try {
+          const [activitybarPartKey, ActivitybarPartClass] = findInPrototype(activitybarPart, 'ActivitybarPart', 'getVisiblePaneCompositeIds'); // the only one
           activitybarPart[activitybarPartKey] = class ActivitybarPart extends ActivitybarPartClass {
             constructor(paneCompositePart, a, layoutService, themeService, storageService, extensionService, b, c, configurationService, environmentService) {
               try {

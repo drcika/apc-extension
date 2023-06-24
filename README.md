@@ -77,7 +77,7 @@ VSCode commands:
 
 ```jsonc
     "apc.activityBar": {
-      "position": "bottom" | "bottom" | undefined (regular) // activity bar will be positioned below/above the sidebar
+      "position": "bottom" | "top" | undefined (regular) // activity bar will be positioned below/above the sidebar
       "size": number // if position set to bottom  this is the heigth else width of activity bar
     }
 ```

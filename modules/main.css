@@ -55,14 +55,38 @@ div.monaco-workbench {
 }
 
 /*  */
-.horizontal-activitybar.activitybar-top .monaco-workbench .activitybar.bordered {
-  border-bottom-style: solid;
-  border-bottom-width: 1px;
+.horizontal-activitybar .monaco-workbench .activitybar.bordered:after {
+  content: "";
+  position: absolute;
+  box-sizing: border-box;
+  height: 0;
+  width: calc(100% - 1px);
+  border-color: inherit;
 }
 
-.horizontal-activitybar.activitybar-bottom .monaco-workbench .activitybar.bordered {
+.horizontal-activitybar .monaco-workbench .activitybar.left.bordered:before {
+  border-right-color: var(--vscode-sideBar-border);
+}
+
+.horizontal-activitybar .monaco-workbench .activitybar.right.bordered:before {
+  border-left-color: var(--vscode-sideBar-border);
+}
+
+.horizontal-activitybar.activitybar-top .monaco-workbench .activitybar.bordered:after {
+  border-bottom-style: solid;
+  border-bottom-width: 1px;
+  bottom: 0;
+}
+
+.horizontal-activitybar .monaco-workbench .activitybar.right.bordered:after {
+  right: 0;
+}
+
+/*  */
+.horizontal-activitybar.activitybar-bottom .monaco-workbench .activitybar.bordered:after {
   border-top-style: solid;
   border-top-width: 1px;
+  top: 0;
 }
 
 .horizontal-activitybar .monaco-workbench .part.activitybar {
@@ -135,8 +159,6 @@ body:not(.horizontal-activitybar) .nosidebar:not(.sidebar-right):not(.no-activit
   min-width: calc(var(--traffic-X) + 46px - var(--activity-bar-action-size));
 }
 
-/* .inline-title-bar.activitybar-top:not(.statusbar-top) .monaco-workbench:not(.fullscreen) .activitybar.left .content .composite-bar  */
-/* .inline-title-bar.activitybar-top:not(.statusbar-top) .monaco-workbench:not(.fullscreen) .activitybar.left .content */
 .inline-title-bar:not(.horizontal-activitybar):not(.activitybar-top):not(.statusbar-top) .monaco-workbench.no-activity-bar:not(.sidebar-right):not(.fullscreen) .inline-titlebar-placeholder,
 .horizontal-activitybar:not(.statusbar-editor-top):not(.statusbar-top) .monaco-workbench.sidebar-right.noauxiliarybar:not(.fullscreen) .part.editor>.content .editor-group-container>.title:not(.tabs),
 .horizontal-activitybar:not(.frameless-title-bar):not(.statusbar-editor-top):not(.statusbar-top) .monaco-workbench:not(.sidebar-right).nosidebar:not(.fullscreen) .part.editor>.content .editor-group-container>.title:not(.tabs),
@@ -163,10 +185,6 @@ body:not(.horizontal-activitybar) .nosidebar:not(.sidebar-right):not(.no-activit
 
 .inline-title-bar:not(.statusbar-top) .monaco-workbench:not(.fullscreen) .auxiliarybar.left .composite.title {
   padding-left: calc(var(--traffic-X) + 60px);
-}
-
-.inline-title-bar:not(.activitybar-bottom) .monaco-workbench div.activitybar.bordered.left:before {
-  border-color: transparent;
 }
 
 .inline-title-bar:not(.horizontal-activitybar) .monaco-workbench div.activitybar.bordered.left .content {
@@ -196,17 +214,31 @@ body.horizontal-activitybar .monaco-workbench .activitybar>.content :not(.monaco
   border-bottom: 1px solid var(--title-border-bottom-color);
 }
 
-.inline-drag-placeholder {
-  position: absolute;
-  width: 100%;
-  height: calc(var(--header-height) * .33);
-  min-height: 10px;
-  top: 0;
-  cursor: move;
-  -webkit-app-region: drag;
+.frameless-title-bar:not(.statusbar-top) .tabs-container,
+.inline-title-bar:not(.statusbar-top) .tabs-container {
+  position: relative;
+  z-index: 1;
 }
 
-/* .tabs-container, */
+.editor-group-container.empty.editor-group-top .inline-no-tabs-placeholder,
+.editor-group-container.empty.editor-group-top .inline-no-tabs-placeholder {
+  position: absolute;
+  top: 0;
+  width: 100%;
+  height: var(--header-height);
+  -webkit-app-region: drag;
+  cursor: move;
+  background-color: rgba(0, 0, 0, 0.05);
+}
+
+.frameless-title-bar:not(.statusbar-top) .monaco-workbench:not(.fullscreen) .editor-group-top .tab,
+.inline-title-bar:not(.statusbar-top) .monaco-workbench:not(.fullscreen) .editor-group-top .tab {
+  -webkit-app-region: no-drag;
+}
+
+/*  */
+.frameless-title-bar:not(.statusbar-top) .monaco-workbench:not(.fullscreen) .editor-group-top .tabs-and-actions-container,
+.inline-title-bar:not(.statusbar-top) .monaco-workbench:not(.fullscreen) .editor-group-top .tabs-and-actions-container,
 /*  */
 .frameless-title-bar.statusbar-top .monaco-workbench:not(.fullscreen) .statusbar,
 .frameless-title-bar.statusbar-editor-top .monaco-workbench:not(.fullscreen) .statusbar,
@@ -222,6 +254,7 @@ body.horizontal-activitybar .monaco-workbench .activitybar>.content :not(.monaco
 .frameless-title-bar:not(.activitybar-top):not(.statusbar-top) .monaco-workbench:not(.fullscreen) .sidebar .composite.title,
 .inline-title-bar:not(.activitybar-top):not(.statusbar-top) .monaco-workbench:not(.fullscreen) .sidebar .composite.title {
   -webkit-app-region: drag;
+  cursor: move;
 }
 
 .frameless-title-bar .monaco-workbench .part.editor>.content div.editor-group-container.empty>div.tabs.inline,
@@ -296,7 +329,7 @@ body.horizontal-activitybar .monaco-workbench .activitybar>.content :not(.monaco
   line-height: var(--titlebar-height);
 }
 
-.monaco-workbench .part.editor>.content .editor-group-container>.title .tabs-container>.tab {
+.custom-header .monaco-workbench .part.editor>.content .editor-group-container>.title div.tabs-container>div.tab {
   padding: 0 calc(var(--header-height) * 0.2);
 }
 

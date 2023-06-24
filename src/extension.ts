@@ -71,8 +71,8 @@ export function activate(context: vscode.ExtensionContext) {
 
   applyButtons(context);
 
-  context.subscriptions.push(vscode.workspace.onDidChangeWorkspaceFolders(onDidChangeWorkspaceFolders));
-  context.subscriptions.push(vscode.workspace.onDidChangeConfiguration(onDidChangeConfiguration));
+  isEnabled && context.subscriptions.push(vscode.workspace.onDidChangeWorkspaceFolders(onDidChangeWorkspaceFolders));
+  isEnabled && context.subscriptions.push(vscode.workspace.onDidChangeConfiguration(onDidChangeConfiguration));
 }
 
 export function deactivate() {

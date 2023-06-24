@@ -102,7 +102,7 @@ define(['exports', 'apc/auxiliary'], function (exports, auxiliary) {
           position,
           hideSettings,
           isHorizontal,
-          orientation: isHorizontal ? 0 : 1, // ?? action Orientation
+          orientation: isHorizontal ? store.ActionsOrientation.HORIZONTAL : store.ActionsOrientation.VERTICAL,
           size: (size ?? this.ACTIVITY_BAR_SIZE) * this.zoomFactor,
           isEnabled: !!size
         };

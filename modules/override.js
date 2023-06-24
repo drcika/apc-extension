@@ -90,9 +90,60 @@ define(
       return store.menubarControlContainer;
     };
 
+    function updateTabsClasses() {
+      try {
+        store.editorPartView.groups.forEach(group => {
+          const isTop = group.element.getBoundingClientRect().top === 0;
+          group.element.classList[isTop ? 'add' : 'remove']('editor-group-top');
+        });
+      }
+      catch (error) { traceError(error); }
+    }
+
+    function addTabsPlaceHolder() {
+      store.editorPartView.groups[0].element.querySelector('.tabs-and-actions-container').prepend(config.inlineTabsPlaceholder);
+    }
+
+    function decorateTabsPlaceHolders(group) {
+      try {
+        group.element.style.position = 'relative';
+        group.disposableNoTabsDblclick = config.handleDblclick(UI.appendDiv(group.element, 'inline-no-tabs-placeholder'), config.handleTitleDoubleClick);
+
+        group.disposableTabsDblclick = config.handleDblclick(group.element.querySelector('.tabs-container'), () => group.element.classList.contains('editor-group-top') && config.handleTitleDoubleClick());
+      }
+      catch (error) { traceError(error); }
+    }
+
     exports.editorPartCreate = function (original) {
       original();
-      if (!store.editorPartView) { store.editorPartView = this; }
+      try {
+        if (!store.editorPartView) { store.editorPartView = this; }
+        if (!config.isInline) { return; }
+        config.disposables.add(this.onDidAddGroup(decorateTabsPlaceHolders));
+
+        queueMicrotask(() => {
+          config.inlineTabsPlaceholder = UI.createDiv('inline-tabs-placeholder');
+          addTabsPlaceHolder();
+          updateTabsClasses();
+          this.groups.forEach(decorateTabsPlaceHolders);
+        });
+
+      }
+      catch (error) { traceError(error); }
+    };
+
+    exports.editorPartRemoveGroup = function (original, [group]) {
+      group.disposableTabsDblclick?.dispose();
+      group.disposableNoTabsDblclick?.dispose();
+      original();
+      addTabsPlaceHolder();
+    };
+
+    exports.editorApplyLayout = function (original) {
+      original();
+      if (config.isInline) {
+        updateTabsClasses();
+      }
     };
 
     exports.setVisibleActivityBar = function (original) {
@@ -137,7 +188,7 @@ define(
       try {
         const { orientation, size, position } = config.activityBar;
 
-        if (orientation === 1 || height === undefined || !(config.isVisible(store.Parts.ACTIVITYBAR_PART))) { return; }
+        if (orientation === store.ActionsOrientation.VERTICAL || height === undefined || !(config.isVisible(store.Parts.ACTIVITYBAR_PART))) { return; }
         const sideBarPosition = store.layoutService.getSideBarPosition();
 
         const padding = sideBarPosition !== store.Position.RIGHT && position === 'top' && config.electron.titleBarStyle && config.statusBar.position !== 'top' ? 55 : 0;
@@ -161,12 +212,4 @@ define(
       catch (error) { traceError(error); }
     };
 
-    exports.onTabsGroupClose = function (original) {
-      original();
-      if (!store.inlineTabsPlaceholder.isConnected) {
-        const tabsContainer = document.querySelector('.tabs-and-actions-container');
-        if (tabsContainer) { tabsContainer.prepend(store.inlineTabsPlaceholder); }
-        else { delete store.inlineTabsPlaceholder; }
-      }
-    };
   });

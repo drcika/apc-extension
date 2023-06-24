@@ -1,6 +1,12 @@
 {
   "theme": [
     {
+      "color": "#00000033",
+      "tokens": [
+        "quickInput.background"
+      ]
+    },
+    {
       "color": "#00000000",
       "tokens": [
         "activityBar.border",

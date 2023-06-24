@@ -15,7 +15,6 @@ define(
       require(['vs/workbench/browser/workbench'], classes.workbench, traceError);
       require(['vs/workbench/browser/layout'], classes.layout, traceError);
       require(['vs/workbench/browser/parts/panel/panelPart'], classes.panelPart, traceError);
-      require(['vs/workbench/browser/parts/editor/tabsTitleControl'], classes.tabsTitleControl, traceError);
       require(['vs/workbench/browser/parts/titlebar/menubarControl'], classes.menubarControl, traceError);
       require(['vs/workbench/browser/parts/statusbar/statusbarPart'], classes.statusbarPart, traceError);
       require(['vs/workbench/browser/parts/editor/editorPart'], classes.editorPart, traceError);

@@ -35,6 +35,7 @@ define(
           options.compositeSize = size + 3; // 3 margine
           store.activityBarCompositeBar.recomputeSizes();
 
+          store.activitybarPartView.layout();
         } catch (error) { traceError(error); }
       };
 
@@ -148,6 +149,7 @@ define(
         try {
           if (store.zenMode) { return; };
           const { size, position, hideSettings } = config.activityBar;
+          toggleSettings(hideSettings);
 
           if (!store.previousActivityBarConfig.position && position) {
             if (config.isVisible(store.Parts.SIDEBAR_PART)) {
@@ -167,7 +169,6 @@ define(
             updateSize();
           }
 
-          toggleSettings(hideSettings);
           updateActivityBarItemSize();
 
         } catch (error) { traceError(error); }

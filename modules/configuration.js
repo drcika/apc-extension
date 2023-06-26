@@ -18,7 +18,7 @@ define(['exports', 'apc/auxiliary'], function (exports, auxiliary) {
   };
 
   try {
-    const { store, findOwnProperty, traceError } = auxiliary;
+    const { store, findOwnProperty, traceError, services } = auxiliary;
 
     const [, DisposableStore] = findOwnProperty(require('vs/base/common/lifecycle'), 'DisposableStore', 'DISABLE_DISPOSED_WARNING');
     const [, Dimension] = findOwnProperty(require('vs/base/browser/dom'), 'Dimension', 'equals');
@@ -48,7 +48,7 @@ define(['exports', 'apc/auxiliary'], function (exports, auxiliary) {
         return this.addDisposable(new DomListener(node, type, handler, options));
       },
       getConfiguration(config) {
-        try { return store.configurationService.getValue(config); }
+        try { return services.configurationService.getValue(config); }
         catch (error) { traceError(error); }
       },
       get zoomFactor() {
@@ -150,22 +150,22 @@ define(['exports', 'apc/auxiliary'], function (exports, auxiliary) {
       },
 
       handleTitleDoubleClick(...args) {
-        try { return store.nativeHostService.handleTitleDoubleClick(...args); }
+        try { return services.nativeHostService.handleTitleDoubleClick(...args); }
         catch (error) { traceError(error); }
       },
 
       onDidChangeConfiguration(...args) {
-        try { return store.configurationService.onDidChangeConfiguration(...args); }
+        try { return services.configurationService.onDidChangeConfiguration(...args); }
         catch (error) { traceError(error); }
       },
 
       getColor(config) {
-        try { return store.themeService.getColorTheme().getColor(config)?.toString(); }
+        try { return services.themeService.getColorTheme().getColor(config)?.toString(); }
         catch (error) { traceError(error); }
       },
 
       isVisible(part) {
-        try { return store.layoutService.isVisible(part); }
+        try { return services.layoutService.isVisible(part); }
         catch (error) { traceError(error); }
         return false;
       }

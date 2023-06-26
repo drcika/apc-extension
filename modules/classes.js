@@ -1,20 +1,8 @@
 define(
-  ['exports', 'apc/utils', 'apc/auxiliary', 'apc/configuration', 'apc/override', 'apc/ui', 'apc/layout.activitybar'],
-  function (exports, utils, auxiliary, { config }, override, UI, activitybar) {
+  ['exports', 'apc/utils', 'apc/auxiliary', 'apc/configuration', 'apc/override'],
+  function (exports, utils, auxiliary, { config }, override) {
     try {
-      const { traceError, findInPrototype, findOwnProperty, store, getProperty, storeReference, Part } = auxiliary;
-
-      exports.fileService = function (fileService) {
-        const [fileServiceKey, FileServiceClass] = findInPrototype(fileService, 'FileService', 'readFile'); // the only one
-        try {
-          fileService[fileServiceKey] = class FileService extends FileServiceClass {
-            constructor() {
-              super(...arguments);
-              if (!store.fileService) { store.fileService = this; }
-            }
-          };
-        } catch (error) { traceError(error); }
-      };
+      const { traceError, findInPrototype, findOwnProperty, store, getProperty, services } = auxiliary;
 
       exports.layoutService = layoutService => {
         try {
@@ -75,9 +63,8 @@ define(
                   if (!config.getConfiguration('apc.menubar.compact')) { return; }
                   const { position, isHorizontal } = config.activityBar;
                   if (isHorizontal) {
-                    const sideBarPosition = store.layoutService.getSideBarPosition();
+                    const sideBarPosition = services.layoutService.getSideBarPosition();
                     const isTop = position === 'top';
-                    const isLeft = sideBarPosition === store.Position.LEFT;
                     if (!isTop) {
                       const menuElement = store.menubarControlContainer.querySelector('.monaco-menu');
                       const maxHeight = `${menuElement.querySelector('.monaco-action-bar').clientHeight}px`;
@@ -90,7 +77,7 @@ define(
                     const menuHolderBoundingRect = menuHolder.getBoundingClientRect();
 
                     menuHolder.style.top = isTop ? `${titleBoundingRect.top}px` : `${titleBoundingRect.bottom - menuHolderBoundingRect.height}px`;
-                    menuHolder.style.left = isLeft ? `${titleBoundingRect.left + titleBoundingRect.width}px` : `${titleBoundingRect.left - menuHolderBoundingRect.width}px`;
+                    menuHolder.style.left = sideBarPosition === store.Position.LEFT ? `${titleBoundingRect.left + titleBoundingRect.width}px` : `${titleBoundingRect.left - menuHolderBoundingRect.width}px`;
                     menuHolder.style.right = 'auto';
                     menuHolder.style.bottom = 'auto';
                   }
@@ -102,39 +89,24 @@ define(
       };
 
       exports.menubar = function (menubar) {
-        try {
-          const [menuBarKey, MenuBarClass] = findInPrototype(menubar, 'MenuBar', 'createOverflowMenu'); // the only one
-          menubar[menuBarKey] = class MenuBar extends MenuBarClass {
-            constructor() {
-              super(...arguments);
-              store.menubar = this;
-              // setTimeout(() => { this.menubar.ab(20, false); }, 1000);
-            }
-          };
-
-        } catch (error) { traceError(error); }
-      };
-
-      exports.panelPart = function (panelPart) {
-        const [panelPartKey, PanelPartClass] = findInPrototype(panelPart, 'PanelPart', 'toJSON');
-        try {
-          panelPart[panelPartKey] = class PanelPart extends PanelPartClass {
-            constructor(a, storageService, b, c, layoutService, d, e, themeService, f, g, extensionService, j, k) {
-              super(...arguments);
-              storeReference({ storageService, layoutService, themeService, extensionService, panelPartView: this });
-            }
-          };
-
-        } catch (error) { traceError(error); }
+        // try {
+        // const [menuBarKey, MenuBarClass] = findInPrototype(menubar, 'MenuBar', 'createOverflowMenu'); // the only one
+        // menubar[menuBarKey] = class MenuBar extends MenuBarClass {
+        // constructor() {
+        // super(...arguments);
+        // store.menubar = this;
+        // setTimeout(() => { this.menubar.ab(20, false); }, 1000);
+        // }
+        // };
+        // } catch (error) { traceError(error); }
       };
 
       exports.openEditorsView = function (openEditorsView) {
         try {
           const [openEditorsViewKey, OpenEditorsViewClass] = findInPrototype(openEditorsView, 'OpenEditorsView', 'titleDescription'); // the only one
           openEditorsView[openEditorsViewKey] = class OpenEditorsView extends OpenEditorsViewClass {
-            constructor(a, b, c, d, editorGroupService) {
+            constructor() {
               super(...arguments);
-              if (!store.editorGroupService) { store.editorGroupService = editorGroupService; }
               try {
                 const getMinimumBodySize = Object.getOwnPropertyDescriptor(this.__proto__.__proto__.__proto__.__proto__, 'minimumBodySize').get;
                 const setMinimumBodySize = Object.getOwnPropertyDescriptor(this.__proto__.__proto__.__proto__.__proto__, 'minimumBodySize').set;
@@ -153,8 +125,8 @@ define(
             }
 
             get _elementCount() {
-              return store.editorGroupService.groups.map(g => g.count)
-                .reduce((first, second) => first + second, this.showGroups ? store.editorGroupService.groups.length : 0);
+              return services.editorGroupsService.groups.map(g => g.count)
+                .reduce((first, second) => first + second, this.showGroups ? services.editorGroupsService.groups.length : 0);
             }
           };
         } catch (error) { traceError(error); }
@@ -211,13 +183,6 @@ define(
         } catch (error) { traceError(error); }
       };
 
-      exports.statusbarPart = function (statusbarPart) {
-        try {
-          const [, StatusbarPartClass] = findInPrototype(statusbarPart, 'StatusbarPart', 'addEntry'); // the only one
-          utils.override(StatusbarPartClass, 'create', override.statusbarPartCreate); // ?? service 
-        } catch (error) { traceError(error); }
-      };
-
       exports.editorPart = function (editorPart) {
         try {
           const [, EditorPartClass] = findInPrototype(editorPart, 'EditorPart', 'addGroup'); // the only one
@@ -226,33 +191,6 @@ define(
           utils.override(EditorPartClass, 'applyLayout', override.editorApplyLayout);
         } catch (error) { traceError(error); }
       };
-      // razdvojiti css i primeniti samo ako je inline
-      exports.sidebarPart = function (sidebarPart) {
-        const [sidebarPartKey, SidebarPartClass] = findInPrototype(sidebarPart, 'SidebarPart', 'getPaneComposite'); // the only one
-        try {
-          sidebarPart[sidebarPartKey] = class SidebarPart extends sidebarPart[sidebarPartKey] {
-            constructor(notificationService, storageService, a, layoutService, b, c, themeService, d, e, extensionService) {
-              super(...arguments);
-              storeReference({ layoutService, storageService, themeService, notificationService, sidebarPartView: this, extensionService });
-            }
-          };
-        } catch (error) { traceError(error); }
-
-        utils.override(SidebarPartClass, 'create', override.sidebarPartCreate);
-      };
-
-      exports.auxiliaryBarPart = function (auxiliaryBarPart) {
-        const [auxiliaryBarPartKey, AuxiliaryBarPartClass] = findInPrototype(auxiliaryBarPart, 'AuxiliaryBarPart', 'onDidPaneCompositeOpen'); // the only one
-
-        auxiliaryBarPart[auxiliaryBarPartKey] = class AuxiliaryBarPart extends AuxiliaryBarPartClass {
-          constructor(notificationService, storageService, a, layoutService, b, c, themeService, d, e, extensionService, f) {
-            super(...arguments);
-            storeReference({ auxiliarybarPartView: this, notificationService, storageService, layoutService, themeService, extensionService });
-          }
-        };
-
-        utils.override(AuxiliaryBarPartClass, 'create', override.auxiliarybarPartCreate, traceError);
-      };
 
       exports.compositeBar = function (compositeBar) {
         try {
@@ -260,7 +198,6 @@ define(
           compositeBar[compositeBarKey] = class CompositeBar extends CompositeBarClass {
             constructor(items, options) {
               if (options.getDefaultCompositeId() === 'workbench.view.explorer') {
-                // activitybar.updateActivityBarItemSize(options);
                 super(...arguments);
                 this.activityBarOptions = options;
                 store.activityBarCompositeBar = this;
@@ -275,19 +212,7 @@ define(
 
       exports.activitybarPart = function (activitybarPart) {
         try {
-          const [activitybarPartKey, ActivitybarPartClass] = findInPrototype(activitybarPart, 'ActivitybarPart', 'getVisiblePaneCompositeIds'); // the only one
-          activitybarPart[activitybarPartKey] = class ActivitybarPart extends ActivitybarPartClass {
-            constructor(paneCompositePart, a, layoutService, themeService, storageService, extensionService, b, c, configurationService, environmentService) {
-              try {
-                store.dummActivitybarPartView = new Part(store.DUMMY_ACTIVITYBAR_PART, { hasTitle: false }, themeService, storageService, layoutService);
-                store.dummStatusbarPartView = new Part(store.DUMMY_STATUSBAR_PART, { hasTitle: false }, themeService, storageService, layoutService);
-              } catch (error) { traceError(error); }
-
-              super(...arguments);
-              storeReference({ activitybarPartView: this, layoutService, themeService, storageService, configurationService, sidebarPartView: paneCompositePart, extensionService, environmentService });
-            }
-          };
-
+          const [, ActivitybarPartClass] = findInPrototype(activitybarPart, 'ActivitybarPart', 'getVisiblePaneCompositeIds'); // the only one
           utils.override(ActivitybarPartClass, 'create', override.activitybarCreate);
           utils.override(ActivitybarPartClass, 'setVisible', override.setVisibleActivityBar);
           utils.override(ActivitybarPartClass, 'layout', override.activitybarLayout);

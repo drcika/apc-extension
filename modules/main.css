@@ -220,8 +220,8 @@ body.horizontal-activitybar .monaco-workbench .activitybar>.content :not(.monaco
   z-index: 1;
 }
 
-.editor-group-container.empty.editor-group-top .inline-no-tabs-placeholder,
-.editor-group-container.empty.editor-group-top .inline-no-tabs-placeholder {
+.frameless-title-bar:not(.statusbar-top) .monaco-workbench:not(.fullscreen) .editor-group-container.empty.editor-group-top .inline-no-tabs-placeholder,
+.inline-title-bar:not(.statusbar-top) .monaco-workbench:not(.fullscreen) .editor-group-container.empty.editor-group-top .inline-no-tabs-placeholder {
   position: absolute;
   top: 0;
   width: 100%;

@@ -4,7 +4,14 @@ define(['exports'], function (exports) {
     get() { return Reflect.get(...arguments); },
     set() { return Reflect.set(...arguments); }
   });
+
+  const services = new Proxy({}, {
+    get() { return Reflect.get(...arguments); },
+    set() { return Reflect.set(...arguments); }
+  });
+
   exports.store = store;
+  exports.services = services;
 
   store.isMacintosh = navigator.userAgent.includes('Macintosh');
   store.DUMMY_ACTIVITYBAR_PART = 'workbench.parts.dummyActivitybar';
@@ -17,12 +24,6 @@ define(['exports'], function (exports) {
     minimumWidth = 0; maximumWidth = 0; minimumHeight = 0; maximumHeight = 0;
     element = document.createElement('div');
     toJSON() { return { type: this.id }; }
-  };
-
-  exports.storeReference = function (references) {
-    for (const key in references) {
-      if (!store[key]) { store[key] = references[key]; }
-    }
   };
 
   exports.traceError = function (error) {

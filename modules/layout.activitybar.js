@@ -2,7 +2,7 @@ define(
   ['exports', 'apc/auxiliary', 'apc/configuration'],
   (exports, auxiliary, configuration) => {
     try {
-      const { traceError, store } = auxiliary;
+      const { traceError, store, services } = auxiliary;
       const { config } = configuration;
 
       store.previousActivityBarConfig = { size: config.ACTIVITY_BAR_SIZE, hideSettings: false };
@@ -111,7 +111,7 @@ define(
 
           updateActivityBarClassList(isHorizontal);
 
-          store.layoutService.layout();
+          services.layoutService.layout();
           store.previousActivityBarConfig.size = size;
         } catch (error) { traceError(error); }
       };
@@ -125,7 +125,7 @@ define(
             if (position) {
               store.activitybarPartView.minimumWidth = 0;
               store.activitybarPartView.maximumWidth = 0;
-              store.layoutService.layout();
+              services.layoutService.layout();
             }
             else { updateSize(); }
           }
@@ -159,7 +159,7 @@ define(
               store.activitybarPartView.minimumWidth = 0;
               store.activitybarPartView.maximumWidth = 0;
 
-              store.layoutService.layout();
+              services.layoutService.layout();
 
               store.previousActivityBarConfig.position = position;
               store.previousActivityBarConfig.size = 0;

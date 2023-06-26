@@ -1,45 +1,40 @@
 define(
   ['exports', 'apc/auxiliary', 'apc/configuration', 'apc/layout', 'apc/ui', 'apc/layout.statusbar', 'apc/layout.activitybar'],
   function (exports, auxiliary, configuration, layout, UI, statusbar, activitybar) {
-    const { store, traceError } = auxiliary;
+    const { store, traceError, services } = auxiliary;
     const { config } = configuration;
 
     exports.startup = function (original) {
-      const res = original();
+      const instantiationService = original();
+      // this === layouteService
       layout.init();
-      return res;
+      config.handleDblclick(document.querySelector('footer'), () => config.statusBar.position.includes('top') && config.handleTitleDoubleClick());
+      return instantiationService;
     };
 
     exports.registerPart = function (original, [part]) {
       original();
       try {
         switch (part.getId()) {
-          case store.Parts?.STATUSBAR_PART:
-            if (!store.statusbarPartView) { store.statusbarPartView = part; }
-            break;
-          case store.Parts?.EDITOR_PART:
-            if (!store.editorPartView) { store.editorPartView = part; }
-            break;
           case store.Parts?.PANEL_PART:
-            if (!store.panelPartView) { store.panelPartView = part; }
+            store.panelPartView = part;
             break;
           case store.Parts?.SIDEBAR_PART:
-            if (!store.sidebarPartView) { store.sidebarPartView = part; }
+            store.sidebarPartView = part;
+            if (config.isInline) {
+              queueMicrotask(() => {
+                const inlineTitle = part.getContainer().querySelector('.title');
+                config.handleDblclick(inlineTitle, () => config.activityBar.position !== 'top' && config.statusBar.position !== 'top' && config.handleTitleDoubleClick());
+                UI.prependDiv(inlineTitle, 'inline-titlebar-placeholder');
+              });
+            }
             break;
           case store.Parts?.AUXILIARYBAR_PART:
-            if (!store.auxiliarybarPartView) { store.auxiliarybarPartView = part; }
+            store.auxiliarybarPartView = part;
+            if (config.isInline) { queueMicrotask(() => config.handleDblclick(part.getContainer().querySelector('.title'), () => config.statusBar.position !== 'top' && config.handleTitleDoubleClick())); }
             break;
           case store.Parts?.ACTIVITYBAR_PART:
-            if (!store.activitybarPartView) { store.activitybarPartView = part; }
-            break;
-          // case store.Parts?.TITLEBAR_PART:
-          //   if (!store.titlebarPartView) { store.titlebarPartView = part; }
-          //   break;
-          // case store.Parts?.BANNER_PART:
-          //   if (!store.bannerPartView) { store.bannerPartView = part; } 
-          //   break;
-          default:
-            // console.log(part);
+            store.activitybarPartView = part;
             break;
         }
       } catch (error) { traceError(error); }
@@ -91,24 +86,19 @@ define(
     };
 
     function updateTabsClasses() {
-      try {
-        store.editorPartView.groups.forEach(group => {
-          const isTop = group.element.getBoundingClientRect().top === 0;
-          group.element.classList[isTop ? 'add' : 'remove']('editor-group-top');
-        });
-      }
+      try { services.editorGroupsService.groups.forEach(group => group.element.classList[group.element.getBoundingClientRect().top === 0 ? 'add' : 'remove']('editor-group-top')); }
       catch (error) { traceError(error); }
     }
 
     function addTabsPlaceHolder() {
-      store.editorPartView.groups[0].element.querySelector('.tabs-and-actions-container').prepend(config.inlineTabsPlaceholder);
+      try { config.inlineTabsPlaceholder && services.editorGroupsService.groups[0].element.querySelector('.tabs-and-actions-container').prepend(config.inlineTabsPlaceholder); }
+      catch (error) { traceError(error); }
     }
 
     function decorateTabsPlaceHolders(group) {
       try {
         group.element.style.position = 'relative';
         group.disposableNoTabsDblclick = config.handleDblclick(UI.appendDiv(group.element, 'inline-no-tabs-placeholder'), config.handleTitleDoubleClick);
-
         group.disposableTabsDblclick = config.handleDblclick(group.element.querySelector('.tabs-container'), () => group.element.classList.contains('editor-group-top') && config.handleTitleDoubleClick());
       }
       catch (error) { traceError(error); }
@@ -117,7 +107,6 @@ define(
     exports.editorPartCreate = function (original) {
       original();
       try {
-        if (!store.editorPartView) { store.editorPartView = this; }
         if (!config.isInline) { return; }
         config.disposables.add(this.onDidAddGroup(decorateTabsPlaceHolders));
 
@@ -136,50 +125,25 @@ define(
       group.disposableTabsDblclick?.dispose();
       group.disposableNoTabsDblclick?.dispose();
       original();
+      if (!config.isInline) { return; }
       addTabsPlaceHolder();
     };
 
     exports.editorApplyLayout = function (original) {
       original();
-      if (config.isInline) {
-        updateTabsClasses();
-      }
+      if (config.isInline) { updateTabsClasses(); }
     };
 
     exports.setVisibleActivityBar = function (original) {
       original();
       if (!config.isInline) { return; }
-      try { store.layoutService.container.classList.toggle('no-activity-bar'); }
-      catch (error) { traceError(error); }
-    };
-
-    exports.statusbarPartCreate = function (original, [parent]) {
-      original();
-      if (!store.statusbarPartView) { store.statusbarPartView = this; }
-      config.handleDblclick(parent, () => config.statusBar.position.includes('top') && config.handleTitleDoubleClick());
-    };
-
-    exports.auxiliarybarPartCreate = function (original, [parent]) {
-      if (!store.auxiliarybarPartView) { store.auxiliarybarPartView = this; };
-      original();
-      if (!config.isInline) { return; }
-      config.handleDblclick(parent.querySelector('.title'), () => config.statusBar.position !== 'top' && config.handleTitleDoubleClick());
-    };
-
-    exports.sidebarPartCreate = function (original, [parent]) {
-      original();
-      if (!config.isInline) { return; }
-      try {
-        const inlineTitle = parent.querySelector('.title');
-        config.handleDblclick(inlineTitle, () => config.activityBar.position !== 'top' && config.statusBar.position !== 'top' && config.handleTitleDoubleClick());
-        UI.prependDiv(inlineTitle, 'inline-titlebar-placeholder');
-      }
+      try { services.layoutService.container.classList.toggle('no-activity-bar'); }
       catch (error) { traceError(error); }
     };
 
     exports.activitybarUpdateStyles = function (original) {
       original();
-      try { store.layoutService.container.style.setProperty('--title-border-bottom-color', config.getColor('editorGroupHeader.border')); }
+      try { services.layoutService.container.style.setProperty('--title-border-bottom-color', config.getColor('editorGroupHeader.border')); }
       catch (error) { traceError(error); }
     };
 
@@ -189,7 +153,7 @@ define(
         const { orientation, size, position } = config.activityBar;
 
         if (orientation === store.ActionsOrientation.VERTICAL || height === undefined || !(config.isVisible(store.Parts.ACTIVITYBAR_PART))) { return; }
-        const sideBarPosition = store.layoutService.getSideBarPosition();
+        const sideBarPosition = services.layoutService.getSideBarPosition();
 
         const padding = sideBarPosition !== store.Position.RIGHT && position === 'top' && config.electron.titleBarStyle && config.statusBar.position !== 'top' ? 55 : 0;
         const menubar = store.menubarControlContainer?.isConnected ? size : 0;
@@ -203,9 +167,9 @@ define(
 
     exports.activitybarCreate = function (original, [parent]) {
       original();
-      if (!config.isInline) { return; }
       try {
-        if (!config.isVisible(store.Parts.ACTIVITYBAR_PART)) { store.layoutService.container.classList.add('no-activity-bar'); }
+        if (!config.isInline) { return; }
+        if (!config.isVisible(store.Parts.ACTIVITYBAR_PART)) { services.layoutService.container.classList.add('no-activity-bar'); }
         UI.prependDiv(parent, 'activity-bar-placeholder');
         config.handleDblclick(parent.querySelector('.content'), () => config.activityBar.position === 'top' && config.statusBar.position !== 'top' && config.handleTitleDoubleClick());
       }

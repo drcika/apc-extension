@@ -1,6 +1,6 @@
 define(['exports', 'apc/auxiliary', 'apc/configuration'], (exports, auxiliary, configuration) => {
   try {
-    const { traceError, store } = auxiliary;
+    const { traceError, store, services } = auxiliary;
     const { config } = configuration;
 
     store.previousStatusBarConfig = { height: config.STATUSBAR_HEIGHT, position: 'bottom' };
@@ -9,9 +9,9 @@ define(['exports', 'apc/auxiliary', 'apc/configuration'], (exports, auxiliary, c
       try {
         // add placeholder in place of the original, for later easier restore
         // and avoiding complex logic where which panel is located
-        store.dummStatusbarPartView.minimumWidth = store.statusbarPartView.minimumWidth;
-        store.dummStatusbarPartView.maximumWidth = store.statusbarPartView.maximumWidth;
-        store.workbenchGrid.addView(store.dummStatusbarPartView, 0, store.statusbarPartView, store.Direction.Down);
+        store.dummStatusbarPartView.minimumWidth = services.statusbarService.minimumWidth;
+        store.dummStatusbarPartView.maximumWidth = services.statusbarService.maximumWidth;
+        store.workbenchGrid.addView(store.dummStatusbarPartView, 0, services.statusbarService, store.Direction.Down);
 
         switchPosition();
       } catch (error) { traceError(error); }
@@ -21,24 +21,24 @@ define(['exports', 'apc/auxiliary', 'apc/configuration'], (exports, auxiliary, c
       try {
         const { position, height } = config.statusBar;
 
-        const isUnderPanel = position === 'editor-bottom' && store.layoutService.getPanelPosition() === store.Position.BOTTOM;
+        const isUnderPanel = position === 'editor-bottom' && services.layoutService.getPanelPosition() === store.Position.BOTTOM;
         const isEditor = position.includes('editor');
 
-        store.statusbarPartView.minimumWidth = isUnderPanel ? store.panelPartView.minimumWidth : isEditor ? store.editorPartView.minimumWidth : store.statusbarPartView.minimumWidth;
-        store.statusbarPartView.maximumWidth = isUnderPanel ? store.panelPartView.maximumWidth : isEditor ? store.editorPartView.maximumWidth : store.statusbarPartView.maximumWidth;
-        store.statusbarPartView.minimumHeight = height;
-        store.statusbarPartView.maximumHeight = height;
+        services.statusbarService.minimumWidth = isUnderPanel ? store.panelPartView.minimumWidth : isEditor ? services.editorGroupsService.minimumWidth : services.statusbarService.minimumWidth;
+        services.statusbarService.maximumWidth = isUnderPanel ? store.panelPartView.maximumWidth : isEditor ? services.editorGroupsService.maximumWidth : services.statusbarService.maximumWidth;
+        services.statusbarService.minimumHeight = height;
+        services.statusbarService.maximumHeight = height;
 
         if (isUnderPanel) {
-          store.workbenchGrid.removeView(store.statusbarPartView);
-          store.workbenchGrid.addView(store.statusbarPartView, height, store.panelPartView, store.Direction.Down);
+          store.workbenchGrid.removeView(services.statusbarService);
+          store.workbenchGrid.addView(services.statusbarService, height, store.panelPartView, store.Direction.Down);
         }
         else if (isEditor) {
           const placment = position === 'editor-top' ? store.Direction.Up : store.Direction.Down;
-          store.workbenchGrid.moveView(store.statusbarPartView, height, store.editorPartView, placment);
+          store.workbenchGrid.moveView(services.statusbarService, height, services.editorGroupsService, placment);
         }
         else {
-          store.workbenchGrid.moveViewTo(store.statusbarPartView, [store.Direction.Up]);
+          store.workbenchGrid.moveViewTo(services.statusbarService, [store.Direction.Up]);
         }
 
         store.previousStatusBarConfig.position = position;
@@ -49,14 +49,14 @@ define(['exports', 'apc/auxiliary', 'apc/configuration'], (exports, auxiliary, c
     function restore() {
       try {
         const { height } = config.statusBar;
-        store.workbenchGrid.removeView(store.statusbarPartView);
+        store.workbenchGrid.removeView(services.statusbarService);
 
-        store.statusbarPartView.minimumWidth = store.dummStatusbarPartView.minimumWidth;
-        store.statusbarPartView.maximumWidth = store.dummStatusbarPartView.maximumWidth;
-        store.statusbarPartView.minimumHeight = height;
-        store.statusbarPartView.maximumHeight = height;
+        services.statusbarService.minimumWidth = store.dummStatusbarPartView.minimumWidth;
+        services.statusbarService.maximumWidth = store.dummStatusbarPartView.maximumWidth;
+        services.statusbarService.minimumHeight = height;
+        services.statusbarService.maximumHeight = height;
 
-        store.workbenchGrid.addView(store.statusbarPartView, height, store.dummStatusbarPartView, store.Direction.Down);
+        store.workbenchGrid.addView(services.statusbarService, height, store.dummStatusbarPartView, store.Direction.Down);
         store.workbenchGrid.removeView(store.dummStatusbarPartView);
 
         store.previousStatusBarConfig.position = 'bottom';
@@ -67,10 +67,10 @@ define(['exports', 'apc/auxiliary', 'apc/configuration'], (exports, auxiliary, c
     function updateSize() {
       try {
         const { height } = config.statusBar;
-        store.statusbarPartView.minimumHeight = height;
-        store.statusbarPartView.maximumHeight = height;
+        services.statusbarService.minimumHeight = height;
+        services.statusbarService.maximumHeight = height;
 
-        store.layoutService.layout();
+        services.layoutService.layout();
         store.previousStatusBarConfig.height = height;
       } catch (error) { traceError(error); }
     };

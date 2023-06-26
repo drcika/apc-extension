@@ -1,12 +1,9 @@
 define(
   ['exports', 'apc/utils', 'apc/auxiliary', 'apc/configuration', 'apc/classes', 'apc/ui', 'apc/layout', 'apc/layout.statusbar', 'apc/layout.activitybar'],
   (exports, utils, auxiliary, { config }, classes, ui, layout, statusbar, activitybar) => {
-    const { traceError, findOwnProperty, store } = auxiliary;
+    const { traceError, store } = auxiliary;
 
     try {
-      // store.dev = true;
-
-      require(['vs/platform/files/common/fileService'], classes.fileService, traceError);
       require(['vs/base/browser/ui/grid/grid'], classes.grid, traceError);
       require(['vs/base/browser/ui/actionbar/actionbar'], classes.actionbar, traceError);
       require(['vs/base/browser/ui/menu/menu'], classes.menu, traceError);
@@ -14,23 +11,55 @@ define(
       require(['vs/workbench/services/layout/browser/layoutService'], classes.layoutService, traceError);
       require(['vs/workbench/browser/workbench'], classes.workbench, traceError);
       require(['vs/workbench/browser/layout'], classes.layout, traceError);
-      require(['vs/workbench/browser/parts/panel/panelPart'], classes.panelPart, traceError);
       require(['vs/workbench/browser/parts/titlebar/menubarControl'], classes.menubarControl, traceError);
-      require(['vs/workbench/browser/parts/statusbar/statusbarPart'], classes.statusbarPart, traceError);
       require(['vs/workbench/browser/parts/editor/editorPart'], classes.editorPart, traceError);
-      require(['vs/workbench/browser/parts/sidebar/sidebarPart'], classes.sidebarPart, traceError);
-      require(['vs/workbench/browser/parts/auxiliarybar/auxiliaryBarPart'], classes.auxiliaryBarPart, traceError);
       require(['vs/workbench/browser/parts/compositeBar'], classes.compositeBar, traceError);
       require(['vs/workbench/browser/parts/activitybar/activitybarPart'], classes.activitybarPart, traceError);
       require(['vs/workbench/contrib/files/browser/views/openEditorsView'], classes.openEditorsView, traceError);
-      if (store.dev) {
-        require(['vs/base/browser/ui/menu/menubar'], classes.menubar, traceError);
-      }
+      require(['vs/base/browser/ui/menu/menubar'], classes.menubar, traceError);
+
+      // const skipService = ['credentialsMainService', 'encryptionMainService', 'editorProgressService', 'ptyService', 'sharedTunnelsService',
+      //   'IUserDataSyncStoreService', 'IUserDataSyncBackupStoreService', 'IUserDataSyncResourceProviderService', 'IExtHostRpcService',
+      //   'IExtHostTunnelService', 'IWebExtensionsScannerService', 'extensionUrlHandler', 'extensionUrlHandler',
+      //   'privateBreakpointWidgetService'];
+      // const services = [];
+      const services = ['nativeHostService', 'configurationService', 'themeService', 'fileService', 'layoutService', 'statusbarService', 'editorGroupsService', 'storageService'];
+
+      // themeService.onDidColorThemeChange(colorTheme => {
+      // colorTheme.setCustomColors({
+      //   "sideBar.border": "#000000",
+      //   "activityBar.border": "#0000ff",
+      //   "statusBar.border": "#00ff00",
+      //   "editorGroupHeader.tabsBackground": "#00000000",
+      //   "sideBar.background": "#00000000",
+      //   "sideBarSectionHeader.background": "#00000000",
+      //   "editor.background": "#00000000",
+      //   "peekViewEditor.background": "#00000000",
+      //   "peekViewEditorGutter.background": "#00000000",
+      //   "peekViewTitle.background": "#00000000",
+      //   "peekViewResult.background": "#00000000",
+      //   "tab.activeBackground": "#00000000",
+      //   "tab.inactiveBackground": "#00000000",
+      //   "statusBar.background": "#00000000",
+      //   "statusBar.debuggingBackground": "#00000000",
+      //   "statusBar.noFolderBackground": "#00000000",
+      //   "statusBarItem.activeBackground": "#00000000",
+      //   "panel.background": "#00000000",
+      //   "activityBar.background": "#00000000"
+      // });
+      // });
 
       class Patch {
-        constructor(nativeHostService, configurationService) {
-          store.nativeHostService = nativeHostService; // relaunch, reload, openDevTools, clipboard, msgbox,
-          store.configurationService = configurationService;
+        constructor(...args) {
+          try {
+            args.forEach((service, index) => auxiliary.services[services[index]] = service);
+
+            store.dummActivitybarPartView = new auxiliary.Part(store.DUMMY_ACTIVITYBAR_PART, { hasTitle: false }, auxiliary.services.themeService, auxiliary.services.storageService, auxiliary.services.layoutService);
+            store.dummStatusbarPartView = new auxiliary.Part(store.DUMMY_STATUSBAR_PART, { hasTitle: false }, auxiliary.services.themeService, auxiliary.services.storageService, auxiliary.services.layoutService);
+          } catch (error) {
+            console.log(error);
+          }
+
           if (store.isMacintosh && config.getConfiguration('apc.menubar.compact')) {
             try { require(['vs/platform/window/common/window'], classes.window, traceError); }
             catch (error) { traceError(error); }
@@ -38,12 +67,13 @@ define(
         }
       }
 
+
       exports.run = (instantiationService) => {
         try {
-          const [, INativeHostServiceClass] = findOwnProperty(require('vs/platform/native/common/native'), 'INativeHostService', 'toString'); // the only one
-          const [, IConfigurationService] = findOwnProperty(require('vs/platform/configuration/common/configuration'), 'IConfigurationService', 'toString'); // len 3, toString
+          const instantiation = require('vs/platform/instantiation/common/instantiation');
 
-          instantiationService.createInstance(utils.decorate([utils.param(0, INativeHostServiceClass), utils.param(1, IConfigurationService)], Patch));
+          // instantiation._util.serviceIds.forEach((a, key) => !skipService.includes(key) && services.push(key));
+          instantiationService.createInstance(utils.decorate([...services.map((name, i) => utils.param(i, instantiation._util.serviceIds.get(name)))], Patch));
 
           ui.run();
 

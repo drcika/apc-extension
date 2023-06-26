@@ -1,5 +1,5 @@
 define(['exports', 'apc/auxiliary', 'apc/configuration'], (exports, auxiliary, configuration) => {
-  const { traceError, store } = auxiliary;
+  const { traceError, store, services } = auxiliary;
   const { config } = configuration;
 
   try {
@@ -126,7 +126,7 @@ define(['exports', 'apc/auxiliary', 'apc/configuration'], (exports, auxiliary, c
         }
         else {
           store.watchedFiles = new Map();
-          config.disposables.add(store.fileService.onDidFilesChange(onDidFilesChange));
+          config.disposables.add(services.fileService.onDidFilesChange(onDidFilesChange));
         }
 
         if (store.externalLinks) {
@@ -157,11 +157,11 @@ define(['exports', 'apc/auxiliary', 'apc/configuration'], (exports, auxiliary, c
             }
             else if (typeof path === 'string' && path.match(/(\.css|\.js)$/)) {
               const URI = uri.URI.parse(!path.startsWith('file://') ? 'file://' + path : path);
-              const data = await store.fileService.readFile(URI);
+              const data = await services.fileService.readFile(URI);
               const isCss = path.endsWith('.css');
 
               if (isCss) {
-                const disposable = store.fileService.watch(URI);
+                const disposable = services.fileService.watch(URI);
                 config.disposables.add(disposable);
                 store.watchedFiles.set(URI.path, disposable);
               }

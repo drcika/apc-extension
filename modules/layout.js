@@ -2,11 +2,11 @@ define(
   ['exports', 'apc/auxiliary', 'apc/configuration', 'apc/layout.statusbar', 'apc/layout.activitybar'],
   (exports, auxiliary, configuration, statusbar, activitybar) => {
     try {
-      const { traceError, store } = auxiliary;
+      const { traceError, store, services } = auxiliary;
       const { config } = configuration;
 
       exports.init = function () {
-        store.zenMode = store.storageService.getBoolean('workbench.zenMode.active', 1);
+        store.zenMode = services.storageService.getBoolean('workbench.zenMode.active', 1);
         activitybar.init();
         statusbar.update();
         updateSideBarClass();
@@ -30,9 +30,9 @@ define(
 
       function updateSideBarClass() {
         try {
-          const sideBarPosition = store.layoutService.getSideBarPosition();
+          const sideBarPosition = services.layoutService.getSideBarPosition();
           const isRight = sideBarPosition === store.Position.RIGHT;
-          store.layoutService.container.classList[isRight ? 'add' : 'remove']('sidebar-right');
+          services.layoutService.container.classList[isRight ? 'add' : 'remove']('sidebar-right');
         } catch (error) { traceError(error); }
       };
 

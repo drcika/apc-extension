@@ -1,35 +1,39 @@
-# Apc Customize UI++ extension README
+# Apc Customize UI++ Extension README
 
-The successor of iocave/Customize UI
+The Successor of iocave/Customize UI
 
-## What does it do
+![Visual Studio Marketplace Downloads](https://img.shields.io/visual-studio-marketplace/d/drcika.apc-extension?color=blue) ![Visual Studio Marketplace Installs](https://img.shields.io/visual-studio-marketplace/i/drcika.apc-extension?color=dark-green) ![License](https://img.shields.io/github/license/drcika/apc-extension?color=red) ![Issues](https://img.shields.io/github/issues/drcika/apc-extension?color=yellow) ![Stargazers](https://img.shields.io/github/stars/drcika/apc-extension?style=social)
 
-Allows customization outside vscode scoop.
 
-The extension comes with no default settings.
+## Overview
+This extension allows customization outside vscode scoop.
 
-It's all up to you
+Unlike its predecessor, it does not come with default settings, allowing you complete control over customization.
 
-see my personal settings
-https://github.com/drcika/apc-extension/blob/production/demo/settings.json
+Feel free to explore my personal settings for inspiration: [View Settings](https://github.com/drcika/apc-extension/blob/production/demo/settings.json)
 
-## Instructions
+## Usage Instructions
 
-  - deactivate simular extensions
-  - inastall/enable Apc Customize UI++ (Apc Customize UI++ it should be enabled after the first installation)
-  - express your creativity
+Follow these steps to make the most of the Apc Customize UI++ extension:
+  - Disable similar extensions.
+  - Install/enable Apc Customize UI++ (It should be automatically enabled upon the first installation).
+  - Open your `User settings.json` file in Visual Studio Code.
+  - Add the provided configurations below to your settings.json file.
+  - Unleash your creativity.
 
 ## Enabling and Disabling
 
-VSCode commands:
-* Enable Apc extension / apc.extension.enable
-* Disable Apc extension / apc.extension.disable
+To enable or disable this extension, follow these steps:
+  1. Open Visual Studio Code.
+  2. Go to the Command Palette by pressing `Cmd+Shift+P` on Mac or `Ctrl+Shift+P` on Windows.
+  3. Type "Enable Apc extension" and enter to enable the extension.
+  4. Conversely, type "Disable Apc extension" and enter to disable the extension.
   
-## Supported configuration options
+## Supported Configuration Options
 
 ### `apc.imports`
 
-***Css files are watched in real time, no need to restart the application***
+>**Real-time monitoring of CSS files, no need to restart the application**
 ```jsonc
     "apc.imports": [ 
       "/Users/some/path/style.css",
@@ -94,27 +98,21 @@ VSCode commands:
 
 ### `apc.electron`
 
-see 
+For detailed information on the `apc.electron` configuration option, refer to the [Electron BrowserWindow documentation](https://www.electronjs.org/docs/latest/api/browser-window#new-browserwindowoptions).
 
-https://www.electronjs.org/docs/latest/api/browser-window#new-browserwindowoptions
+Note that, when using the `vibrancy` option, other panels must also be transparent. You can check out a demo of this configuration [vibrancy.settings](https://github.com/drcika/apc-extension/blob/production/demo/vibrancy.settings.json).
 
-*vibrancy requires other panels to be transparent*
+# ⚠️Disclaimer
 
-see demo https://github.com/drcika/apc-extension/blob/production/demo/vibrancy.settings.json
+This extension is specifically designed for configuring Electron and Visual Studio Code.
 
-# Disclaimer #
+I haven't developed anything or provided support for potential bugs.
+My role is solely to provide a bridge for configuring Electron/VS Code.
 
-this extension only allows configuring electron / vscode 
+For detailed information on available configurations, refer to [Electron BrowserWindow Options](https://www.electronjs.org/docs/latest/api/browser-window#new-browserwindowoptions).
 
-I didn't develop anything or provide support for possible bugs
+### 🚩Exercise caution with the "apc.electron" configuration. Incorrect parameters may disrupt the proper startup of VSCode or VSCodium.
 
-I'm just providing a bridge to configure electron / vscode
-
-all possible configuration
-
-https://www.electronjs.org/docs/latest/api/browser-window#new-browserwindowoptions
-
-### be careful with the "apc.electron" configuration if you put not a valid parameter the vscode/vscodium won't start ###
 ```jsonc
     // requires other panels to be transparent
     // see demo https://github.com/drcika/apc-extension/blob/production/demo/vibrancy.settings.json
@@ -197,10 +195,8 @@ https://www.electronjs.org/docs/latest/api/browser-window#new-browserwindowoptio
   <img src="https://github.com/drcika/apc-extension/blob/production/demo.png"/>
 </div>
 
-## Credits
+## Acknowledgements
 
 Inspired by
-
-https://github.com/iocave/monkey-patch
-
-https://github.com/iocave/customize-ui
+-   [iocave/monkey-patch](https://github.com/iocave/monkey-patch)
+-   [iocave/customize-ui](https://github.com/iocave/customize-ui)

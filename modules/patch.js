@@ -60,7 +60,7 @@ define(
             console.log(error);
           }
 
-          if (store.isMacintosh && config.getConfiguration('apc.menubar.compact')) {
+          if (config.getConfiguration('apc.menubar.compact')) {
             try { require(['vs/platform/window/common/window'], classes.window, traceError); }
             catch (error) { traceError(error); }
           }
@@ -86,7 +86,7 @@ define(
             e.affectsConfiguration('workbench.activityBar.visible') && activitybar.onChangeVisibility();
             e.affectsConfiguration('workbench.sideBar.location') && layout.onChangeSidebarPosition();
             e.affectsConfiguration('workbench.statusBar.visible') && statusbar.onChangeVisibility();
-            e.affectsConfiguration('apc.statusBar') && statusbar.update();
+            e.affectsConfiguration('apc.statusBar') && (statusbar.update(), layout.updateTabsClasses());
             e.affectsConfiguration('apc.activityBar') && activitybar.update();
             e.affectsConfiguration('apc.imports') && ui.appendFiles();
             e.affectsConfiguration('apc.stylesheet') && ui.appendStyles();

@@ -36,6 +36,12 @@ define(
         } catch (error) { traceError(error); }
       };
 
+      function updateTabsClasses() {
+        try { services.editorGroupsService.groups.forEach(group => group.element.classList[group.element.getBoundingClientRect().top === 0 ? 'add' : 'remove']('editor-group-top')); }
+        catch (error) { traceError(error); }
+      }
+
+      exports.updateTabsClasses = updateTabsClasses;
       exports.updateSideBarClass = updateSideBarClass;
     } catch (error) { traceError(error); }
 

@@ -54,37 +54,35 @@ define(
 
       exports.menu = function (menu) {
         try {
-          if (store.isMacintosh) {
-            const [menuKey, MenuClass] = findInPrototype(menu, 'Menu', 'trigger'); // the only one type class
-            menu[menuKey] = class Menu extends MenuClass {
-              constructor(menuHolder) {
-                super(...arguments);
-                try {
-                  if (!config.getConfiguration('apc.menubar.compact')) { return; }
-                  const { position, isHorizontal } = config.activityBar;
-                  if (isHorizontal) {
-                    const sideBarPosition = services.layoutService.getSideBarPosition();
-                    const isTop = position === 'top';
-                    if (!isTop) {
-                      const menuElement = store.menubarControlContainer.querySelector('.monaco-menu');
-                      const maxHeight = `${menuElement.querySelector('.monaco-action-bar').clientHeight}px`;
-                      menuElement.style.maxHeight = maxHeight;
-                      const slider = store.menubarControlContainer.querySelector('.scrollbar.vertical > .slider');
-                      slider.style.height = 0;
-                    }
-
-                    const titleBoundingRect = store.menubarControlContainer.querySelector('.menubar-menu-title').getBoundingClientRect();
-                    const menuHolderBoundingRect = menuHolder.getBoundingClientRect();
-
-                    menuHolder.style.top = isTop ? `${titleBoundingRect.top}px` : `${titleBoundingRect.bottom - menuHolderBoundingRect.height}px`;
-                    menuHolder.style.left = sideBarPosition === store.Position.LEFT ? `${titleBoundingRect.left + titleBoundingRect.width}px` : `${titleBoundingRect.left - menuHolderBoundingRect.width}px`;
-                    menuHolder.style.right = 'auto';
-                    menuHolder.style.bottom = 'auto';
+          const [menuKey, MenuClass] = findInPrototype(menu, 'Menu', 'trigger'); // the only one type class
+          menu[menuKey] = class Menu extends MenuClass {
+            constructor(menuHolder) {
+              super(...arguments);
+              try {
+                if (!config.getConfiguration('apc.menubar.compact')) { return; }
+                const { position, isHorizontal } = config.activityBar;
+                if (isHorizontal) {
+                  const sideBarPosition = services.layoutService.getSideBarPosition();
+                  const isTop = position === 'top';
+                  if (!isTop) {
+                    const menuElement = store.menubarControlContainer.querySelector('.monaco-menu');
+                    const maxHeight = `${menuElement.querySelector('.monaco-action-bar').clientHeight}px`;
+                    menuElement.style.maxHeight = maxHeight;
+                    const slider = store.menubarControlContainer.querySelector('.scrollbar.vertical > .slider');
+                    slider.style.height = 0;
                   }
-                } catch (error) { traceError(error); }
-              }
-            };
-          }
+
+                  const titleBoundingRect = store.menubarControlContainer.querySelector('.menubar-menu-title').getBoundingClientRect();
+                  const menuHolderBoundingRect = menuHolder.getBoundingClientRect();
+
+                  menuHolder.style.top = isTop ? `${titleBoundingRect.top}px` : `${titleBoundingRect.bottom - menuHolderBoundingRect.height}px`;
+                  menuHolder.style.left = sideBarPosition === store.Position.LEFT ? `${titleBoundingRect.left + titleBoundingRect.width}px` : `${titleBoundingRect.left - menuHolderBoundingRect.width}px`;
+                  menuHolder.style.right = 'auto';
+                  menuHolder.style.bottom = 'auto';
+                }
+              } catch (error) { traceError(error); }
+            }
+          };
         } catch (error) { traceError(error); }
       };
 

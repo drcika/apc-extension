@@ -187,7 +187,7 @@ For detailed information on available configurations, refer to [Electron Browser
 ### `apc.menubar.compact`
 
 ```jsonc
-    // "Enables compact menu bar on macos"
+    // "Enables compact menu bar"
     "apc.menubar.compact": true
 ```
 

@@ -182,8 +182,8 @@ define(['exports', 'apc/auxiliary', 'apc/configuration'], (exports, auxiliary, c
 
     exports.run = function () {
       try {
-        if (store.isMacintosh && config.electron.titleBarStyle) { document.body.classList.add(`inline-title-bar`); }
-        if (store.isMacintosh && config.electron.frame === false) { document.body.classList.add(`frameless-title-bar`); }
+        if (config.electron.titleBarStyle) { document.body.classList.add(`inline-title-bar`); }
+        if (config.electron.frame === false) { document.body.classList.add(`frameless-title-bar`); }
 
         updateClasses();
         appendFiles();

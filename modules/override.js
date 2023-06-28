@@ -21,7 +21,7 @@ define(
             break;
           case store.Parts?.SIDEBAR_PART:
             store.sidebarPartView = part;
-            if (config.isInline) {
+            if (store.isMacintosh && config.isInline) {
               queueMicrotask(() => {
                 const inlineTitle = part.getContainer().querySelector('.title');
                 config.handleDblclick(inlineTitle, () => config.activityBar.position !== 'top' && config.statusBar.position !== 'top' && config.handleTitleDoubleClick());
@@ -85,11 +85,6 @@ define(
       return store.menubarControlContainer;
     };
 
-    function updateTabsClasses() {
-      try { services.editorGroupsService.groups.forEach(group => group.element.classList[group.element.getBoundingClientRect().top === 0 ? 'add' : 'remove']('editor-group-top')); }
-      catch (error) { traceError(error); }
-    }
-
     function addTabsPlaceHolder() {
       try { config.inlineTabsPlaceholder && services.editorGroupsService.groups[0].element.querySelector('.tabs-and-actions-container').prepend(config.inlineTabsPlaceholder); }
       catch (error) { traceError(error); }
@@ -99,7 +94,7 @@ define(
       try {
         group.element.style.position = 'relative';
         group.disposableNoTabsDblclick = config.handleDblclick(UI.appendDiv(group.element, 'inline-no-tabs-placeholder'), config.handleTitleDoubleClick);
-        group.disposableTabsDblclick = config.handleDblclick(group.element.querySelector('.tabs-container'), () => group.element.classList.contains('editor-group-top') && config.handleTitleDoubleClick());
+        group.disposableTabsDblclick = config.handleDblclick(group.element.querySelector('.tabs-container'), () => group.element.classList.contains('editor-group-top') && config.statusBar.position !== 'top' && config.handleTitleDoubleClick());
       }
       catch (error) { traceError(error); }
     }
@@ -111,9 +106,11 @@ define(
         config.disposables.add(this.onDidAddGroup(decorateTabsPlaceHolders));
 
         queueMicrotask(() => {
-          config.inlineTabsPlaceholder = UI.createDiv('inline-tabs-placeholder');
-          addTabsPlaceHolder();
-          updateTabsClasses();
+          if (store.isMacintosh) {
+            config.inlineTabsPlaceholder = UI.createDiv('inline-tabs-placeholder');
+            addTabsPlaceHolder();
+          }
+          layout.updateTabsClasses();
           this.groups.forEach(decorateTabsPlaceHolders);
         });
 
@@ -125,13 +122,13 @@ define(
       group.disposableTabsDblclick?.dispose();
       group.disposableNoTabsDblclick?.dispose();
       original();
-      if (!config.isInline) { return; }
+      if (!store.isMacintosh || !config.isInline) { return; }
       addTabsPlaceHolder();
     };
 
     exports.editorApplyLayout = function (original) {
       original();
-      if (config.isInline) { updateTabsClasses(); }
+      if (config.isInline) { layout.updateTabsClasses(); }
     };
 
     exports.setVisibleActivityBar = function (original) {

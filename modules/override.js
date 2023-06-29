@@ -23,7 +23,7 @@ define(
             store.sidebarPartView = part;
             if (store.isMacintosh && config.isInline) {
               queueMicrotask(() => {
-                const inlineTitle = part.getContainer().querySelector('.title');
+                const inlineTitle = part.getContainer().querySelector('.title-label');
                 config.handleDblclick(inlineTitle, () => config.activityBar.position !== 'top' && config.statusBar.position !== 'top' && config.handleTitleDoubleClick());
                 UI.prependDiv(inlineTitle, 'inline-titlebar-placeholder');
               });
@@ -31,7 +31,14 @@ define(
             break;
           case store.Parts?.AUXILIARYBAR_PART:
             store.auxiliarybarPartView = part;
-            if (config.isInline) { queueMicrotask(() => config.handleDblclick(part.getContainer().querySelector('.title'), () => config.statusBar.position !== 'top' && config.handleTitleDoubleClick())); }
+            if (config.isInline) {
+              queueMicrotask(() => {
+                const titleActions = part.element.querySelector('.title-actions');
+                config.inlineAuxiliarybarPlaceholder = UI.createDiv('inline-auxiliarybar-placeholder');
+                titleActions.parentNode.insertBefore(config.inlineAuxiliarybarPlaceholder, titleActions);
+                config.handleDblclick(config.inlineAuxiliarybarPlaceholder, () => config.statusBar.position !== 'top' && config.handleTitleDoubleClick());
+              });
+            }
             break;
           case store.Parts?.ACTIVITYBAR_PART:
             store.activitybarPartView = part;
@@ -100,7 +107,6 @@ define(
     }
 
     exports.editorPartCreate = function (original) {
-      console.log('create');
       original();
       try {
         if (!config.isInline) { return; }

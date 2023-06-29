@@ -246,16 +246,31 @@ body.horizontal-activitybar .monaco-workbench .activitybar>.content :not(.monaco
 .inline-title-bar.statusbar-top .monaco-workbench:not(.fullscreen) .statusbar,
 .inline-title-bar.statusbar-editor-top .monaco-workbench:not(.fullscreen) .statusbar,
 /**/
-.frameless-title-bar:not(.statusbar-top) .monaco-workbench:not(.fullscreen) .auxiliarybar .title-actions,
-.inline-title-bar:not(.statusbar-top) .monaco-workbench:not(.fullscreen) .auxiliarybar .title-actions,
+.frameless-title-bar:not(.statusbar-top) .monaco-workbench:not(.fullscreen) .auxiliarybar .inline-auxiliarybar-placeholder,
+.inline-title-bar:not(.statusbar-top) .monaco-workbench:not(.fullscreen) .auxiliarybar .inline-auxiliarybar-placeholder,
 /**/
 .frameless-title-bar.activitybar-top:not(.statusbar-top) .monaco-workbench:not(.fullscreen) .activitybar.left .content,
 .inline-title-bar.activitybar-top:not(.statusbar-top) .monaco-workbench:not(.fullscreen) .activitybar.left .content,
 /**/
-.frameless-title-bar:not(.activitybar-top):not(.statusbar-top) .monaco-workbench:not(.fullscreen) .sidebar .composite.title,
-.inline-title-bar:not(.activitybar-top):not(.statusbar-top) .monaco-workbench:not(.fullscreen) .sidebar .composite.title {
+.frameless-title-bar:not(.activitybar-top):not(.statusbar-top) .monaco-workbench:not(.fullscreen) .sidebar .composite.title .title-label,
+.inline-title-bar:not(.activitybar-top):not(.statusbar-top) .monaco-workbench:not(.fullscreen) .sidebar .composite.title .title-label {
   -webkit-app-region: drag;
   cursor: move;
+}
+
+.frameless-title-bar:not(.statusbar-top) .monaco-workbench:not(.fullscreen) .auxiliarybar .inline-auxiliarybar-placeholder,
+.inline-title-bar:not(.statusbar-top) .monaco-workbench:not(.fullscreen) .auxiliarybar .inline-auxiliarybar-placeholder,
+.frameless-title-bar:not(.activitybar-top):not(.statusbar-top) .monaco-workbench:not(.fullscreen) .sidebar .composite.title .title-label,
+.inline-title-bar:not(.activitybar-top):not(.statusbar-top) .monaco-workbench:not(.fullscreen) .sidebar .composite.title .title-label {
+  display: flex;
+  flex: 1;
+}
+
+.frameless-title-bar:not(.statusbar-top) .monaco-workbench:not(.fullscreen) .auxiliarybar .title-actions,
+.inline-title-bar:not(.statusbar-top) .monaco-workbench:not(.fullscreen) .auxiliarybar .title-actions,
+.frameless-title-bar:not(.activitybar-top):not(.statusbar-top) .monaco-workbench:not(.fullscreen) .sidebar .composite.title .title-actions,
+.inline-title-bar:not(.activitybar-top):not(.statusbar-top) .monaco-workbench:not(.fullscreen) .sidebar .composite.title .title-actions {
+  flex: unset;
 }
 
 .frameless-title-bar .monaco-workbench .part.editor>.content div.editor-group-container.empty>div.tabs.inline,

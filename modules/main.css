@@ -238,8 +238,8 @@ body.horizontal-activitybar .monaco-workbench .activitybar>.content :not(.monaco
 }
 
 /*  */
-.frameless-title-bar:not(.statusbar-top) .monaco-workbench:not(.fullscreen) .editor-group-top .tabs-and-actions-container,
-.inline-title-bar:not(.statusbar-top) .monaco-workbench:not(.fullscreen) .editor-group-top .tabs-and-actions-container,
+.frameless-title-bar:not(.statusbar-top) .monaco-workbench:not(.fullscreen) .editor-group-top .tabs-and-actions-container .monaco-scrollable-element,
+.inline-title-bar:not(.statusbar-top) .monaco-workbench:not(.fullscreen) .editor-group-top .tabs-and-actions-container .monaco-scrollable-element,
 /*  */
 .frameless-title-bar.statusbar-top .monaco-workbench:not(.fullscreen) .statusbar,
 .frameless-title-bar.statusbar-editor-top .monaco-workbench:not(.fullscreen) .statusbar,

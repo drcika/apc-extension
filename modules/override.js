@@ -100,10 +100,14 @@ define(
     }
 
     exports.editorPartCreate = function (original) {
+      console.log('create');
       original();
       try {
         if (!config.isInline) { return; }
-        config.disposables.add(this.onDidAddGroup(decorateTabsPlaceHolders));
+        config.disposables.add(this.onDidAddGroup((...args) => {
+          layout.updateTabsClasses();
+          decorateTabsPlaceHolders(...args);
+        }));
 
         queueMicrotask(() => {
           if (store.isMacintosh) {

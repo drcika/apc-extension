@@ -2,7 +2,7 @@ define(
   ['exports', 'apc/utils', 'apc/auxiliary', 'apc/configuration', 'apc/override'],
   function (exports, utils, auxiliary, { config }, override) {
     try {
-      const { traceError, findInPrototype, findOwnProperty, store, getProperty, services } = auxiliary;
+      const { traceError, findInPrototype, findOwnProperty, store, getProperty, services, findVariable } = auxiliary;
 
       exports.layoutService = layoutService => {
         try {
@@ -88,14 +88,14 @@ define(
 
       exports.menubar = function (menubar) {
         // try {
-        // const [menuBarKey, MenuBarClass] = findInPrototype(menubar, 'MenuBar', 'createOverflowMenu'); // the only one
-        // menubar[menuBarKey] = class MenuBar extends MenuBarClass {
-        // constructor() {
-        // super(...arguments);
-        // store.menubar = this;
-        // setTimeout(() => { this.menubar.ab(20, false); }, 1000);
-        // }
-        // };
+        //   const [menuBarKey, MenuBarClass] = findInPrototype(menubar, 'MenuBar', 'createOverflowMenu'); // the only one
+        //   menubar[menuBarKey] = class MenuBar extends MenuBarClass {
+        //     constructor() {
+        //       super(...arguments);
+        //       store.menubar = this;
+        //       setTimeout(() => { this.ab(20, false); }, 1000);
+        //     }
+        //   };
         // } catch (error) { traceError(error); }
       };
 
@@ -164,12 +164,31 @@ define(
 
       exports.layout = function (layout) {
         try {
-          const [, Layout] = findInPrototype(layout, 'Layout', 'registerPart'); // the only one
-          utils.override(Layout, 'registerPart', override.registerPart);
-          utils.override(Layout, 'toggleZenMode', override.toggleZenMode);
-          utils.override(Layout, 'setPartHidden', override.setPartHidden);
-          utils.override(Layout, 'setPanelAlignment', override.setPanelAlignment);
-          utils.override(Layout, 'setPanelPosition', override.setPanelPosition);
+          const [, LayoutClass] = findInPrototype(layout, 'Layout', 'registerPart'); // the only one
+          utils.override(LayoutClass, 'registerPart', override.registerPart);
+          utils.override(LayoutClass, 'toggleZenMode', override.toggleZenMode);
+          utils.override(LayoutClass, 'setPartHidden', override.setPartHidden);
+          utils.override(LayoutClass, 'setPanelAlignment', override.setPanelAlignment);
+          utils.override(LayoutClass, 'setPanelPosition', override.setPanelPosition);
+        } catch (error) { traceError(error); }
+      };
+
+      exports.style = function (style) {
+        try {
+          const [key] = findVariable(style, 'DEFAULT_FONT_FAMILY', 'string'); // the only one
+          const _DEFAULT_FONT_FAMILY = style[key];
+          Object.defineProperty(style, key, {
+            get() {
+              try {
+                return config.fontFamily.customFontFamily || _DEFAULT_FONT_FAMILY;
+              } catch (error) {
+                traceError(error);
+                return _DEFAULT_FONT_FAMILY;
+              }
+            },
+            set() { },
+            configurable: true
+          });
         } catch (error) { traceError(error); }
       };
 

@@ -397,3 +397,88 @@ body.horizontal-activitybar .monaco-workbench .activitybar>.content :not(.monaco
 .custom-header .monaco-workbench .part.editor>.content .editor-group-container>.title .tabs-container>.tab>div.tab-actions {
   width: calc(var(--header-height) * 0.6);
 }
+
+/*  */
+.custom-font-family .monaco-editor,
+.custom-font-family .mac,
+.custom-font-family .mac:lang(zh-Hans),
+.custom-font-family .mac:lang(zh-Hant),
+.custom-font-family .mac:lang(ja),
+.custom-font-family .mac:lang(ko),
+.custom-font-family .windows,
+.custom-font-family .windows:lang(zh-Hans),
+.custom-font-family .windows:lang(zh-Hant),
+.custom-font-family .windows:lang(ja),
+.custom-font-family .windows:lang(ko),
+.custom-font-family .linux,
+.custom-font-family .linux:lang(zh-Hans),
+.custom-font-family .linux:lang(zh-Hant),
+.custom-font-family .linux:lang(ja),
+.custom-font-family .linux:lang(ko) {
+  font-family: var(--custom-font-family)
+}
+
+.custom-monospace-font .monaco-editor,
+.custom-monospace-font .mac,
+.custom-monospace-font .windows,
+.custom-monospace-font .linux {
+  --monaco-monospace-font: var(--custom-monospace-font)
+}
+
+.custom-font-family-statusbar .statusbar {
+  font-family: var(--custom-font-family-statusbar)
+}
+
+.custom-font-family-panel .panel {
+  font-family: var(--custom-font-family-panel)
+}
+
+.custom-font-family-banner .mac .banner,
+.custom-font-family-banner .windows .banner,
+.custom-font-family-banner .linux .banner {
+  font-family: var(--custom-font-family-banner)
+}
+
+/* .custom-font-family-menubar .menubar,
+.custom-font-family-menubar .mac .menubar,
+.custom-font-family-menubar .windows .menubar, */
+.custom-font-family-monaco-menu .mac .monaco-menu {
+  font-family: var(--custom-font-family-monaco-menu)
+}
+
+.custom-font-family-titlebar .mac .titlebar,
+.custom-font-family-titlebar .windows .titlebar,
+.custom-font-family-titlebar .linux .titlebar {
+  font-family: var(--custom-font-family-titlebar)
+}
+
+.custom-font-family-extension-editor .extension-editor {
+  font-family: var(--custom-font-family-extension-editor)
+}
+
+.custom-font-family-settings-body .settings-body .mac,
+.custom-font-family-settings-body .settings-body .windows,
+.custom-font-family-settings-body .settings-body .linux {
+  font-family: var(--custom-font-family-settings-body)
+}
+
+.custom-font-family-auxiliarybar .auxiliarybar .mac,
+.custom-font-family-auxiliarybar .auxiliarybar .windows,
+.custom-font-family-auxiliarybar .auxiliarybar .linux {
+  font-family: var(--custom-font-family-auxiliarybar)
+}
+
+.custom-font-family-tabs .tabs .windows,
+.custom-font-family-tabs .tabs .mac,
+.custom-font-family-tabs .tabs .linux {
+  font-family: var(--custom-font-family-tabs)
+}
+
+.custom-font-family-sidebar .sidebar .mac,
+.custom-font-family-sidebar .sidebar .windows,
+.custom-font-family-sidebar .sidebar .linux,
+.custom-font-family-sidebar .mac .sidebar,
+.custom-font-family-sidebar .linux .sidebar,
+.custom-font-family-sidebar .mawindowsc .sidebar {
+  font-family: var(--custom-font-family-sidebar)
+}

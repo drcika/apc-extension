@@ -47,10 +47,46 @@
       "type": "object",
       "title": "Apc",
       "properties": {
-        "apc.backgroundColor": {
-          "type": "string",
-          "format": "color",
-          "description": "#00000000 for transparent"
+        "apc.font.family": {
+          "type": "string"
+        },
+        "apc.monospace.font.family": {
+          "type": "string"
+        },
+        "apc.parts.font.family": {
+          "type": "object",
+          "properties": {
+            "monaco-menu": {
+              "type": "string"
+            },
+            "banner": {
+              "type": "string"
+            },
+            "titlebar": {
+              "type": "string"
+            },
+            "statusbar": {
+              "type": "string"
+            },
+            "panel": {
+              "type": "string"
+            },
+            "extension-editor": {
+              "type": "string"
+            },
+            "settings-body": {
+              "type": "string"
+            },
+            "auxiliarybar": {
+              "type": "string"
+            },
+            "tabs": {
+              "type": "string"
+            },
+            "sidebar": {
+              "type": "string"
+            }
+          }
         },
         "apc.listRow": {
           "type": "object",
@@ -275,7 +311,7 @@
         "apc.buttons": {
           "type": "array",
           "description": "Views to include on the status bar with associated icons",
-          "default": [],
+          "default": [ ],
           "uniqueItems": true,
           "items": {
             "type": "object",

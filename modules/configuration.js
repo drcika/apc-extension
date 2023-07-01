@@ -131,6 +131,17 @@ define(['exports', 'apc/auxiliary'], function (exports, auxiliary) {
         return this._electronConfig;
       },
 
+      get fontFamily() {
+        const customFontFamily = this.getConfiguration('apc.font.family');
+        const customMonospaceFontFamily = this.getConfiguration('apc.monospace.font.family');
+        const customPartsFontFamily = this.getConfiguration('apc.parts.font.family') || {};
+        return {
+          customFontFamily,
+          customMonospaceFontFamily,
+          ...customPartsFontFamily,
+        };
+      },
+
       get titleBarStyle() {
         if (!this._titleBarStyle) {
           this._titleBarStyle = this.getConfiguration('window.titleBarStyle');

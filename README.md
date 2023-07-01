@@ -31,6 +31,45 @@ To enable or disable this extension, follow these steps:
   
 ## Supported Configuration Options
 
+### `font.family`
+>**Install the desired font on your computer **
+
+provided by vscode
+```jsonc
+  "editor.fontFamily": "Roboto Mono",
+  "editor.inlayHints.fontFamily": "Roboto Mono",
+  "editor.codeLensFontFamily": "Roboto Mono",
+  "terminal.integrated.fontFamily": "Roboto Mono",
+  "scm.inputFontFamily": "Roboto Mono",
+  "chat.editor.fontFamily": "Roboto Mono",
+  "debug.console.fontFamily": "Roboto Mono",
+  "notebook.output.fontFamily": "Roboto Mono",
+  "markdown.preview.fontFamily": "Roboto Mono",
+```
+
+replaces the default font-family for extension-editor require restart
+
+```jsonc
+  "apc.font.family": "Roboto Mono",
+  "apc.monospace.font.family": "Roboto Mono",
+```
+
+individually by parts
+
+```jsonc
+  "apc.parts.font.family": {
+    "sidebar": "Roboto Mono",
+    "titlebar": "Roboto Mono",
+    "activityBar": "Roboto Mono",
+    "panel": "Roboto Mono",
+    "tabs": "Roboto Mono",
+    "statusbar": "Roboto Mono",
+    "settings-body": "Roboto Mono",
+    "extension-editor": "Roboto Mono", // require the font to be installed on the computer and the applications to be restarted
+    "monaco-menu": "Roboto Mono"
+  },
+```
+
 ### `apc.imports`
 
 >**Real-time monitoring of CSS files, no need to restart the application**

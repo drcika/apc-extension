@@ -45,17 +45,32 @@ define(['exports', 'apc/auxiliary', 'apc/configuration'], (exports, auxiliary, c
       const statusBarConfig = config.statusBar;
       const trafficLightPosition = config.electron.trafficLightPosition;
       const sidebarTitlebarConfig = config.titlebar;
+      const { customFontFamily, customMonospaceFontFamily, ...fontFamilyParts } = config.fontFamily;
 
-      document.body.classList[statusBarConfig.position === 'top' ? 'add' : 'remove']('statusbar-top');
-      document.body.classList[statusBarConfig.position === 'editor-top' ? 'add' : 'remove']('statusbar-editor-top');
-      document.body.classList[activityBarConfig.position ? 'add' : 'remove']('horizontal-activitybar');
-      document.body.classList[activityBarConfig.position === 'bottom' ? 'add' : 'remove']('activitybar-bottom');
-      document.body.classList[activityBarConfig.position === 'top' ? 'add' : 'remove']('activitybar-top');
-      document.body.classList[activityBarConfig.isEnabled ? 'add' : 'remove']('custom-activitybar');
-      document.body.classList[headerConfig.isEnabled ? 'add' : 'remove']('custom-header');
-      document.body.classList[sidebarTitlebarConfig.isEnabled ? 'add' : 'remove']('custom-sidebar-titlebar');
-      document.body.classList[listRowConfig.isEnabled ? 'add' : 'remove']('custom-list-row');
-      document.body.classList[statusBarConfig.isEnabled ? 'add' : 'remove']('custom-statusbar');
+      const classList = document.body.classList;
+      classList[statusBarConfig.position === 'top' ? 'add' : 'remove']('statusbar-top');
+      classList[statusBarConfig.position === 'editor-top' ? 'add' : 'remove']('statusbar-editor-top');
+      classList[activityBarConfig.position ? 'add' : 'remove']('horizontal-activitybar');
+      classList[activityBarConfig.position === 'bottom' ? 'add' : 'remove']('activitybar-bottom');
+      classList[activityBarConfig.position === 'top' ? 'add' : 'remove']('activitybar-top');
+      classList[activityBarConfig.isEnabled ? 'add' : 'remove']('custom-activitybar');
+      classList[headerConfig.isEnabled ? 'add' : 'remove']('custom-header');
+      classList[sidebarTitlebarConfig.isEnabled ? 'add' : 'remove']('custom-sidebar-titlebar');
+      classList[listRowConfig.isEnabled ? 'add' : 'remove']('custom-list-row');
+      classList[statusBarConfig.isEnabled ? 'add' : 'remove']('custom-statusbar');
+      // 
+      classList[customFontFamily ? 'add' : 'remove']('custom-font-family');
+      classList[customMonospaceFontFamily ? 'add' : 'remove']('custom-monospace-font');
+      classList[fontFamilyParts.statusbar ? 'add' : 'remove']('custom-font-family-statusbar');
+      classList[fontFamilyParts.panel ? 'add' : 'remove']('custom-font-family-panel');
+      classList[fontFamilyParts['extension-editor'] ? 'add' : 'remove']('custom-font-family-extension-editor');
+      classList[fontFamilyParts['settings-body'] ? 'add' : 'remove']('custom-font-family-settings-body');
+      classList[fontFamilyParts.auxiliarybar ? 'add' : 'remove']('custom-font-family-auxiliarybar');
+      classList[fontFamilyParts.tabs ? 'add' : 'remove']('custom-font-family-tabs');
+      classList[fontFamilyParts.sidebar ? 'add' : 'remove']('custom-font-family-sidebar');
+      classList[fontFamilyParts.titlebar ? 'add' : 'remove']('custom-font-family-titlebar');
+      classList[fontFamilyParts.banner ? 'add' : 'remove']('custom-font-family-banner');
+      classList[fontFamilyParts['monaco-menu'] ? 'add' : 'remove']('custom-font-family-monaco-menu');
 
       if (!store.rootTextNode) {
         store.rootTextNode = appendStyleElement();
@@ -71,6 +86,18 @@ define(['exports', 'apc/auxiliary', 'apc/configuration'], (exports, auxiliary, c
         --activity-bar-action-size: ${activityBarConfig.size}px;
         --status-bar-font-size: ${statusBarConfig.fontSize}px;
         --traffic-X: ${trafficLightPosition.x}px;
+        --custom-font-family: '${customFontFamily}';
+        --custom-monospace-font: '${customMonospaceFontFamily}';
+        --custom-font-family-statusbar: '${fontFamilyParts.statusbar}';
+        --custom-font-family-panel: '${fontFamilyParts.panel}';
+        --custom-font-family-extension-editor: '${fontFamilyParts['extension-editor']}';
+        --custom-font-family-settings-body: '${fontFamilyParts['settings-body']}';
+        --custom-font-family-auxiliarybar: '${fontFamilyParts.auxiliarybar}';
+        --custom-font-family-tabs: '${fontFamilyParts.tabs}';
+        --custom-font-family-sidebar: '${fontFamilyParts.sidebar}';
+        --custom-font-family-titlebar: '${fontFamilyParts.titlebar}';
+        --custom-font-family-banner: '${fontFamilyParts.banner}';
+        --custom-font-family-monaco-menu: '${fontFamilyParts['monaco-menu']}';
         `;
     };
     exports.updateClasses = updateClasses;

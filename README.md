@@ -32,9 +32,9 @@ To enable or disable this extension, follow these steps:
 ## Supported Configuration Options
 
 ### `font.family`
->**Install the desired font on your computer **
+> **Install the desired font on your computer**
 
-provided by vscode
+Provided by vscode
 ```jsonc
   "editor.fontFamily": "Roboto Mono",
   "editor.inlayHints.fontFamily": "Roboto Mono",
@@ -47,14 +47,14 @@ provided by vscode
   "markdown.preview.fontFamily": "Roboto Mono",
 ```
 
-replaces the default font-family for extension-editor require restart
+Replace the Default Font Family for `extension-editor` (Requires Restart)
 
 ```jsonc
   "apc.font.family": "Roboto Mono",
   "apc.monospace.font.family": "Roboto Mono",
 ```
 
-individually by parts
+Replace the Default Font Family for Each Part Individually
 
 ```jsonc
   "apc.parts.font.family": {
@@ -72,7 +72,7 @@ individually by parts
 
 ### `apc.imports`
 
->**Real-time monitoring of CSS files, no need to restart the application**
+> **Real-time monitoring of CSS files, no need to restart the application**
 ```jsonc
     "apc.imports": [ 
       "/Users/some/path/style.css",
@@ -236,7 +236,7 @@ For detailed information on available configurations, refer to [Electron Browser
 ### `apc.menubar.compact`
 
 ```jsonc
-    // "Enables compact menu bar"
+    // Enables compact menu bar
     "apc.menubar.compact": true
 ```
 

@@ -95,6 +95,16 @@ individually by parts
     ]
 ```
 
+### `apc.iframe.style`
+Inject custom css into iFrame (notebook, extension view, etc)
+
+>**Tab must be reopened for changes to take effect **
+
+```jsonc
+  "apc.iframe.style": "/Users/path/style.css",
+  "apc.iframe.style": "/C:/Users/path/style.css", // windows
+```
+
 ### `apc.stylesheet`
 
 ```jsonc

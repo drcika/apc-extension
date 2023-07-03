@@ -399,6 +399,7 @@ body.horizontal-activitybar .monaco-workbench .activitybar>.content :not(.monaco
 }
 
 /*  */
+.custom-font-family .shadow-root-host,
 .custom-font-family .monaco-editor,
 .custom-font-family .mac,
 .custom-font-family .mac:lang(zh-Hans),
@@ -418,6 +419,7 @@ body.horizontal-activitybar .monaco-workbench .activitybar>.content :not(.monaco
   font-family: var(--custom-font-family)
 }
 
+.custom-monospace-font .shadow-root-host,
 .custom-monospace-font .monaco-editor,
 .custom-monospace-font .mac,
 .custom-monospace-font .windows,

@@ -4,27 +4,34 @@ define(
     const { traceError, store } = auxiliary;
 
     try {
+      require(['vs/base/common/buffer'], classes.buffer, traceError);
+
       require(['vs/base/browser/ui/grid/grid'], classes.grid, traceError);
       require(['vs/base/browser/ui/actionbar/actionbar'], classes.actionbar, traceError);
       require(['vs/base/browser/ui/menu/menu'], classes.menu, traceError);
       require(['vs/base/browser/ui/list/listView'], classes.listView, traceError);
-      require(['vs/workbench/services/layout/browser/layoutService'], classes.layoutService, traceError);
+      require(['vs/base/browser/ui/menu/menubar'], classes.menubar, traceError);
+
       require(['vs/workbench/browser/workbench'], classes.workbench, traceError);
       require(['vs/workbench/browser/layout'], classes.layout, traceError);
       require(['vs/workbench/browser/style'], classes.style, traceError);
+
       require(['vs/workbench/browser/parts/titlebar/menubarControl'], classes.menubarControl, traceError);
       require(['vs/workbench/browser/parts/editor/editorPart'], classes.editorPart, traceError);
       require(['vs/workbench/browser/parts/compositeBar'], classes.compositeBar, traceError);
       require(['vs/workbench/browser/parts/activitybar/activitybarPart'], classes.activitybarPart, traceError);
+
+      require(['vs/workbench/services/layout/browser/layoutService'], classes.layoutService, traceError);
+
       require(['vs/workbench/contrib/files/browser/views/openEditorsView'], classes.openEditorsView, traceError);
-      require(['vs/base/browser/ui/menu/menubar'], classes.menubar, traceError);
+
 
       // const skipService = ['credentialsMainService', 'encryptionMainService', 'editorProgressService', 'ptyService', 'sharedTunnelsService',
       //   'IUserDataSyncStoreService', 'IUserDataSyncBackupStoreService', 'IUserDataSyncResourceProviderService', 'IExtHostRpcService',
       //   'IExtHostTunnelService', 'IWebExtensionsScannerService', 'extensionUrlHandler', 'extensionUrlHandler',
       //   'privateBreakpointWidgetService'];
       // const services = [];
-      const services = ['nativeHostService', 'configurationService', 'themeService', 'fileService', 'layoutService', 'statusbarService', 'editorGroupsService', 'storageService'];
+      const services = ['nativeHostService', 'configurationService', 'themeService', 'fileService', 'layoutService', 'statusbarService', 'editorGroupsService', 'storageService', 'environmentService'];
 
       // themeService.onDidColorThemeChange(colorTheme => {
       // colorTheme.setCustomColors({

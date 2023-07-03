@@ -11,6 +11,13 @@ define(
         } catch (error) { traceError(error); }
       };
 
+      exports.buffer = function (buffer) {
+        try {
+          const [, VSBuffer] = findOwnProperty(buffer, 'VSBuffer', 'fromString');
+          services.VSBuffer = VSBuffer;
+        } catch (error) { traceError(error); }
+      };
+
       exports.grid = function (grid) {
         try {
           const [serializableGridKey, SerializableGridClass] = findOwnProperty(grid, 'SerializableGrid', 'deserialize');

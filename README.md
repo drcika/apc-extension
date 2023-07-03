@@ -96,9 +96,9 @@ Replace the Default Font Family for Each Part Individually
 ```
 
 ### `apc.iframe.style`
-Inject custom css into iFrame (notebook, extension view, etc)
+Inject Custom CSS into iFrame (Notebook, Extension view, etc)
 
->**Tab must be reopened for changes to take effect **
+> **Tab must be reopened for changes to take effect**
 
 ```jsonc
   "apc.iframe.style": "/Users/path/style.css",

@@ -209,6 +209,7 @@ define(['exports', 'apc/auxiliary', 'apc/configuration'], (exports, auxiliary, c
     // !! backward compatibility
     async function restore() {
       try {
+        const appRoot = services.environmentService.appRoot;
         const IFrameIndexPath = uri.URI.parse('file://' + appRoot + '/out/vs/workbench/contrib/webview/browser/pre/index.html');
         const IFrameIndexPathBkpPath = uri.URI.parse('file://' + appRoot + '/out/vs/workbench/contrib/webview/browser/pre/index.apc.bkp.html');
         const backup = await services.fileService.exists(IFrameIndexPathBkpPath);

@@ -4,6 +4,8 @@ This file tracks the changes made to the project.
 
 ![Visual Studio Marketplace Last Updated](https://img.shields.io/visual-studio-marketplace/last-updated/drcika.apc-extension) ![Visual Studio Marketplace Version (including pre-releases)](https://img.shields.io/visual-studio-marketplace/v/drcika.apc-extension?label=latest%20Version) ![GitHub last commit (branch)](https://img.shields.io/github/last-commit/drcika/apc-extension/production)
 
+### [0.2.5] - 2023-07-04
+-   Update readme and small bugfix
 ### [0.2.4] - 2023-07-04
 -   Fix iFrame customization(windows)
 ### [0.2.3] - 2023-07-03

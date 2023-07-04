@@ -99,10 +99,11 @@ Replace the Default Font Family for Each Part Individually
 Inject Custom CSS into iFrame (Notebook, Extension view, etc)
 
 > **Tab must be reopened for changes to take effect**
+### 🚩 Limitation: if a tab with an iframe is open when starting vscode, the tab needs to be reopened for the styles to apply
 
 ```jsonc
   "apc.iframe.style": "/Users/path/style.css",
-  "apc.iframe.style": "/C:/Users/path/style.css", // windows
+  "apc.iframe.style": "C:\\Users\\path\\style.css", // windows
   //
   "apc.iframe.style": {
     "h1": "color: red; font-size: 2rem;"

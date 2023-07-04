@@ -102,7 +102,7 @@
           }
         },
         "apc.iframe.style": {
-          "type": "string"
+          "type": [ "string", "object" ]
         },
         "apc.imports": {
           "type": "array",
@@ -314,7 +314,7 @@
         "apc.buttons": {
           "type": "array",
           "description": "Views to include on the status bar with associated icons",
-          "default": [],
+          "default": [ ],
           "uniqueItems": true,
           "items": {
             "type": "object",

@@ -103,6 +103,17 @@ Inject Custom CSS into iFrame (Notebook, Extension view, etc)
 ```jsonc
   "apc.iframe.style": "/Users/path/style.css",
   "apc.iframe.style": "/C:/Users/path/style.css", // windows
+  //
+  "apc.iframe.style": {
+    "h1": "color: red; font-size: 2rem;"
+  }
+  //
+  "apc.iframe.style": {
+    "h1": {
+      "color": "red",
+      "font-size": "2rem;"
+      }
+  }
 ```
 
 ### `apc.stylesheet`

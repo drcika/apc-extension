@@ -2,7 +2,7 @@ import * as vscode from 'vscode';
 import * as fs from 'fs';
 import * as path from 'path';
 import * as os from 'os';
-import { promptRestart } from './utils';
+import { getConfiguration, getStyleFromFile, getStyles, promptRestart } from './utils';
 
 const bkpName = '.apc.extension.backup';
 const bootstrapName = 'bootstrap-amd.js';
@@ -24,6 +24,8 @@ const workbenchHtmlReplacementPath = workbenchHtmlPath.replace(workbenchHtmlName
 const patchPath = path.join(installationPath, patch);
 const modulesPath = path.join(installationPath, modules);
 const browserEntrypointPath = path.join(patchPath, browserMain);
+const iframeIndexPath = path.join(installationPath, '/vs/workbench/contrib/webview/browser/pre/index.html');
+const iframeIndexBkpPath = iframeIndexPath + bkpName;
 
 const isWin = os.platform() === 'win32';
 
@@ -36,6 +38,43 @@ const fixedModulesPath = fixPath(modulesPath);
 
 function isFilesChanges(context: vscode.ExtensionContext): boolean {
   return fs.readdirSync(modulesPath).some(name => fs.readFileSync(path.join(modulesPath, name), "utf8") !== fs.readFileSync(path.join(context.extensionPath, modules, name), "utf8"));
+}
+
+function appendIframeStyle(iframeStyle: Record<string, string> | string) {
+  const style = typeof iframeStyle === 'string' ? getStyleFromFile(iframeStyle) : iframeStyle instanceof Object ? getStyles(iframeStyle) : '';
+
+  const iframeIndex = fs.readFileSync(iframeIndexBkpPath, "utf8")
+    .replace('meta http-equiv="Content-Security-Policy"', 'meta http-equiv=""')
+    .replace('blockquote {', `${style}\n\t\t\tblockquote {`);
+
+  fs.writeFile(iframeIndexPath, iframeIndex, 'utf8', () => { });
+}
+
+function getIframeConfig() {
+  return getConfiguration<Record<string, string> | string>('apc.iframe.style') || '';
+}
+let fileWatcher: fs.FSWatcher | undefined;
+export async function appendIframeStyles() {
+  try {
+    fileWatcher?.close?.();
+    const iframeStyle = getIframeConfig();
+    if (iframeStyle) {
+      if (!fs.existsSync(iframeIndexBkpPath)) { fs.renameSync(iframeIndexPath, iframeIndexBkpPath); }
+
+      appendIframeStyle(iframeStyle);
+
+      fileWatcher = typeof iframeStyle === 'string' ? fs.watch(iframeStyle, 'utf8', () => appendIframeStyle(getIframeConfig())) : undefined;
+    }
+    else { restoreIframe(); };
+  } catch (error) {
+    console.trace(error);
+  }
+}
+
+function restoreIframe() {
+  if (fs.existsSync(iframeIndexBkpPath)) {
+    fs.rename(iframeIndexBkpPath, iframeIndexPath, () => { });
+  }
 }
 
 export async function ensurePatch(context: vscode.ExtensionContext) {
@@ -210,4 +249,5 @@ export function uninstallPatch() {
   restoreMain();
   restoreWorkbench();
   promptRestart();
+  restoreIframe();
 }

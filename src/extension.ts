@@ -2,7 +2,7 @@ import * as vscode from 'vscode';
 
 import { applyButtons } from './buttons/button';
 import * as customizations from './customizations.json';
-import { ensurePatch, uninstallPatch, install } from './patch';
+import { ensurePatch, uninstallPatch, install, appendIframeStyles } from './patch';
 import { promptRestart } from './utils';
 
 function changeTheme(context: vscode.ExtensionContext) {
@@ -30,10 +30,12 @@ function registerCommands(context: vscode.ExtensionContext) {
 
 }
 
+
 export function activate(context: vscode.ExtensionContext) {
   const isRunned = context.globalState.get('isRunned');
   const isEnabled = context.globalState.get('isEnabled');
 
+  isEnabled && appendIframeStyles();
   if (isRunned) { isEnabled && ensurePatch(context); }
   else {
     context.globalState.update('isRunned', true);
@@ -45,6 +47,7 @@ export function activate(context: vscode.ExtensionContext) {
   async function onDidChangeConfiguration(e: vscode.ConfigurationChangeEvent) {
     e.affectsConfiguration('apc.theme') && isEnabled && changeTheme(context);
     e.affectsConfiguration('apc.buttons') && isEnabled && applyButtons(context);
+    e.affectsConfiguration('apc.iframe.style') && isEnabled && appendIframeStyles();
 
     if (e.affectsConfiguration('apc.electron')) {
       const newState: any = vscode.workspace.getConfiguration().get('apc.electron') || {};

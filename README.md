@@ -253,7 +253,7 @@ For detailed information on available configurations, refer to [Electron Browser
 ```
 
 <div style="text-align:center">
-  <img src="https://github.com/drcika/apc-extension/blob/production/demo.png"/>
+  <img src="https://raw.githubusercontent.com/drcika/apc-extension/production/demo.png" alt="Demo"/>
 </div>
 
 ## Acknowledgements

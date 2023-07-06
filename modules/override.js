@@ -43,6 +43,9 @@ define(
           case store.Parts?.ACTIVITYBAR_PART:
             store.activitybarPartView = part;
             break;
+          case store.Parts?.EDITOR_PART:
+            store.editorPartView = part;
+            break;
         }
       } catch (error) { traceError(error); }
 

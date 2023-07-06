@@ -279,7 +279,7 @@
             },
             "height": {
               "type": "number",
-              "default": 37
+              "default": 35
             }
           }
         },
@@ -317,7 +317,7 @@
         "apc.buttons": {
           "type": "array",
           "description": "Views to include on the status bar with associated icons",
-          "default": [],
+          "default": [ ],
           "uniqueItems": true,
           "items": {
             "type": "object",

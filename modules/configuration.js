@@ -58,7 +58,7 @@ define(['exports', 'apc/auxiliary'], function (exports, auxiliary) {
           return 1;
         }
       },
-      HEADER_HEIGHT: 37,
+      HEADER_HEIGHT: 35,
       HEADER_FONT_SIZE: 13,
       get header() {
         const { height, fontSize } = this.getConfiguration('apc.header') || {};

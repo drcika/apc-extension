@@ -11,13 +11,6 @@ define(
         } catch (error) { traceError(error); }
       };
 
-      exports.buffer = function (buffer) {
-        try {
-          const [, VSBuffer] = findOwnProperty(buffer, 'VSBuffer', 'fromString');
-          services.VSBuffer = VSBuffer;
-        } catch (error) { traceError(error); }
-      };
-
       exports.grid = function (grid) {
         try {
           const [serializableGridKey, SerializableGridClass] = findOwnProperty(grid, 'SerializableGrid', 'deserialize');
@@ -263,5 +256,28 @@ define(
         }
       };
 
+      exports.tabsTitleControl = function (tabsTitleControl) {
+        try {
+          const [, tabsTitleControlClass] = findInPrototype(tabsTitleControl, 'TabsTitleControl', 'closeEditor'); // the only one
+
+          function findPropertyByValue(obj, value) {
+            for (const key in obj) {
+              if (obj[key] === value) {
+                return key;
+              }
+            }
+          }
+
+          const height_key = findPropertyByValue(tabsTitleControlClass, 35);
+          // na promenu bi trebao da pokrenem layoute  rerender
+          if (height_key) {
+            Object.defineProperty(tabsTitleControlClass, height_key, {
+              get() { return config.header.height; },
+              set() { },
+              configurable: true
+            });
+          }
+        } catch (error) { traceError(error); }
+      };
     } catch (error) { traceError(error); }
   });

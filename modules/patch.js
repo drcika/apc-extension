@@ -4,8 +4,6 @@ define(
     const { traceError, store } = auxiliary;
 
     try {
-      require(['vs/base/common/buffer'], classes.buffer, traceError);
-
       require(['vs/base/browser/ui/grid/grid'], classes.grid, traceError);
       require(['vs/base/browser/ui/actionbar/actionbar'], classes.actionbar, traceError);
       require(['vs/base/browser/ui/menu/menu'], classes.menu, traceError);
@@ -20,11 +18,11 @@ define(
       require(['vs/workbench/browser/parts/editor/editorPart'], classes.editorPart, traceError);
       require(['vs/workbench/browser/parts/compositeBar'], classes.compositeBar, traceError);
       require(['vs/workbench/browser/parts/activitybar/activitybarPart'], classes.activitybarPart, traceError);
+      require(['vs/workbench/browser/parts/editor/tabsTitleControl'], classes.tabsTitleControl, traceError);
 
       require(['vs/workbench/services/layout/browser/layoutService'], classes.layoutService, traceError);
 
       require(['vs/workbench/contrib/files/browser/views/openEditorsView'], classes.openEditorsView, traceError);
-
 
       // const skipService = ['credentialsMainService', 'encryptionMainService', 'editorProgressService', 'ptyService', 'sharedTunnelsService',
       //   'IUserDataSyncStoreService', 'IUserDataSyncBackupStoreService', 'IUserDataSyncResourceProviderService', 'IExtHostRpcService',
@@ -98,6 +96,7 @@ define(
             e.affectsConfiguration('apc.activityBar') && activitybar.update();
             e.affectsConfiguration('apc.imports') && ui.appendFiles();
             e.affectsConfiguration('apc.stylesheet') && ui.appendStyles();
+            e.affectsConfiguration('apc.header') && queueMicrotask(() => store.editorPartView?.layout?.(store.editorPartView?.element?.clientWidth, store.editorPartView?.element?.clientHeight));
 
           }));
 

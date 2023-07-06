@@ -204,11 +204,14 @@ Adjust the height and font size of the header bar
 ### `apc.activityBar`
 
 Set the position and size of the activity bar
+- `top`: above sidebar
+- `bottom`: below sidebar
+- Default position if not specified
 
 ```jsonc
     "apc.activityBar": {
-      "position": "bottom" | "top" | undefined (regular) // Position of the activity bar: below/above the sidebar or default position
-      "size": number // Height of the activity bar if positioned at the bottom, otherwise width of the activity bar
+      "position": "bottom" | "top",
+      "size": number  // height when positioned at top/bottom, width in default position
     }
 ```
 

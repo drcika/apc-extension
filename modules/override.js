@@ -113,9 +113,15 @@ define(
       original();
       try {
         if (!config.isInline) { return; }
-        config.disposables.add(this.onDidAddGroup((...args) => {
+        config.disposables.add(this.onDidAddGroup((group) => {
           layout.updateTabsClasses();
-          decorateTabsPlaceHolders(...args);
+          decorateTabsPlaceHolders(group);
+        }));
+
+        config.disposables.add(this.onDidRemoveGroup((group) => {
+          group.disposableTabsDblclick?.dispose?.();
+          group.disposableNoTabsDblclick?.dispose?.();
+          store.isMacintosh && addTabsPlaceHolder();
         }));
 
         queueMicrotask(() => {
@@ -129,14 +135,6 @@ define(
 
       }
       catch (error) { traceError(error); }
-    };
-
-    exports.editorPartRemoveGroup = function (original, [group]) {
-      group.disposableTabsDblclick?.dispose();
-      group.disposableNoTabsDblclick?.dispose();
-      original();
-      if (!store.isMacintosh || !config.isInline) { return; }
-      addTabsPlaceHolder();
     };
 
     exports.editorApplyLayout = function (original) {
@@ -180,8 +178,11 @@ define(
       try {
         if (!config.isInline) { return; }
         if (!config.isVisible(store.Parts.ACTIVITYBAR_PART)) { services.layoutService.container.classList.add('no-activity-bar'); }
-        UI.prependDiv(parent, 'activity-bar-placeholder');
-        config.handleDblclick(parent.querySelector('.content'), () => config.activityBar.position === 'top' && config.statusBar.position !== 'top' && config.handleTitleDoubleClick());
+        config.isMacintosh && UI.prependDiv(parent, 'activity-bar-placeholder');
+        const content = parent.querySelector('.content');
+        !config.isMacintosh && content.insertBefore(UI.createDiv('activity-bar-placeholder-win'), content.children[1]);
+
+        config.handleDblclick(content, () => config.activityBar.position === 'top' && config.statusBar.position !== 'top' && config.handleTitleDoubleClick());
       }
       catch (error) { traceError(error); }
     };

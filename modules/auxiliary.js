@@ -48,6 +48,13 @@ define(['exports'], function (exports) {
     return [];
   };
 
+  exports.findPropertyByValue = function (obj, value) {
+    for (const key in obj) {
+      if (obj[key] === value) {
+        return key;
+      }
+    }
+  };
   exports.findVariable = function (obj, original, _typeof) {
     if (obj[original]) { return [original, obj[original]]; }
     for (const key in obj) { if (typeof obj[key] === _typeof) { return [key, obj[key]]; } }

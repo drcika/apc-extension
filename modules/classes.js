@@ -2,7 +2,7 @@ define(
   ['exports', 'apc/utils', 'apc/auxiliary', 'apc/configuration', 'apc/override'],
   function (exports, utils, auxiliary, { config }, override) {
     try {
-      const { traceError, findInPrototype, findOwnProperty, store, getProperty, services, findVariable } = auxiliary;
+      const { traceError, findInPrototype, findOwnProperty, store, getProperty, services, findVariable, findPropertyByValue } = auxiliary;
 
       exports.layoutService = layoutService => {
         try {
@@ -203,7 +203,6 @@ define(
       exports.editorPart = function (editorPart) {
         try {
           const [, EditorPartClass] = findInPrototype(editorPart, 'EditorPart', 'addGroup'); // the only one
-          utils.override(EditorPartClass, 'removeGroup', override.editorPartRemoveGroup);
           utils.override(EditorPartClass, 'create', override.editorPartCreate);
           utils.override(EditorPartClass, 'applyLayout', override.editorApplyLayout);
         } catch (error) { traceError(error); }
@@ -260,16 +259,7 @@ define(
         try {
           const [, tabsTitleControlClass] = findInPrototype(tabsTitleControl, 'TabsTitleControl', 'closeEditor'); // the only one
 
-          function findPropertyByValue(obj, value) {
-            for (const key in obj) {
-              if (obj[key] === value) {
-                return key;
-              }
-            }
-          }
-
           const height_key = findPropertyByValue(tabsTitleControlClass, 35);
-          // na promenu bi trebao da pokrenem layoute  rerender
           if (height_key) {
             Object.defineProperty(tabsTitleControlClass, height_key, {
               get() { return config.header.height; },
@@ -279,5 +269,6 @@ define(
           }
         } catch (error) { traceError(error); }
       };
+
     } catch (error) { traceError(error); }
   });

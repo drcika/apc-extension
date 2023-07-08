@@ -10,24 +10,22 @@ This extension allows customization outside vscode scoop.
 
 Unlike its predecessor, it does not come with default settings, allowing you complete control over customization.
 
-Feel free to explore my personal settings for inspiration: [View Settings](https://github.com/drcika/apc-extension/blob/production/demo/settings.json)
+Explore my personal settings for inspiration: [View Settings](https://github.com/drcika/apc-extension/blob/production/demo/settings.json)
 
 ## Usage Instructions
 
-Follow these steps to make the most of the Apc Customize UI++ extension:
+To use the Apc Customize UI++ extension:
   - Disable similar extensions.
-  - Install/enable Apc Customize UI++ (It should be automatically enabled upon the first installation).
-  - Open your `User settings.json` file in Visual Studio Code.
-  - Add the provided configurations below to your settings.json file.
-  - Unleash your creativity.
+  - Install/enable this extension (Enabled automatically on first install).
+  - Add the provided configurations below to your `User settings.json` file in vscode.
+  - Start customizing!
 
 ## Enabling and Disabling
 
-To enable or disable this extension, follow these steps:
-- Open Visual Studio Code.
-- Go to the Command Palette by pressing `Cmd+Shift+P` on Mac or `Ctrl+Shift+P` on Windows.
-- Type "Enable Apc extension" and enter to enable the extension.
-- Conversely, type "Disable Apc extension" and enter to disable the extension.
+To enable or disable this extension:
+  - Open Visual Studio Code.
+  - Go to the Command Palette by pressing `Cmd+Shift+P` on Mac or `Ctrl+Shift+P` on Windows.
+  - Type "Enable Apc extension" to enable, or "Disable Apc extension" to disable the extension.
 
 ## Supported Configuration Options
 
@@ -37,9 +35,11 @@ Configures the Electron window
 
 For detailed information on available configurations, refer to the [Electron BrowserWindow documentation](https://www.electronjs.org/docs/latest/api/browser-window#new-browserwindowoptions).
 
-### 🚩WARNING: Exercise caution with the "apc.electron" configuration. Incorrect parameters may disrupt the proper startup of VSCode or VSCodium.
+> **Warning** <br>
+> Be careful with the "apc.electron" configuration as incorrect parameters may disrupt VSCode or VSCodium startup.
 
-> **Feel free to pick a style you like or come up with your own!**
+> **Note** <br>
+> Here's what we covered. Choose a style you like or create your own!
 
 #### frameless title bar
 ```jsonc
@@ -81,7 +81,7 @@ For detailed information on available configurations, refer to the [Electron Bro
 
 #### vibrancy setting
 ```jsonc
-    // Other panels requires to be transparent to use the `vibrancy` option
+    // Other panels must be transparent to use the `vibrancy` option
     // Demo: https://github.com/drcika/apc-extension/blob/production/demo/vibrancy.settings.json
     "apc.electron": {
       "vibrancy": "ultra-dark"
@@ -101,13 +101,11 @@ For detailed information on available configurations, refer to the [Electron Bro
     }
 ```
 
-**Note:** Multiple declarations of `apc.electron` will result in only the last declaration being applied, while the previous declarations are ignored.
+> **Note** Multiple declarations of `apc.electron` will result in only the last declaration being applied, while the previous declarations are ignored.
 
 ### `font.family`
 
 Change the default font family for (any part of) vscode
-
-> **The desired font must be installed on your computer**
 
 By default, Provided by vscode
 ```jsonc
@@ -122,14 +120,15 @@ By default, Provided by vscode
   "markdown.preview.fontFamily": "Roboto Mono",
 ```
 
-Replace the Default Font Family for `extension-editor` (Requires Restart)
+Replace the Default Font Family for `extension-editor`
+> **Install desired font on your computer. Restart required.**
 
 ```jsonc
   "apc.font.family": "Roboto Mono",
   "apc.monospace.font.family": "Roboto Mono",
 ```
 
-Replace the Default Font Family for Each Part Individually
+Replace the Default Font Family for Each Part individually
 
 ```jsonc
   "apc.parts.font.family": {
@@ -140,7 +139,7 @@ Replace the Default Font Family for Each Part Individually
     "tabs": "Roboto Mono",
     "statusbar": "Roboto Mono",
     "settings-body": "Roboto Mono",
-    "extension-editor": "Roboto Mono", // requires the font to be installed on your computer and applications to be restarted
+    "extension-editor": "Roboto Mono", // Required: Expected font installation on machine and Application restart
     "monaco-menu": "Roboto Mono"
   },
 ```
@@ -266,7 +265,8 @@ Set the position and height of the status bar
 
 Inject custom CSS into iframes (Notebook, Extension view, etc)
 
-### 🚩 Limitation: On vscode startup, if there is a tab open with an iframe, you will need to reopen that tab in order for the styles to be applied.
+> **Warning** <br>
+> On vscode startup, if there is a tab open with an iframe, you will need to reopen that tab in order for the styles to be applied.
 
 ```jsonc
   "apc.iframe.style": "/Users/path/style.css",
@@ -300,5 +300,5 @@ My role is solely to provide a bridge for configuring Electron/VS Code.
 ## Acknowledgements
 
 Inspired by
--   [iocave/monkey-patch](https://github.com/iocave/monkey-patch)
--   [iocave/customize-ui](https://github.com/iocave/customize-ui)
+  - [iocave/customize-ui](https://github.com/iocave/customize-ui)
+  - [iocave/monkey-patch](https://github.com/iocave/monkey-patch)

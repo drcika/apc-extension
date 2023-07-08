@@ -37,48 +37,27 @@ Configures the Electron window
 
 For detailed information on available configurations, refer to the [Electron BrowserWindow documentation](https://www.electronjs.org/docs/latest/api/browser-window#new-browserwindowoptions).
 
+### 🚩WARNING: Exercise caution with the "apc.electron" configuration. Incorrect parameters may disrupt the proper startup of VSCode or VSCodium.
 
 > **Feel free to pick a style you like or come up with your own!**
 
-Here's what we covered:
-
-- vibrancy setting
-- background color, transparency
-- title bar style (frameless, inline, traffic light position)
-- custom title bar
-
-### 🚩WARNING: Exercise caution with the "apc.electron" configuration. Incorrect parameters may disrupt the proper startup of VSCode or VSCodium.
-
+#### frameless title bar
 ```jsonc
-    // For using the `vibrancy` option, other panels requires to be transparent.
-    // check out a demo https://github.com/drcika/apc-extension/blob/production/demo/vibrancy.settings.json
-    "apc.electron": {
-      "vibrancy": "ultra-dark"
-    }
-
-    // customize visuals including background color, transparency, and title bar style
-    "apc.electron": {
-      "backgroundColor": "rgba(123, 123, 123, 0.5)",
-      "frame": false,
-      "transparent": true,
-      "titleBarStyle": "hiddenInset",
-      "vibrancy": "ultra-dark",
-      "opacity": 0.98,  // Opacity range is 0-1 where 0 means full transparency. If set, you won't see the element.
-      "visualEffectState": "active"
-    }
-
-    // disables the frame
     "apc.electron": {
       "frame": false,
     }
+```
 
-    // sets the title bar style to hidden (inline title bar)
+#### inline title bar
+```jsonc
     // requires "window.titleBarStyle": "native" to take effect
     "apc.electron": {
       "titleBarStyle": "hidden",
     }
+```
 
-    // sets the title bar style to hiddenInset (inline title bar) and defines a custom traffic light position
+#### inline title bar with traffic light position
+```jsonc
     "apc.electron": {
       "titleBarStyle": "hiddenInset",
       "trafficLightPosition": {
@@ -86,8 +65,10 @@ Here's what we covered:
         "y": 5
       }
     }
+```
 
-    // sets the title bar style to hidden and adds a title bar overlay with custom color, symbol color, and height
+#### custom title bar
+```jsonc
     "apc.electron": {
       "titleBarStyle": "hidden",
       "titleBarOverlay": {
@@ -97,6 +78,30 @@ Here's what we covered:
       }
     }
 ```
+
+#### vibrancy setting
+```jsonc
+    // Other panels requires to be transparent to use the `vibrancy` option
+    // Demo: https://github.com/drcika/apc-extension/blob/production/demo/vibrancy.settings.json
+    "apc.electron": {
+      "vibrancy": "ultra-dark"
+    }
+```
+
+#### background color, transparency
+```jsonc
+    "apc.electron": {
+      "backgroundColor": "rgba(123, 123, 123, 0.5)",
+      "frame": false,
+      "transparent": true,
+      "titleBarStyle": "hiddenInset",
+      "vibrancy": "ultra-dark",
+      "opacity": 0.98,  // Range: 0-1 (0 means full transparency) If set, you won't see the element.
+      "visualEffectState": "active"
+    }
+```
+
+**Note:** Multiple declarations of `apc.electron` will result in only the last declaration being applied, while the previous declarations are ignored.
 
 ### `font.family`
 

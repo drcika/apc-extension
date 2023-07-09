@@ -135,7 +135,7 @@ define(
           const [listViewKey, ListViewClass] = findInPrototype(listView, 'ListView', 'domElement'); // the only one
           listView[listViewKey] = class ListView extends ListViewClass {
             constructor(_, virtualDelegate, renderers) {
-              if (!renderers.find(renderer => renderer.templateId?.match(/(notification|replGroup|rm|extension|settings)/))) {
+              if (!renderers.find(renderer => renderer.templateId?.match(/(notification|replGroup|rm|extension|settings|row)/))) {
                 const originalDelegate = getProperty(virtualDelegate, 'getHeight');
                 virtualDelegate.getHeight = function (...args) {
                   try {

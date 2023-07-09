@@ -16,16 +16,16 @@ Explore my personal settings for inspiration: [View Settings](https://github.com
 
 To use the Apc Customize UI++ extension:
   - Disable similar extensions.
-  - Install/enable this extension (Enabled automatically on first install).
-  - Add the provided configurations below to your `User settings.json` file in vscode.
+  - Install/enable this extension. (Enabled automatically on the first install)
+  - Add the configurations below to your `user settings.json` file in vscode.
   - Start customizing!
 
 ## Enabling and Disabling
 
 To enable or disable this extension:
   - Open Visual Studio Code.
-  - Go to the Command Palette by pressing `Cmd+Shift+P` on Mac or `Ctrl+Shift+P` on Windows.
-  - Type "Enable Apc extension" to enable, or "Disable Apc extension" to disable the extension.
+  - Go to the Command Palette by pressing <kbd>Cmd</kbd>+<kbd>Shift</kbd>+<kbd>P</kbd> on Mac or <kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>P</kbd> on Windows.
+  - Type "Enable Apc extension" to enable or "Disable Apc extension" to disable the extension.
 
 ## Supported Configuration Options
 
@@ -33,13 +33,13 @@ To enable or disable this extension:
 
 Configures the Electron window
 
-For detailed information on available configurations, refer to the [Electron BrowserWindow documentation](https://www.electronjs.org/docs/latest/api/browser-window#new-browserwindowoptions).
+For detailed information on available configurations, refer to the [Electron BrowserWindow documentation](https://www.electronjs.org/docs/latest/api/browser-window#new-browserwindowoptions)
 
 > **Warning** <br>
-> Be careful with the "apc.electron" configuration as incorrect parameters may disrupt VSCode or VSCodium startup.
+> Be careful with the "apc.electron" configuration, as incorrect parameters may disrupt VSCode or VSCodium startup.
 
 > **Note** <br>
-> Here's what we covered. Choose a style you like or create your own!
+> Here's what we covered. Choose a style you like, or create your own!
 
 #### frameless title bar
 ```jsonc
@@ -96,7 +96,7 @@ For detailed information on available configurations, refer to the [Electron Bro
       "transparent": true,
       "titleBarStyle": "hiddenInset",
       "vibrancy": "ultra-dark",
-      "opacity": 0.98,  // Range: 0-1 (0 means full transparency) If set, you won't see the element.
+      "opacity": 0.98,  // Range: 0-1 (0 means full transparency). If set, you won't see the element.
       "visualEffectState": "active"
     }
 ```
@@ -121,7 +121,7 @@ By default, Provided by vscode
 ```
 
 Replace the Default Font Family for `extension-editor`
-> **Install desired font on your computer. Restart required.**
+> **Install the desired font on your computer. Restart required.**
 
 ```jsonc
   "apc.font.family": "Roboto Mono",
@@ -156,7 +156,7 @@ Import CSS and JavaScript files to customize the look and feel of VS Code
       "/C:/Users/path/style.css", // for windows
 
       // or see https://developer.mozilla.org/en-US/docs/Web/HTML/Element/link
-      // local file imports like this are not watched in real time
+      // Local file imports like this are not watched in real time
       {
         "rel": "stylesheet",
         "href": "https://fonts.googleapis.com/css?family=Sofia"
@@ -180,7 +180,7 @@ Override the default CSS of VS Code
       ".monaco-workbench .part.editor>.content .editor-group-container>.title div.tabs-container": "border-radius: 5px; font-family: 'Times New Roman', Times, serif;"
       
       "body": {
-        // other panels should be transparent. see "workbench.colorCustomizations"
+        // Other panels should be transparent. see "workbench.colorCustomizations"
         "background-image": "url(/Users/aleksandarpopovic/imgs/19.png), linear-gradient(to top,rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.2))",
         "background-size": "cover",
         "background-blend-mode": "multiply",
@@ -215,7 +215,7 @@ Set the position and size of the activity bar
 ```jsonc
     "apc.activityBar": {
       "position": "bottom" | "top",
-      "size": number  // height when positioned at top/bottom, width in default position
+      "size": number  // height when positioned at top/bottom, width in the default position
     }
 ```
 
@@ -266,7 +266,7 @@ Set the position and height of the status bar
 Inject custom CSS into iframes (Notebook, Extension view, etc)
 
 > **Warning** <br>
-> On vscode startup, if there is a tab open with an iframe, you will need to reopen that tab in order for the styles to be applied.
+> On vscode startup, if there is a tab open with an iframe, you will need to reopen that tab for the styles to be applied.
 
 ```jsonc
   "apc.iframe.style": "/Users/path/style.css",
@@ -287,15 +287,14 @@ Inject custom CSS into iframes (Notebook, Extension view, etc)
 ## Demo
 
 <div style="text-align:center">
-  <img src="https://raw.githubusercontent.com/drcika/apc-extension/production/demo.png" alt="Demo"/>
+  <img src="https://raw.githubusercontent.com/drcika/apc-extension/production/demo.png" alt="Demo.png"/>
 </div>
 
 ## ⚠️Disclaimer
 
 This extension is specifically designed for configuring Electron and Visual Studio Code.
 
-I haven't developed anything or provided support for potential bugs.
-My role is solely to provide a bridge for configuring Electron/VS Code.
+I have not developed anything or provided support for potential bugs. My role is to provide a bridge for configuring Electron/VS Code.
 
 ## Acknowledgements
 

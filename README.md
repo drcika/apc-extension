@@ -27,42 +27,54 @@ To enable or disable this extension:
   - Go to the Command Palette by pressing <kbd>Cmd</kbd>+<kbd>Shift</kbd>+<kbd>P</kbd> on Mac or <kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>P</kbd> on Windows.
   - Type "Enable Apc extension" to enable or "Disable Apc extension" to disable the extension.
 
-### Windows users
+### Windows Users
 
->In Windows, make sure you run your Visual Studio Code / VSCodium in Administrator mode before enabling or disabling extension
+> Run VSCode / VSCodium in Administrator mode before enabling or disabling the extension.
 
-### Mac and Linux users
->The extension would NOT work if Visual Studio Code / VSCodium cannot modify itself.
+### Mac and Linux Users
 
-- Code files being read-only, like on a read-only file system.
-- Code is not started with the permissions to modify itself.
+> The extension will NOT work if VSCode / VSCodium cannot modify itself for specific reasons.
 
-**You need to claim ownership on Visual Studio Code's installation directory, by running this command**:
+ The possible reasons are:
+  - Code files are read-only, such as on a read-only file system.
+  - Code is not started with the necessary permissions to modify itself.
 
+To fix this, you need to claim ownership of VSCode's installation directory.
+
+For macOS, use the following command.
 ```sh
 sudo chown -R $(whoami) $(which code)
+```
+
+For Linux, use this command instead.
+```sh
 sudo chown -R $(whoami) /usr/share/code
 ```
 
-Mac and Linux package managers may have customized installation path.
-Please double check your path is correct. 
-It is typically:
+> **Note:** Mac and Linux package managers might have a customized installation path. <br>
+> Double-check that your path is correct. 
 
-- `/Applications/VSCodium.app/Contents/Resources/app/out`, on MacOS;
-- `/Applications/Visual Studio Code.app/Contents/Resources/app/out`, on MacOS;
-- `/Applications/Visual Studio Code - Insiders.app/Contents/Resources/app/out`, on MacOS when using Insiders branch;
-- `/usr/share/code`, on most Linux;
-- `/usr/lib/code/` or `/opt/visual-studio-code` on Arch Linux.
+In macOS, the typical paths are:
+  - `/Applications/Visual Studio Code.app/Contents/Resources/app/out` for VSCode
+  - `/Applications/Visual Studio Code - Insiders.app/Contents/Resources/app/out` for VSCode Insiders
+  - `/Applications/VSCodium.app/Contents/Resources/app/out` for VSCodium
 
-### Disclaimer
+In most Linux distributions, the typical path is `/usr/share/code`
 
-This extension modifies some Visual Studio Code / VSCodium files so use it at your own risk.
-The extension will keep a copy of the original file in case something goes wrong. That's what the disable command will do for you.
+On Arch Linux, the path can be:
+  - `/usr/lib/code/`
+  - `/opt/visual-studio-code`
 
-As this extension modifies Visual Studio Code / VSCodium files, it will try repatch with every Visual Studio Code / VSCodium update. 
-If for some reason it doesn't do it automatically, try to eneble  extension again.
+## ⚠️Disclaimer
 
-Take into account that this extension is still experimental, so you may find some bugs while playing with it. Please, report them to [the issues section of the Github's repo](https://github.com/drcika/apc-extension/issues).
+This extension modifies specific files of Visual Studio Code / VSCodium.
+> **Use at your own risk**
+
+If something goes wrong, the extension will create a backup of the original file. That's what the disable command is for.
+
+The extension attempts to reapply patches with each VSCode / VSCodium update. If it doesn't happen automatically, try enabling the extension again.
+
+Remember that this extension is still experimental, which means you may encounter some bugs while playing with it. Kindly report any bugs to the [Github repository's issues section](https://github.com/drcika/apc-extension/issues)
 
 ## Supported Configuration Options
 
@@ -327,7 +339,7 @@ Inject custom CSS into iframes (Notebook, Extension view, etc)
   <img src="https://raw.githubusercontent.com/drcika/apc-extension/production/demo.png" alt="Demo.png"/>
 </div>
 
-## ⚠️Disclaimer
+## ⚠️Important Notice
 
 This extension is specifically designed for configuring Electron and Visual Studio Code.
 

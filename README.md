@@ -27,6 +27,43 @@ To enable or disable this extension:
   - Go to the Command Palette by pressing <kbd>Cmd</kbd>+<kbd>Shift</kbd>+<kbd>P</kbd> on Mac or <kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>P</kbd> on Windows.
   - Type "Enable Apc extension" to enable or "Disable Apc extension" to disable the extension.
 
+### Windows users
+
+>In Windows, make sure you run your Visual Studio Code / VSCodium in Administrator mode before enabling or disabling extension
+
+### Mac and Linux users
+>The extension would NOT work if Visual Studio Code / VSCodium cannot modify itself.
+
+- Code files being read-only, like on a read-only file system.
+- Code is not started with the permissions to modify itself.
+
+**You need to claim ownership on Visual Studio Code's installation directory, by running this command**:
+
+```sh
+sudo chown -R $(whoami) $(which code)
+sudo chown -R $(whoami) /usr/share/code
+```
+
+Mac and Linux package managers may have customized installation path.
+Please double check your path is correct. 
+It is typically:
+
+- `/Applications/VSCodium.app/Contents/Resources/app/out`, on MacOS;
+- `/Applications/Visual Studio Code.app/Contents/Resources/app/out`, on MacOS;
+- `/Applications/Visual Studio Code - Insiders.app/Contents/Resources/app/out`, on MacOS when using Insiders branch;
+- `/usr/share/code`, on most Linux;
+- `/usr/lib/code/` or `/opt/visual-studio-code` on Arch Linux.
+
+### Disclaimer
+
+This extension modifies some Visual Studio Code / VSCodium files so use it at your own risk.
+The extension will keep a copy of the original file in case something goes wrong. That's what the disable command will do for you.
+
+As this extension modifies Visual Studio Code / VSCodium files, it will try repatch with every Visual Studio Code / VSCodium update. 
+If for some reason it doesn't do it automatically, try to eneble  extension again.
+
+Take into account that this extension is still experimental, so you may find some bugs while playing with it. Please, report them to [the issues section of the Github's repo](https://github.com/drcika/apc-extension/issues).
+
 ## Supported Configuration Options
 
 ### `apc.electron`

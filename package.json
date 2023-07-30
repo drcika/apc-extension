@@ -156,6 +156,10 @@
               "type": "number",
               "default": 48
             },
+            "itemSize": {
+              "type": "number",
+              "description": "Works only if apc.activityBar.size is specified, default apc.activityBar.size"
+            },
             "position": {
               "type": "string",
               "enum": [
@@ -317,7 +321,7 @@
         "apc.buttons": {
           "type": "array",
           "description": "Views to include on the status bar with associated icons",
-          "default": [],
+          "default": [ ],
           "uniqueItems": true,
           "items": {
             "type": "object",

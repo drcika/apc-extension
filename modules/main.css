@@ -64,6 +64,10 @@ div.monaco-workbench {
   border-color: inherit;
 }
 
+.inline-title-bar .monaco-workbench .activitybar.left.bordered:before {
+  border-right-color: transparent;
+}
+
 .horizontal-activitybar .monaco-workbench .activitybar.left.bordered:before {
   border-right-color: var(--vscode-sideBar-border);
 }
@@ -108,16 +112,25 @@ div.monaco-workbench {
 }
 
 .custom-activitybar:not(.horizontal-activitybar) .monaco-workbench .activitybar>.content :not(.monaco-menu)>.monaco-action-bar .badge div.badge-content {
-  right: calc(var(--activity-bar-action-size) / 6);
-  top: calc(var(--activity-bar-action-size) / 2);
+  right: calc(var(--activity-bar-action-item-size) / 6);
+  top: calc(var(--activity-bar-action-item-size) / 2);
+}
+
+.horizontal-activitybar .monaco-workbench .activitybar>.content>.composite-bar {
+  margin-bottom: unset;
+}
+
+.custom-activitybar .monaco-workbench .activitybar>.content>.composite-bar .action-label,
+.custom-activitybar .monaco-workbench .activitybar>.content>.global-activity-actionbar .action-label {
+  margin: auto;
 }
 
 .horizontal-activitybar .monaco-workbench .activitybar .menubar,
 .custom-activitybar div.monaco-workbench div.activitybar>div.content div.monaco-action-bar ul.actions-container li.action-item a.action-label {
-  height: var(--activity-bar-action-size);
-  width: var(--activity-bar-action-size);
-  font-size: calc(var(--activity-bar-action-size) * 0.6);
-  -webkit-mask-size: calc(var(--activity-bar-action-size) * 0.8) calc(var(--activity-bar-action-size) * 0.8);
+  height: var(--activity-bar-action-item-size);
+  width: var(--activity-bar-action-item-size);
+  font-size: calc(var(--activity-bar-action-item-size) * 0.6);
+  -webkit-mask-size: calc(var(--activity-bar-action-item-size) * 0.8) calc(var(--activity-bar-action-item-size) * 0.8);
   padding: 0;
 }
 
@@ -132,6 +145,7 @@ div.monaco-workbench {
 .inline-title-bar:not(.horizontal-activitybar) .monaco-workbench:not(.fullscreen) .activitybar:not(.right) .content {
   height: calc(100% - var(--titlebar-height)) !important;
   width: calc(var(--activity-bar-action-size) - 1px) !important;
+  transform: translateY(var(--titlebar-height));
 }
 
 .custom-activitybar .monaco-workbench .part.activitybar {

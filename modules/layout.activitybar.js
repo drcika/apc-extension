@@ -30,7 +30,7 @@ define(
           if (!store.activityBarCompositeBar?.activityBarOptions) { return; }
           // relies on reference
           const options = store.activityBarCompositeBar.activityBarOptions;
-          const size = config.activityBar.size;
+          const size = config.activityBar.itemSize;
           options.overflowActionSize = size;
           options.compositeSize = size + 3; // 3 margine
           store.activityBarCompositeBar.recomputeSizes();

@@ -158,14 +158,13 @@ define(
     exports.activitybarLayout = function (original, [width, height]) {
       original();
       try {
-        const { orientation, size, position } = config.activityBar;
-
+        const { orientation, itemSize, position } = config.activityBar;
         if (orientation === store.ActionsOrientation.VERTICAL || height === undefined || !(config.isVisible(store.Parts.ACTIVITYBAR_PART))) { return; }
         const sideBarPosition = services.layoutService.getSideBarPosition();
 
         const padding = sideBarPosition !== store.Position.RIGHT && position === 'top' && config.electron.titleBarStyle && config.statusBar.position !== 'top' ? 55 : 0;
-        const menubar = store.menubarControlContainer?.isConnected ? size : 0;
-        const viewItems = store.globalActivityActionBar?.domNode?.isConnected ? (store.globalActivityActionBar?.viewItems?.length ?? 0) * size : 0;
+        const menubar = store.menubarControlContainer?.isConnected ? itemSize : 0;
+        const viewItems = store.globalActivityActionBar?.domNode?.isConnected ? (store.globalActivityActionBar?.viewItems?.length ?? 0) * itemSize : 0;
         const availableSize = width - viewItems - menubar - padding;
 
         store.activityBarCompositeBar.layout(new store.Dimension(height, availableSize));

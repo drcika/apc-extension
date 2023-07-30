@@ -34,9 +34,9 @@ define(
       };
 
       exports.actionbar = function (actionbar) {
-        store.ActionsOrientation = actionbar.ActionsOrientation;
-        const [actionBarKey, ActionBarClass] = findInPrototype(actionbar, 'ActionBar', 'getAction'); // the only one type class
         try {
+          store.ActionsOrientation = actionbar.ActionsOrientation;
+          const [actionBarKey, ActionBarClass] = findInPrototype(actionbar, 'ActionBar', 'getAction'); // the only one type class
           actionbar[actionBarKey] = class ActionBar extends ActionBarClass {
             constructor(container, options) {
               super(...arguments);

@@ -25,16 +25,31 @@ define(['exports', 'apc/auxiliary'], function (exports, auxiliary) {
 
     store.Dimension = Dimension;
 
-    const browser = require('vs/base/browser/browser');
-    for (const key in browser) {
-      if (browser[key] instanceof Function && browser[key].length === 1) {
-        const original = browser[key];
-        browser[key] = function (arg) {
-          if (typeof arg === 'number') { store.zoomFactor = arg; }
-          original(arg);
+    const win = require('vs/platform/window/common/window');
+
+    for (const key in win) {
+      if (win[key] instanceof Function && win[key].length === 0) {
+        const original = win[key];
+        win[key] = function (arg = 0) {
+          const res = original(arg);
+          store.zoomFactor = res;
+          return res;
         };
       }
     }
+
+    // const browser = require('vs/base/browser/browser');
+    // for (const key in browser) {
+    //   if (browser[key] instanceof Function && browser[key].length === 1) {
+    //     const original = browser[key];
+    //     browser[key] = function (arg) {
+    //       if (typeof arg === 'number') {
+    //         store.zoomFactor = arg || 1;
+    //       }
+    //       original(arg);
+    //     };
+    //   }
+    // }
 
     exports.config = {
       disposables: new DisposableStore(),

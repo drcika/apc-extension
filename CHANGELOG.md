@@ -4,6 +4,9 @@ This file tracks the changes made to the project.
 
 ![Visual Studio Marketplace Last Updated](https://img.shields.io/visual-studio-marketplace/last-updated/drcika.apc-extension) ![Visual Studio Marketplace Version (including pre-releases)](https://img.shields.io/visual-studio-marketplace/v/drcika.apc-extension?label=latest%20Version) ![GitHub last commit (branch)](https://img.shields.io/github/last-commit/drcika/apc-extension/production)
 
+### [0.2.8] - 2023-07-09
+-   Separat activity bar sizes(size, itemSize)
+-   Fix: braken zoomFactor (1.81.0-insider)
 ### [0.2.7] - 2023-07-09
 -   Exclude keybindings from custom row height
 ### [0.2.6] - 2023-07-04

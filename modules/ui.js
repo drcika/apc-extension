@@ -85,6 +85,7 @@ define(['exports', 'apc/auxiliary', 'apc/configuration'], (exports, auxiliary, c
         --titlebar-font-size: ${sidebarTitlebarConfig.fontSize}px;
         --activity-bar-action-size: ${activityBarConfig.size}px;
         --activity-bar-action-item-size: ${activityBarConfig.itemSize}px;
+        --activity-bar-action-item-margin: ${activityBarConfig.itemMargin}px;
         --status-bar-font-size: ${statusBarConfig.fontSize}px;
         --traffic-X: ${trafficLightPosition.x}px;
         --custom-font-family: '${customFontFamily}';

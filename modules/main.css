@@ -129,8 +129,8 @@ div.monaco-workbench {
 .custom-activitybar div.monaco-workbench div.activitybar>div.content div.monaco-action-bar ul.actions-container li.action-item a.action-label {
   height: var(--activity-bar-action-item-size);
   width: var(--activity-bar-action-item-size);
-  font-size: calc(var(--activity-bar-action-item-size) * 0.6);
-  -webkit-mask-size: calc(var(--activity-bar-action-item-size) * 0.8) calc(var(--activity-bar-action-item-size) * 0.8);
+  font-size: calc(var(--activity-bar-action-item-size) * 0.5);
+  -webkit-mask-size: 1em;
   padding: 0;
 }
 

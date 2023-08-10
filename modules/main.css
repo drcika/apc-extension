@@ -135,11 +135,11 @@ div.monaco-workbench {
 }
 
 .custom-activitybar:not(.horizontal-activitybar) div.monaco-workbench div.activitybar>div.content div.monaco-action-bar ul.actions-container li.action-item {
-  margin-top: 3px;
+  margin-top: var(--activity-bar-action-item-margin);
 }
 
 .horizontal-activitybar div.monaco-workbench div.activitybar>div.content div.monaco-action-bar ul.actions-container li.action-item {
-  margin-left: 3px;
+  margin-left: var(--activity-bar-action-item-margin);
 }
 
 .inline-title-bar:not(.horizontal-activitybar) .monaco-workbench:not(.fullscreen) .activitybar:not(.right) .content {

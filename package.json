@@ -160,6 +160,10 @@
               "type": "number",
               "description": "Works only if apc.activityBar.size is specified, default apc.activityBar.size"
             },
+            "itemMargin": {
+              "type": "number",
+              "default": 3
+            },
             "position": {
               "type": "string",
               "enum": [

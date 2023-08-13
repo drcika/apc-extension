@@ -139,8 +139,8 @@ div.monaco-workbench {
 body:not(.statusbar-editor-top) .mac.no-activity-bar.noauxiliarybar.sidebar-right .inline-tabs-placeholder,
 body:not(.statusbar-editor-top) .mac.no-activity-bar.nosidebar:not(.sidebar-right):not(.nosidebar) .inline-tabs-placeholder,
 body:not(.frameless-title-bar):not(.statusbar-editor-top) .monaco-workbench.mac.sidebar-right.noauxiliarybar .split-view-view:nth-child(1) .split-view-view:nth-child(1) .tabs-and-actions-container .inline-tabs-placeholder,
-.horizontal-activitybar:not(.statusbar-editor-top):not(.frameless-title-bar) .monaco-workbench.mac:not(.sidebar-right).nosidebar .inline-tabs-placeholder,
-.horizontal-activitybar:not(.statusbar-editor-top):not(.frameless-title-bar) .monaco-workbench.mac.sidebar-right.noauxiliarybar .inline-tabs-placeholder {
+.horizontal-activitybar.inline-title-bar:not(.statusbar-editor-top) .monaco-workbench.mac.nosidebar:not(.sidebar-right) .inline-tabs-placeholder,
+.horizontal-activitybar.inline-title-bar:not(.statusbar-editor-top) .monaco-workbench.mac.sidebar-right.noauxiliarybar .inline-tabs-placeholder {
   width: calc(var(--traffic-X) + 60px);
 }
 

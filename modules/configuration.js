@@ -158,7 +158,7 @@ define(['exports', 'apc/auxiliary'], function (exports, auxiliary) {
 
       get isInline() {
         if (!this._isInline) {
-          this._isInline = this.titleBarStyle === 'native' && (!!this.electron.titleBarStyle || this.electron.frame === false);
+          this._isInline = (!!this.electron.titleBarStyle || this.electron.frame === false);
         }
         return this._isInline;
       },

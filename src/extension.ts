@@ -45,28 +45,11 @@ export function activate(context: vscode.ExtensionContext) {
   registerCommands(context);
 
   async function onDidChangeConfiguration(e: vscode.ConfigurationChangeEvent) {
-    e.affectsConfiguration('apc.theme') && isEnabled && changeTheme(context);
-    e.affectsConfiguration('apc.buttons') && isEnabled && applyButtons(context);
-    e.affectsConfiguration('apc.iframe.style') && isEnabled && appendIframeStyles();
-
-    if (e.affectsConfiguration('apc.electron')) {
-      const newState: any = vscode.workspace.getConfiguration().get('apc.electron') || {};
-
-      if (newState.frame === false || newState.titleBarStyle) {
-        if (vscode.workspace.getConfiguration().get('window.titleBarStyle') !== 'native') {
-          const res = await vscode.window.showWarningMessage("Inline title bar requires titleBarStyle = 'native'.", 'Enable');
-          await vscode.workspace.getConfiguration().update('window.titleBarStyle', 'native', vscode.ConfigurationTarget.Global);
-          if (res === 'Enable') {
-            await vscode.workspace.getConfiguration().update('window.titleBarStyle', 'native', vscode.ConfigurationTarget.Global);
-            return;
-          }
-        }
-      }
-
-      return promptRestart();
-    }
-
-    e.affectsConfiguration('apc.menubar.compact') && isEnabled && promptRestart(); // reload
+    if (!isEnabled) { return; };
+    e.affectsConfiguration('apc.theme') && changeTheme(context);
+    e.affectsConfiguration('apc.buttons') && applyButtons(context);
+    e.affectsConfiguration('apc.iframe.style') && appendIframeStyles();
+    (e.affectsConfiguration('apc.electron') || e.affectsConfiguration('apc.menubar.compact')) && promptRestart();
   }
   function onDidChangeWorkspaceFolders(e: vscode.WorkspaceFoldersChangeEvent) {
     applyButtons(context);

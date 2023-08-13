@@ -85,6 +85,8 @@ export async function ensurePatch(context: vscode.ExtensionContext) {
     !fs.readFileSync(bootstrapPath, "utf8")?.includes('$apcExtensionBootstrapToken$') ||
     !fs.existsSync(browserEntrypointPath) ||
     !fs.existsSync(modulesPath) ||
+    !fs.readFileSync(bootstrapPath, "utf8")?.includes('apc') ||
+    !fs.readFileSync(mainJsPath, 'utf8')?.includes('require("./bootstrap-amd")') ||
     isFilesChanges(context)
   ) {
     await install(context);

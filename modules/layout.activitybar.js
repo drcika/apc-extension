@@ -53,6 +53,7 @@ define(
           const { size, position, isHorizontal } = config.activityBar;
 
           const activitybarPartViewSize = store.workbenchGrid.getViewSize(store.activitybarPartView);
+          const auxiliarybarPartViewSize = store.workbenchGrid.getViewSize(store.auxiliarybarPartView);
 
           // redistributing size, preventing jumps
           store.activitybarPartView.minimumWidth = 0;
@@ -70,6 +71,7 @@ define(
           store.activitybarPartView.maximumHeight = size;
 
           store.workbenchGrid.moveView(store.activitybarPartView, size, store.sidebarPartView, position === 'top' ? store.Direction.Up : store.Direction.Down);
+          store.workbenchGrid.resizeView(store.auxiliarybarPartView, auxiliarybarPartViewSize);
 
           updateActivityBarClassList(isHorizontal);
 
@@ -81,6 +83,7 @@ define(
       function restore({ hidden } = {}) {
         try {
           const { size, isHorizontal } = config.activityBar;
+          const auxiliarybarPartViewSize = store.workbenchGrid.getViewSize(store.auxiliarybarPartView);
 
           store.workbenchGrid.removeView(store.activitybarPartView);
 
@@ -92,6 +95,7 @@ define(
 
           store.workbenchGrid.addView(store.activitybarPartView, width, store.dummActivitybarPartView, store.Direction?.Left);
           store.workbenchGrid.removeView(store.dummActivitybarPartView);
+          store.workbenchGrid.resizeView(store.auxiliarybarPartView, auxiliarybarPartViewSize);
 
           updateActivityBarClassList(isHorizontal);
 
@@ -103,7 +107,7 @@ define(
       function updateSize() {
         try {
           const { size, isHorizontal } = config.activityBar;
-
+          const sidebarPartViewSize = store.workbenchGrid.getViewSize(store.sidebarPartView);
           store.activitybarPartView.minimumWidth = isHorizontal ? 0 : size;
           store.activitybarPartView.maximumWidth = isHorizontal ? Infinity : size;
           store.activitybarPartView.minimumHeight = isHorizontal ? size : 0;
@@ -112,6 +116,8 @@ define(
           updateActivityBarClassList(isHorizontal);
 
           services.layoutService.layout();
+          store.workbenchGrid.resizeView(store.sidebarPartView, sidebarPartViewSize);
+
           store.previousActivityBarConfig.size = size;
         } catch (error) { traceError(error); }
       };

@@ -3,7 +3,7 @@
   "displayName": "Apc Customize UI++",
   "description": "Advanced VSCode user interface customizations. Very experimental.",
   "icon": "logo.png",
-  "version": "0.2.9",
+  "version": "0.3.0",
   "repository": "https://github.com/drcika/apc-extension",
   "publisher": "drcika",
   "license": "MIT",
@@ -101,12 +101,37 @@
             },
             "lists": {
               "type": "array",
-              "default": [ "customview-tree", "results", "open-editors", "explorer-folders-view", "outline-tree", "scm-view", "debug-view-content", "debug-breakpoints", "tree" ],
+              "default": [
+                "customview-tree",
+                "results",
+                "open-editors",
+                "explorer-folders-view",
+                "outline-tree",
+                "scm-view",
+                "debug-view-content",
+                "debug-breakpoints",
+                "tree"
+              ],
               "items": {
                 "type": "string",
                 "enum": [
-                  "customview-tree", "tabs-list", "results", "open-editors", "explorer-folders-view", "tree", "outline-tree", "scm-view", "debug-view-content", "debug-breakpoints",
-                  "settings-toc-wrapper", "settings-tree-container", "quick-input-list", "monaco-table", "select-box-dropdown-list-container", "extensions-list", "notifications-list-container"
+                  "customview-tree",
+                  "tabs-list",
+                  "results",
+                  "open-editors",
+                  "explorer-folders-view",
+                  "tree",
+                  "outline-tree",
+                  "scm-view",
+                  "debug-view-content",
+                  "debug-breakpoints",
+                  "settings-toc-wrapper",
+                  "settings-tree-container",
+                  "quick-input-list",
+                  "monaco-table",
+                  "select-box-dropdown-list-container",
+                  "extensions-list",
+                  "notifications-list-container"
                 ]
               }
             },
@@ -359,7 +384,7 @@
         "apc.buttons": {
           "type": "array",
           "description": "Views to include on the status bar with associated icons",
-          "default": [ ],
+          "default": [],
           "uniqueItems": true,
           "items": {
             "type": "object",

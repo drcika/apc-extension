@@ -39,7 +39,6 @@ define(['exports', 'apc/auxiliary', 'apc/configuration'], (exports, auxiliary, c
     exports.appendDiv = appendDiv;
 
     function updateClasses() {
-      const listRowConfig = config.listRow;
       const headerConfig = config.header;
       const activityBarConfig = config.activityBar;
       const statusBarConfig = config.statusBar;
@@ -56,7 +55,6 @@ define(['exports', 'apc/auxiliary', 'apc/configuration'], (exports, auxiliary, c
       classList[activityBarConfig.isEnabled ? 'add' : 'remove']('custom-activitybar');
       classList[headerConfig.isEnabled ? 'add' : 'remove']('custom-header');
       classList[sidebarTitlebarConfig.isEnabled ? 'add' : 'remove']('custom-sidebar-titlebar');
-      classList[listRowConfig.isEnabled ? 'add' : 'remove']('custom-list-row');
       classList[statusBarConfig.isEnabled ? 'add' : 'remove']('custom-statusbar');
       // 
       classList[customFontFamily ? 'add' : 'remove']('custom-font-family');
@@ -77,8 +75,6 @@ define(['exports', 'apc/auxiliary', 'apc/configuration'], (exports, auxiliary, c
       }
 
       store.rootTextNode.textContent = `:root {
-        --row-height: ${listRowConfig.height}px; 
-        --row-font-size: ${listRowConfig.fontSize}px;
         --header-height: ${headerConfig.height}px;
         --header-font-size: ${headerConfig.fontSize}px;
         --titlebar-height: ${sidebarTitlebarConfig.height}px;

@@ -289,9 +289,26 @@ Define the height and font size of the sidebar title bar
 Specify the height and font size of list rows
 
 ```jsonc
+    // knownlistViews = ['customview-tree', 'tabs-list', 'results', 'open-editors', 'explorer-folders-view', 'tree', 'outline-tree', 'scm-view', 'debug-view-content', 'debug-breakpoints',
+    // 'settings-toc-wrapper', 'settings-tree-container', 'quick-input-list', 'monaco-table', 'select-box-dropdown-list-container', 'extensions-list', 'notifications-list-container'];
+
     "apc.listRow": {
+      "lists": ["explorer-folders-view", "results"], // dafault if height or fontSize ar provided ['customview-tree', 'results', 'open-editors', 'explorer-folders-view', 'outline-tree', 'scm-view', 'debug-view-content', 'debug-breakpoints', 'tree']
       "height": number,
-      "fontSize": number
+      "fontSize": number,
+      // by individual list
+      "parts" : {
+        "extensions-list" : {
+          "height": number,
+          "fontSize": number,
+        },
+        "scm-view": {
+          "height": number,
+          "fontSize": number,
+          "actionButton": number, // only for scm-view
+          "input": number // only for scm-view
+        }
+      }
     }
 ```
 

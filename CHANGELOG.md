@@ -4,6 +4,8 @@ This file tracks the changes made to the project.
 
 ![Visual Studio Marketplace Last Updated](https://img.shields.io/visual-studio-marketplace/last-updated/drcika.apc-extension) ![Visual Studio Marketplace Version (including pre-releases)](https://img.shields.io/visual-studio-marketplace/v/drcika.apc-extension?label=latest%20Version) ![GitHub last commit (branch)](https://img.shields.io/github/last-commit/drcika/apc-extension/production)
 
+### [0.3.0] - 2023-08-13
+-   Better handling listRow, add separate configuration per list
 ### [0.2.9] - 2023-08-11
 -   Add activityBar.itemMargin configuration by Jürg Lehni
 -   Fix activity-bar item-sizing by Jürg Lehni

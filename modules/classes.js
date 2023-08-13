@@ -3,7 +3,6 @@ define(
   function (exports, utils, auxiliary, { config }, override) {
     try {
       const { traceError, findInPrototype, findOwnProperty, store, getProperty, services, findVariable, findPropertyByValue } = auxiliary;
-
       exports.layoutService = layoutService => {
         try {
           store.Parts = layoutService.Parts;
@@ -108,13 +107,14 @@ define(
               try {
                 const getMinimumBodySize = Object.getOwnPropertyDescriptor(this.__proto__.__proto__.__proto__.__proto__, 'minimumBodySize').get;
                 const setMinimumBodySize = Object.getOwnPropertyDescriptor(this.__proto__.__proto__.__proto__.__proto__, 'minimumBodySize').set;
+
                 Object.defineProperty(this, 'minimumBodySize', {
                   get() { return getMinimumBodySize.call(this); },
                   set(num) {
-                    const { isEnabled, height } = config.listRow;
-                    if (!isEnabled) { return setMinimumBodySize.call(this, num); }
+                    const openEditorsConfig = config.listRow.get('open-editors');
+                    if (!openEditorsConfig) { return setMinimumBodySize.call(this, num); }
                     const visibleOpenEditors = config.getConfiguration('explorer.openEditors.visible') ?? 1;
-                    const size = this.orientation === store.Orientation.VERTICAL ? Math.min(Math.max(visibleOpenEditors, 1), this._elementCount) * height ?? 170 : 170;
+                    const size = this.orientation === store.Orientation.VERTICAL ? (Math.min(Math.max(visibleOpenEditors, 1), this._elementCount) * openEditorsConfig.height) ?? 170 : 170;
                     setMinimumBodySize?.call(this, size);
                   },
                   configurable: true,
@@ -132,34 +132,62 @@ define(
 
       exports.listView = function (listView) {
         try {
+          const knownlistViews = new Set(['customview-tree', 'tabs-list', 'results', 'open-editors', 'explorer-folders-view', 'tree', 'outline-tree', 'scm-view', 'debug-view-content', 'debug-breakpoints',
+            'settings-toc-wrapper', 'settings-tree-container', 'quick-input-list', 'monaco-table', 'select-box-dropdown-list-container', 'extensions-list', "notifications-list-container"]);
+
+          function findItemList(listView) {
+            for (const key in listView) {
+              if (listView[key] instanceof Array) {
+                return key;
+              }
+            }
+          }
           const [listViewKey, ListViewClass] = findInPrototype(listView, 'ListView', 'domElement'); // the only one
           listView[listViewKey] = class ListView extends ListViewClass {
-            constructor(_, virtualDelegate, renderers) {
-              if (!renderers.find(renderer => renderer.templateId?.match(/(notification|replGroup|rm|extension|settings|row)/))) {
-                const originalDelegate = getProperty(virtualDelegate, 'getHeight');
-                virtualDelegate.getHeight = function (...args) {
-                  try {
-                    const { isEnabled, height } = config.listRow;
-                    return isEnabled ?
-                      args[0].element?.placeholder || args[0].element?.type === 'actionButton' ? height * 1.5 : height :
-                      originalDelegate.value.call(this, ...args);
-                  }
-                  catch (error) { traceError(error); originalDelegate.value.call(this, ...args); }
-                };
+            constructor(container, virtualDelegate, renderers, options) {
 
-                config.disposables.add(config.onDidChangeConfiguration(e => {
-                  if (e.affectsConfiguration('apc.listRow')) {
-                    try {
-                      const height = config.listRow.height;
-                      new Array(this.length).fill(undefined).forEach((e, i) => this.updateElementHeight(i, height));
-                    } catch (error) { traceError(erorr); }
-                  }
-                }));
+              if (!Array.from(container.classList.values()).some((className) => knownlistViews.has(className))) {
+                console.dir(container.classList);
               }
+              const originalDelegate = getProperty(virtualDelegate, 'getHeight');
+              virtualDelegate.getHeight = function (arg) {
+                const configs = config.listRow;
+                const className = Array.from(container.classList.values()).find(classname => configs.get(classname));
+
+                if (className) {
+                  !container.classList.contains('custom-list-row') && container.classList.add('custom-list-row');
+
+                  const { height, fontSize, input, actionButton } = configs.get(className);
+                  container.style.setProperty('--row-height', `${height}px`);
+                  container.style.setProperty('--row-font-size', `${fontSize}px`);
+
+                  return arg?.element?.placeholder ?
+                    input ?? originalDelegate.value.call(this, arg) :
+                    arg?.element?.type === 'actionButton' ?
+                      actionButton ?? originalDelegate.value.call(this, arg) :
+                      height;
+                }
+                container.classList.contains('custom-list-row') && container.classList.remove('custom-list-row');
+
+                return originalDelegate.value.call(this, arg);
+              };
+
               super(...arguments);
+
+              const itemsKey = findItemList(this);
+              config.disposables.add(config.onDidChangeConfiguration(e => {
+                if (e.affectsConfiguration('apc.listRow')) {
+                  try {
+                    this[itemsKey] instanceof Array && this[itemsKey].forEach((item, i) => {
+                      this.updateElementHeight(i, virtualDelegate.getHeight(item.element || item));
+                    });
+                  } catch (error) { traceError(error); }
+                }
+              }));
             }
           };
-        } catch (error) { traceError(erorr); }
+        } catch (error) { traceError(error); }
+
       };
 
       exports.layout = function (layout) {

@@ -2,56 +2,40 @@ div.monaco-workbench {
   background-color: var(--background-color);
 }
 
-.custom-list-row .scm-view .scm-editor-placeholder {
-  font-size: var(--row-font-size) !important;
-}
-
-.custom-list-row .quick-input-list .monaco-list-row,
-.custom-list-row .monaco-workbench .monaco-list-row .codicon[class*=codicon-],
-.custom-list-row .monaco-workbench .part>.content {
+.custom-list-row .monaco-list-row {
+  line-height: var(--row-height);
   font-size: var(--row-font-size);
 }
 
-.custom-list-row .quick-input-list .monaco-list-row,
-.custom-list-row .debug-viewlet .monaco-list-row,
-.custom-list-row .scm-view .monaco-list-row,
-.custom-list-row div.search-view .filematch,
-.custom-list-row div.search-view .foldermatch,
-.custom-list-row div.search-view .linematch,
-.custom-list-row .scm-view .monaco-list-row .resource>.name>.monaco-icon-label>.actions .action-label.codicon {
+.custom-list-row .monaco-list-row .explorer-item {
+  height: 100%;
+  align-items: center
+}
+
+.custom-list-row.open-editors .monaco-list-row .monaco-icon-label {
+  height: 100% !important;
   line-height: var(--row-height);
 }
 
-.custom-list-row .customview-tree .monaco-tree .monaco-tree-row .custom-view-tree-node-item>.custom-view-tree-node-item-icon,
-.custom-list-row .monaco-panel-view .panel>.panel-header>.actions .action-label.icon,
-.custom-list-row .customview-tree .monaco-tree .monaco-tree-row .custom-view-tree-node-item>.custom-view-tree-node-item-icon,
-.custom-list-row .monaco-pane-view .pane>.pane-header,
-.custom-list-row .monaco-pane-view .pane>.pane-header>.actions .action-label.icon,
-.custom-list-row .monaco-pane-view .pane>.pane-header>.actions .action-label.codicon {
-  height: var(--row-height);
-}
-
-.custom-list-row .customview-tree .monaco-list .monaco-list-row div.custom-view-tree-node-item,
-.custom-list-row .customview-tree .monaco-tree .monaco-tree-row div.custom-view-tree-node-item,
-.custom-list-row .explorer-viewlet .open-editor,
-.custom-list-row .explorer-viewlet .editor-group,
-.custom-list-row .explorer-viewlet .explorer-item,
-.custom-list-row .explorer-viewlet .explorer-item::before {
-  height: var(--row-height);
+.custom-list-row.results .monaco-list-row a {
   line-height: var(--row-height);
 }
 
-.custom-list-row .timeline-tree-view .monaco-list .monaco-list-row .custom-view-tree-node-item>div.custom-view-tree-node-item-icon,
-.custom-list-row .customview-tree .monaco-list .monaco-list-row .custom-view-tree-node-item>.custom-view-tree-node-item-resourceLabel>div.custom-view-tree-node-item-icon,
-.custom-list-row .monaco-list-rows div.monaco-icon-label:before,
-.custom-list-row .search-view div.monaco-icon-label:before {
-  background-size: var(--row-font-size);
-  width: var(--row-font-size);
-  height: var(--row-height);
+.custom-list-row.results .monaco-list-row .badge {
+  line-height: var(--row-height);
 }
 
-.custom-list-row .search-view div.monaco-icon-label:before {
-  padding-right: calc(var(--row-font-size) * 0.3);
+.custom-list-row.results .monaco-list-row .monaco-icon-label:before {
+  line-height: var(--row-height) !important;
+}
+
+.custom-list-row.tree .monaco-list-row .contents {
+  height: 100%;
+}
+
+.custom-list-row.tree .monaco-list-row .contents .main {
+  line-height: var(--row-height) !important;
+  height: 100%;
 }
 
 /*  */
@@ -464,9 +448,6 @@ body.horizontal-activitybar .monaco-workbench .activitybar>.content :not(.monaco
   font-family: var(--custom-font-family-banner)
 }
 
-/* .custom-font-family-menubar .menubar,
-.custom-font-family-menubar .mac .menubar,
-.custom-font-family-menubar .windows .menubar, */
 .custom-font-family-monaco-menu .mac .monaco-menu {
   font-family: var(--custom-font-family-monaco-menu)
 }

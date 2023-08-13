@@ -98,6 +98,40 @@
             "height": {
               "type": "number",
               "default": 22
+            },
+            "lists": {
+              "type": "array",
+              "default": [ "customview-tree", "results", "open-editors", "explorer-folders-view", "outline-tree", "scm-view", "debug-view-content", "debug-breakpoints", "tree" ],
+              "items": {
+                "type": "string",
+                "enum": [
+                  "customview-tree", "tabs-list", "results", "open-editors", "explorer-folders-view", "tree", "outline-tree", "scm-view", "debug-view-content", "debug-breakpoints",
+                  "settings-toc-wrapper", "settings-tree-container", "quick-input-list", "monaco-table", "select-box-dropdown-list-container", "extensions-list", "notifications-list-container"
+                ]
+              }
+            },
+            "parts": {
+              "type": "object",
+              "format": {
+                "fontSize": {
+                  "type": "number",
+                  "default": 13
+                },
+                "height": {
+                  "type": "number",
+                  "default": 22
+                },
+                "input": {
+                  "type": "number",
+                  "default": 34,
+                  "description": "Only for scm-view"
+                },
+                "actionButton": {
+                  "type": "number",
+                  "default": 34,
+                  "description": "Only for scm-view"
+                }
+              }
             }
           }
         },
@@ -325,7 +359,7 @@
         "apc.buttons": {
           "type": "array",
           "description": "Views to include on the status bar with associated icons",
-          "default": [],
+          "default": [ ],
           "uniqueItems": true,
           "items": {
             "type": "object",

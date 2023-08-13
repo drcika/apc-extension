@@ -99,14 +99,39 @@ define(['exports', 'apc/auxiliary'], function (exports, auxiliary) {
 
       LIST_ROW_HEIGHT: 22,
       LIST_ROW_FONT_SIZE: 13,
+      LIST_ROW: ['customview-tree', 'results', 'open-editors', 'explorer-folders-view', 'outline-tree', 'scm-view', 'debug-view-content', 'debug-breakpoints', 'tree'],
       get listRow() {
-        const { height, fontSize } = this.getConfiguration('apc.listRow') || {};
-        const factor = this.zoomFactor;
-        return {
-          height: (height || this.LIST_ROW_HEIGHT) * factor,
-          fontSize: (fontSize || this.LIST_ROW_FONT_SIZE) * factor,
-          isEnabled: !!(fontSize || height)
-        };
+        const { parts, input, actionButton, ...config } = this.getConfiguration('apc.listRow') || {};
+        const isEnabled = Boolean(config.height || config.fontSize || config.lists?.length || parts);
+
+        const configs = new Map();
+
+        if (!isEnabled) { return configs; }
+
+        const lists = config.lists || (Boolean(config.height || config.fontSize) ? this.LIST_ROW : []);
+        const height = (config.height ?? this.LIST_ROW_HEIGHT);
+        const fontSize = (config.fontSize ?? this.LIST_ROW_FONT_SIZE);
+
+        lists.forEach(className => configs.set(className, {
+          height,
+          fontSize,
+          ...(className === 'scm-view' && {
+            input,
+            actionButton,
+          })
+        }));
+
+        for (const className in (parts || {})) {
+          configs.set(className, {
+            height: parts[className].height ?? height,
+            fontSize: parts[className].fontSize ?? fontSize,
+            ...(className === 'scm-view' && {
+              input: parts[className].input,
+              actionButton: parts[className].actionButton,
+            })
+          });
+        }
+        return configs;
       },
 
       ACTIVITY_BAR_SIZE: 48,

@@ -25,32 +25,6 @@ define(['exports', 'apc/auxiliary'], function (exports, auxiliary) {
 
     store.Dimension = Dimension;
 
-    const win = require('vs/platform/window/common/window');
-
-    for (const key in win) {
-      if (win[key] instanceof Function && win[key].length === 0) {
-        const original = win[key];
-        win[key] = function (arg = 0) {
-          const res = original(arg);
-          store.zoomFactor = res;
-          return res;
-        };
-      }
-    }
-
-    // const browser = require('vs/base/browser/browser');
-    // for (const key in browser) {
-    //   if (browser[key] instanceof Function && browser[key].length === 1) {
-    //     const original = browser[key];
-    //     browser[key] = function (arg) {
-    //       if (typeof arg === 'number') {
-    //         store.zoomFactor = arg || 1;
-    //       }
-    //       original(arg);
-    //     };
-    //   }
-    // }
-
     exports.config = {
       disposables: new DisposableStore(),
       addDisposable(disposable) {
@@ -66,21 +40,14 @@ define(['exports', 'apc/auxiliary'], function (exports, auxiliary) {
         try { return services.configurationService.getValue(config); }
         catch (error) { traceError(error); }
       },
-      get zoomFactor() {
-        try { return store.zoomFactor; }
-        catch (error) {
-          traceError(error);
-          return 1;
-        }
-      },
+
       HEADER_HEIGHT: 35,
       HEADER_FONT_SIZE: 13,
       get header() {
         const { height, fontSize } = this.getConfiguration('apc.header') || {};
-        const factor = this.zoomFactor;
         return {
-          height: (height || this.HEADER_HEIGHT) * factor,
-          fontSize: (fontSize || this.HEADER_FONT_SIZE) * factor,
+          height: (height || this.HEADER_HEIGHT),
+          fontSize: (fontSize || this.HEADER_FONT_SIZE),
           isEnabled: !!(fontSize || height)
         };
       },
@@ -89,10 +56,9 @@ define(['exports', 'apc/auxiliary'], function (exports, auxiliary) {
       TITLEBAR_FONT_SIZE: 11,
       get titlebar() {
         const { height, fontSize } = this.getConfiguration('apc.sidebar.titlebar') || {};
-        const factor = this.zoomFactor;
         return {
-          height: (height || this.TITLEBAR_HEIGHT) * factor,
-          fontSize: (fontSize || this.TITLEBAR_FONT_SIZE) * factor,
+          height: (height || this.TITLEBAR_HEIGHT),
+          fontSize: (fontSize || this.TITLEBAR_FONT_SIZE),
           isEnabled: !!(fontSize || height)
         };
       },
@@ -143,9 +109,9 @@ define(['exports', 'apc/auxiliary'], function (exports, auxiliary) {
           hideSettings,
           isHorizontal,
           orientation: isHorizontal ? store.ActionsOrientation.HORIZONTAL : store.ActionsOrientation.VERTICAL,
-          size: (size ?? this.ACTIVITY_BAR_SIZE) * this.zoomFactor,
-          itemSize: (itemSize ?? size ?? this.ACTIVITY_BAR_SIZE) * this.zoomFactor,
-          itemMargin: (itemMargin ?? 3) * this.zoomFactor,
+          size: (size ?? this.ACTIVITY_BAR_SIZE),
+          itemSize: (itemSize ?? size ?? this.ACTIVITY_BAR_SIZE),
+          itemMargin: (itemMargin ?? 3),
           isEnabled: !!size
         };
       },
@@ -154,11 +120,10 @@ define(['exports', 'apc/auxiliary'], function (exports, auxiliary) {
       STATUSBAR_FONT_SIZE: 12,
       get statusBar() {
         const { fontSize, height, position } = this.getConfiguration('apc.statusBar') || {};
-        const factor = this.zoomFactor;
         return {
           position: position || 'bottom',
-          height: (height ?? this.STATUSBAR_HEIGHT) * factor,
-          fontSize: (fontSize ?? this.STATUSBAR_FONT_SIZE) * factor,
+          height: (height ?? this.STATUSBAR_HEIGHT),
+          fontSize: (fontSize ?? this.STATUSBAR_FONT_SIZE),
           isEnabled: !!(fontSize || height || position)
         };
       },

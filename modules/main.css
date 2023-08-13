@@ -9,7 +9,7 @@ div.monaco-workbench {
 
 .custom-list-row .monaco-list-row .explorer-item {
   height: 100%;
-  align-items: center
+  align-items: center;
 }
 
 .custom-list-row.open-editors .monaco-list-row .monaco-icon-label {

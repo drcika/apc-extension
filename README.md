@@ -309,6 +309,11 @@ Specify the height and font size of list rows
           "input": number // only for scm-view
         }
       }
+    },
+
+    // if additional styling needed
+    "stylesheet": {
+      ".explorer-folders-view.custom-list-row .monaco-list-row": "font-weight: bold; color: red;"
     }
 ```
 

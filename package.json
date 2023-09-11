@@ -281,6 +281,17 @@
                 "under-page"
               ]
             },
+            "backgroundMaterial": {
+              "description": "windows - This sets the window's system-drawn background material, including behind the non-client area. This is only supported on WIndows 11 22H@ and up.",
+              "type": "string",
+              "enum": [
+                "auto",
+                "none",
+                "mica",
+                "acrylic",
+                "tabbed"
+              ]
+            },
             "visualEffectState": {
               "description": "macos - Specify how the material appearance should reflect window activity state on macOS. Must be used with the vibrancy property.",
               "type": "string",

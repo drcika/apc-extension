@@ -102,8 +102,6 @@ define(
 
     function decorateTabsPlaceHolders(group) {
       try {
-        group.element.style.position = 'relative';
-        group.disposableNoTabsDblclick = config.handleDblclick(UI.appendDiv(group.element, 'inline-no-tabs-placeholder'), config.handleTitleDoubleClick);
         group.disposableTabsDblclick = config.handleDblclick(group.element.querySelector('.tabs-container'), () => group.element.classList.contains('editor-group-top') && config.statusBar.position !== 'top' && config.handleTitleDoubleClick());
       }
       catch (error) { traceError(error); }

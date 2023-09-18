@@ -54,7 +54,7 @@ define(
 
           const activitybarPartViewSize = store.workbenchGrid.getViewSize(store.activitybarPartView);
           const auxiliarybarPartViewSize = store.workbenchGrid.getViewSize(store.auxiliarybarPartView);
-
+          const sidebarPartViewSize = store.workbenchGrid.getViewSize(store.sidebarPartView);
           // redistributing size, preventing jumps
           store.activitybarPartView.minimumWidth = 0;
           store.activitybarPartView.layout(0, activitybarPartViewSize.heigth);
@@ -72,6 +72,7 @@ define(
 
           store.workbenchGrid.moveView(store.activitybarPartView, size, store.sidebarPartView, position === 'top' ? store.Direction.Up : store.Direction.Down);
           store.workbenchGrid.resizeView(store.auxiliarybarPartView, auxiliarybarPartViewSize);
+          store.workbenchGrid.resizeView(store.sidebarPartView, sidebarPartViewSize);
 
           updateActivityBarClassList(isHorizontal);
 
@@ -84,6 +85,7 @@ define(
         try {
           const { size, isHorizontal } = config.activityBar;
           const auxiliarybarPartViewSize = store.workbenchGrid.getViewSize(store.auxiliarybarPartView);
+          const sidebarPartViewSize = store.workbenchGrid.getViewSize(store.sidebarPartView);
 
           store.workbenchGrid.removeView(store.activitybarPartView);
 
@@ -96,6 +98,7 @@ define(
           store.workbenchGrid.addView(store.activitybarPartView, width, store.dummActivitybarPartView, store.Direction?.Left);
           store.workbenchGrid.removeView(store.dummActivitybarPartView);
           store.workbenchGrid.resizeView(store.auxiliarybarPartView, auxiliarybarPartViewSize);
+          store.workbenchGrid.resizeView(store.sidebarPartView, sidebarPartViewSize);
 
           updateActivityBarClassList(isHorizontal);
 

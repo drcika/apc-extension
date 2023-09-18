@@ -8,7 +8,7 @@
   "publisher": "drcika",
   "license": "MIT",
   "engines": {
-    "vscode": "^1.77.0"
+    "vscode": "^1.83.0"
   },
   "categories": [
     "Themes",
@@ -358,6 +358,14 @@
             "height": {
               "type": "number",
               "default": 35
+            },
+            "normal": {
+              "type": "number",
+              "default": 35
+            },
+            "compact": {
+              "type": "number",
+              "default": 22
             }
           }
         },

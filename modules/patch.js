@@ -18,8 +18,6 @@ define(
       require(['vs/workbench/browser/parts/editor/editorPart'], classes.editorPart, traceError);
       require(['vs/workbench/browser/parts/compositeBar'], classes.compositeBar, traceError);
       require(['vs/workbench/browser/parts/activitybar/activitybarPart'], classes.activitybarPart, traceError);
-      require(['vs/workbench/browser/parts/editor/tabsTitleControl'], classes.tabsTitleControl, traceError);
-
       require(['vs/workbench/services/layout/browser/layoutService'], classes.layoutService, traceError);
 
       require(['vs/workbench/contrib/files/browser/views/openEditorsView'], classes.openEditorsView, traceError);
@@ -59,6 +57,7 @@ define(
         constructor(...args) {
           try {
             args.forEach((service, index) => auxiliary.services[services[index]] = service);
+            require(['vs/workbench/browser/parts/editor/editorTabsControl'], classes.editorTabsControl, traceError);
 
             store.dummActivitybarPartView = new auxiliary.Part(store.DUMMY_ACTIVITYBAR_PART, { hasTitle: false }, auxiliary.services.themeService, auxiliary.services.storageService, auxiliary.services.layoutService);
             store.dummStatusbarPartView = new auxiliary.Part(store.DUMMY_STATUSBAR_PART, { hasTitle: false }, auxiliary.services.themeService, auxiliary.services.storageService, auxiliary.services.layoutService);
@@ -77,7 +76,7 @@ define(
       exports.run = (instantiationService) => {
         try {
           const instantiation = require('vs/platform/instantiation/common/instantiation');
-
+          
           // instantiation._util.serviceIds.forEach((a, key) => !skipService.includes(key) && services.push(key));
           instantiationService.createInstance(utils.decorate([...services.map((name, i) => utils.param(i, instantiation._util.serviceIds.get(name)))], Patch));
 
@@ -96,7 +95,9 @@ define(
             e.affectsConfiguration('apc.activityBar') && activitybar.update();
             e.affectsConfiguration('apc.imports') && ui.appendFiles();
             e.affectsConfiguration('apc.stylesheet') && ui.appendStyles();
-            e.affectsConfiguration('apc.header') && queueMicrotask(() => store.editorPartView?.layout?.(store.editorPartView?.element?.clientWidth, store.editorPartView?.element?.clientHeight));
+            // e.affectsConfiguration('apc.header') && queueMicrotask(() => {
+            //   store.editorPartView?.layout?.(store.editorPartView?.element?.clientWidth, store.editorPartView?.element?.clientHeight);
+            // });
 
           }));
 

@@ -75,7 +75,6 @@ define(['exports', 'apc/auxiliary', 'apc/configuration'], (exports, auxiliary, c
       }
 
       store.rootTextNode.textContent = `:root {
-        --header-height: ${headerConfig.height}px;
         --header-font-size: ${headerConfig.fontSize}px;
         --titlebar-height: ${sidebarTitlebarConfig.height}px;
         --titlebar-font-size: ${sidebarTitlebarConfig.fontSize}px;

@@ -2,7 +2,7 @@ define(
   ['exports', 'apc/utils', 'apc/auxiliary', 'apc/configuration', 'apc/override'],
   function (exports, utils, auxiliary, { config }, override) {
     try {
-      const { traceError, findInPrototype, findOwnProperty, store, getProperty, services, findVariable, findPropertyByValue } = auxiliary;
+      const { traceError, findInPrototype, findOwnProperty, store, getProperty, services, findVariable } = auxiliary;
       exports.layoutService = layoutService => {
         try {
           store.Parts = layoutService.Parts;
@@ -132,7 +132,7 @@ define(
 
       exports.listView = function (listView) {
         try {
-          const knownlistViews = new Set(['customview-tree', 'tabs-list', 'results', 'open-editors', 'explorer-folders-view', 'tree', 'outline-tree', 'scm-view', 'debug-view-content', 'debug-breakpoints',
+          const knownlistViews = new Set(['customview-tree', 'tabs-list', 'results', 'open-editors', 'explorer-folders-view', 'tree', 'tree-container', 'outline-tree', 'scm-view', 'debug-view-content', 'debug-breakpoints',
             'settings-toc-wrapper', 'settings-tree-container', 'quick-input-list', 'monaco-table', 'select-box-dropdown-list-container', 'extensions-list', "notifications-list-container"]);
 
           function findItemList(listView) {
@@ -283,20 +283,45 @@ define(
         }
       };
 
-      exports.tabsTitleControl = function (tabsTitleControl) {
-        try {
-          const [, tabsTitleControlClass] = findInPrototype(tabsTitleControl, 'TabsTitleControl', 'closeEditor'); // the only one
-
-          const height_key = findPropertyByValue(tabsTitleControlClass, 35);
-          if (height_key) {
-            Object.defineProperty(tabsTitleControlClass, height_key, {
-              get() { return config.header.height; },
-              set() { },
-              configurable: true
-            });
+      function findTabsHeights(obj) {
+        for (const className in obj) {
+          for (const key in obj[className]) {
+            const val = obj[className][key];
+            if (val instanceof Object && 'compact' in val) {
+              return [className, obj[className], key];
+            }
           }
+        }
+      }
+
+      exports.editorTabsControl = function (editorTabsControl) {
+        try {
+          const [, EditorTabsControl, EDITOR_TAB_HEIGHT] = findTabsHeights(editorTabsControl); // 'EditorTabsControl', 'EDITOR_TAB_HEIGHT'
+
+          EditorTabsControl[EDITOR_TAB_HEIGHT] = {
+            normal: config.header.normal,
+            compact: config.header.compact
+          };
+
+          config.disposables.add(config.onDidChangeConfiguration(async e => {
+            if (e.affectsConfiguration('apc.header')) {
+              try {
+                if (!store.initialised) { return; }
+                // "workbench.editor.tabHeight": "compact",
+                EditorTabsControl[EDITOR_TAB_HEIGHT] = {
+                  normal: config.header.normal,
+                  compact: config.header.compact
+                };
+
+                const currentValue = services.configurationService.getValue('workbench.editor.tabHeight');
+                await services.configurationService.updateValue('workbench.editor.tabHeight', currentValue === 'compact' ? 'normal' : 'compact');
+                services.configurationService.updateValue('workbench.editor.tabHeight', currentValue);
+
+              } catch (error) { traceError(error); }
+            }
+          }));
         } catch (error) { traceError(error); }
       };
-
+      
     } catch (error) { traceError(error); }
   });

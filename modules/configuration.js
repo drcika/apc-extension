@@ -37,18 +37,20 @@ define(['exports', 'apc/auxiliary'], function (exports, auxiliary) {
         return this.addDisposable(new DomListener(node, type, handler, options));
       },
       getConfiguration(config) {
-        try { return services.configurationService.getValue(config); }
+        try { return services.configurationService?.getValue?.(config); }
         catch (error) { traceError(error); }
       },
 
-      HEADER_HEIGHT: 35,
+      HEADER_NORMAL: 35,
+      HEADER_COMPACT: 22,
       HEADER_FONT_SIZE: 13,
       get header() {
-        const { height, fontSize } = this.getConfiguration('apc.header') || {};
+        const { height, fontSize, normal, compact } = this.getConfiguration('apc.header') || {};
         return {
-          height: (height || this.HEADER_HEIGHT),
+          normal: (normal || height || this.HEADER_NORMAL),
+          compact: (compact || height || this.HEADER_COMPACT),
           fontSize: (fontSize || this.HEADER_FONT_SIZE),
-          isEnabled: !!(fontSize || height)
+          isEnabled: !!fontSize
         };
       },
 

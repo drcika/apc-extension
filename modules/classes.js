@@ -283,7 +283,10 @@ define(
         }
       };
 
-      function findTabsHeights(obj) {
+      function findTabsHeights(obj, original, property) {
+        if(obj?.[original]?.[property] instanceof Object && 'compact' in obj[original][property]) {
+          return [original, obj[original], property];
+        }
         for (const className in obj) {
           for (const key in obj[className]) {
             const val = obj[className][key];
@@ -292,11 +295,13 @@ define(
             }
           }
         }
+
+        return [];
       }
 
       exports.editorTabsControl = function (editorTabsControl) {
         try {
-          const [, EditorTabsControl, EDITOR_TAB_HEIGHT] = findTabsHeights(editorTabsControl); // 'EditorTabsControl', 'EDITOR_TAB_HEIGHT'
+          const [, EditorTabsControl, EDITOR_TAB_HEIGHT] = findTabsHeights(editorTabsControl, 'EditorTabsControl', 'EDITOR_TAB_HEIGHT');
 
           EditorTabsControl[EDITOR_TAB_HEIGHT] = {
             normal: config.header.normal,

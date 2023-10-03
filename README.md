@@ -29,52 +29,52 @@ To enable or disable this extension:
 
 ### Windows Users
 
-> Run VSCode / VSCodium in Administrator mode before enabling or disabling the extension.
+Run VSCode / VSCodium in **Administrator mode** before enabling or disabling the extension.
 
 ### Mac and Linux Users
 
-> The extension will NOT work if VSCode / VSCodium cannot modify itself for specific reasons.
+The extension won't work if VSCode or VSCodium cannot modify itself, possibly due to:
 
- The possible reasons are:
-  - Code files are read-only, such as on a read-only file system.
-  - Code is not started with the necessary permissions to modify itself.
+  - Code files are set as read-only (like on a read-only file system).
+  - Code didn't start with the right permissions for self-modification.
 
-To fix this, you need to claim ownership of VSCode's installation directory.
+To resolve this, claim ownership of VSCode's installation directory with these commands.
 
-For macOS, use the following command.
-```sh
-sudo chown -R $(whoami) $(which code)
-```
+#### macOS
+  ```sh
+  sudo chown -R $(whoami) $(which code)
+  ```
 
-For Linux, use this command instead.
-```sh
-sudo chown -R $(whoami) /usr/share/code
-```
+#### Linux
+  ```sh
+  sudo chown -R $(whoami) /usr/share/code
+  ```
 
-> **Note:** Mac and Linux package managers might have a customized installation path. <br>
-> Double-check that your path is correct. 
+>**Note:** Custom installation paths may be used by Mac and Linux package managers.<br>
+> Verify the correct path for your system.
 
-In macOS, the typical paths are:
-  - `/Applications/Visual Studio Code.app/Contents/Resources/app/out` for VSCode
-  - `/Applications/Visual Studio Code - Insiders.app/Contents/Resources/app/out` for VSCode Insiders
-  - `/Applications/VSCodium.app/Contents/Resources/app/out` for VSCodium
+- macOS paths
+  - VSCode: `/Applications/Visual Studio Code.app/Contents/Resources/app/out`
+  - VSCode Insiders: `/Applications/Visual Studio Code - Insiders.app/Contents/Resources/app/out`
+  - VSCodium: `/Applications/VSCodium.app/Contents/Resources/app/out`
 
-In most Linux distributions, the typical path is `/usr/share/code`
+- Most Linux distributions path: `/usr/share/code`
 
-On Arch Linux, the path can be:
+- Arch Linux path:
   - `/usr/lib/code/`
   - `/opt/visual-studio-code`
 
 ## ⚠️Disclaimer
 
-This extension modifies specific files of Visual Studio Code / VSCodium.
-> **Use at your own risk**
+This extension tweaks certain Visual Studio Code / VSCodium files.
 
-If something goes wrong, the extension will create a backup of the original file. That's what the disable command is for.
+> **Proceed at your own risk**
 
-The extension attempts to reapply patches with each VSCode / VSCodium update. If it doesn't happen automatically, try enabling the extension again.
+In case of issues, the disable command auto-backs up the original file.
 
-Remember that this extension is still experimental, which means you may encounter some bugs while playing with it. Kindly report any bugs to the [Github repository's issues section](https://github.com/drcika/apc-extension/issues)
+The extension is designed to reapply patches after each VSCode / VSCodium update. If this doesn't occur automatically, re-enable the extension.
+
+Please be aware that this extension is experimental, and you may encounter bugs. Report any issues on the [GitHub repository](https://github.com/drcika/apc-extension/issues)
 
 ## Supported Configuration Options
 
@@ -82,7 +82,7 @@ Remember that this extension is still experimental, which means you may encounte
 
 Configures the Electron window
 
-For detailed information on available configurations, refer to the [Electron BrowserWindow documentation](https://www.electronjs.org/docs/latest/api/browser-window#new-browserwindowoptions)
+For detailed configuration info, refer to [Electron BrowserWindow documentation](https://www.electronjs.org/docs/latest/api/browser-window#new-browserwindowoptions)
 
 > **Warning** <br>
 > Be careful with the "apc.electron" configuration, as incorrect parameters may disrupt VSCode or VSCodium startup.
@@ -370,9 +370,9 @@ Inject custom CSS into iframes (Notebook, Extension view, etc)
 
 ## ⚠️Important Notice
 
-This extension is specifically designed for configuring Electron and Visual Studio Code.
+This extension is your go-to tool for configuring Electron and Visual Studio Code.
 
-I have not developed anything or provided support for potential bugs. My role is to provide a bridge for configuring Electron/VS Code.
+I haven't developed anything nor provided support for potential bugs, but consider me your bridge to tailor Electron and VS Code just the way you like.
 
 ## Acknowledgements
 

@@ -249,9 +249,9 @@ Adjust the height and font size of the header bar
 
 ```jsonc
     "apc.header": {
-      "normal": number, // applied in case "workbench.editor.tabHeight": "normal"
-      "compact": number, // applied in case "workbench.editor.tabHeight": "compact"
-      "height": number, // applied in case if normal or compact not specified
+      "default": number, // applied in case "window.density.editorTabHeight": "default"
+      "compact": number, // applied in case "window.density.editorTabHeight": "compact"
+      "height": number, // applied in case if default or compact not specified
       "fontSize": number
     }
 ```

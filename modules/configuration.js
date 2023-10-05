@@ -45,7 +45,7 @@ define(['exports', 'apc/auxiliary'], function (exports, auxiliary) {
       HEADER_COMPACT: 22,
       HEADER_FONT_SIZE: 13,
       get header() {
-        const { height, fontSize, normal, compact } = this.getConfiguration('apc.header') || {};
+        const { height, fontSize, default: normal, compact } = this.getConfiguration('apc.header') || {};
         return {
           normal: (normal || height || this.HEADER_NORMAL),
           compact: (compact || height || this.HEADER_COMPACT),

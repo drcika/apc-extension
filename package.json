@@ -359,7 +359,7 @@
               "type": "number",
               "default": 35
             },
-            "normal": {
+            "default": {
               "type": "number",
               "default": 35
             },

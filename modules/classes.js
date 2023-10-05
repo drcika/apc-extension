@@ -312,15 +312,15 @@ define(
             if (e.affectsConfiguration('apc.header')) {
               try {
                 if (!store.initialised) { return; }
-                // "workbench.editor.tabHeight": "compact",
+                // "window.density.editorTabHeight": "compact",
                 EditorTabsControl[EDITOR_TAB_HEIGHT] = {
                   normal: config.header.normal,
                   compact: config.header.compact
                 };
 
-                const currentValue = services.configurationService.getValue('workbench.editor.tabHeight');
-                await services.configurationService.updateValue('workbench.editor.tabHeight', currentValue === 'compact' ? 'normal' : 'compact');
-                services.configurationService.updateValue('workbench.editor.tabHeight', currentValue);
+                const currentValue = services.configurationService.getValue('window.density.editorTabHeight');
+                await services.configurationService.updateValue('window.density.editorTabHeight', currentValue === 'compact' ? 'default' : 'compact');
+                services.configurationService.updateValue('window.density.editorTabHeight', currentValue);
 
               } catch (error) { traceError(error); }
             }

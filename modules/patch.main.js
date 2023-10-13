@@ -1,8 +1,14 @@
-define(['vs/platform/windows/electron-main/windowImpl', 'electron', 'apc-main/utils'], (windowImpl, electron, utils) => {
+define(['vs/platform/windows/electron-main/windowImpl', 'vs/platform/windows/electron-main/windows', 'electron', 'apc-main/utils'], (windowImpl, windows, electron, utils) => {
   function findeCodeWindow() {
-    for (const key in windowImpl) { if (windowImpl[key] instanceof Function) { return key; } }
+    for (const key in windowImpl) { if (windowImpl[key] instanceof Function && windowImpl[key].toString().startsWith('class extends')) { return key; } }
   }
   const codeWindowKey = 'CodeWindow' in windowImpl ? 'CodeWindow' : findeCodeWindow();
+
+  function findDefaultBrowserWindowOptions() {
+    for (const key in windows) { if (windows[key] instanceof Function && windows[key].toString?.() !== 'windowsMainService') { return key; } }
+  }
+
+  const defaultBrowserWindowOptionsKey = 'defaultBrowserWindowOptions' in windows ? 'defaultBrowserWindowOptions' : findDefaultBrowserWindowOptions();
 
   if (codeWindowKey) {
     windowImpl[codeWindowKey] = class CodeWindow extends windowImpl[codeWindowKey] {
@@ -35,12 +41,20 @@ define(['vs/platform/windows/electron-main/windowImpl', 'electron', 'apc-main/ut
             utils.override(electron.BrowserWindow, "setBackgroundColor", function (original, [color]) { });
           }
 
-          for (const key in config) {
-            Object.defineProperty(Object.prototype, key, {
-              get() { return config[key]; },
-              set() { },
-              configurable: true
-            });
+          if (defaultBrowserWindowOptionsKey) {
+            const originalDefaultBrowserWindowOptions = windows[defaultBrowserWindowOptionsKey];
+            windows[defaultBrowserWindowOptionsKey] = (...args) => {
+              return { ...originalDefaultBrowserWindowOptions(...args), ...config };
+            }
+          }
+          else {
+            for (const key in config) {
+              Object.defineProperty(Object.prototype, key, {
+                get() { return config[key]; },
+                set() { },
+                configurable: true
+              });
+            }
           }
           super(...arguments);
           for (const key in config) { delete Object.prototype[key]; }

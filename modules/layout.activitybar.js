@@ -10,7 +10,7 @@ define(
       function toggleSettings(hideSettings) {
         try {
           const content = store.activitybarPartView.getContainer().querySelector('.content');
-          if (!store.globalActivitiesContainer) { store.globalActivitiesContainer = content.childNodes[1]; };
+          if (!store.globalActivitiesContainer) { store.globalActivitiesContainer = content.querySelector('.global-activity-actionbar'); };
           const isConnected = store.globalActivitiesContainer?.isConnected;
 
           if (hideSettings && isConnected) { content.removeChild(store.globalActivitiesContainer); }

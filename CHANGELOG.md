@@ -4,6 +4,9 @@ This file tracks the changes made to the project.
 
 ![Visual Studio Marketplace Last Updated](https://img.shields.io/visual-studio-marketplace/last-updated/drcika.apc-extension) ![Visual Studio Marketplace Version (including pre-releases)](https://img.shields.io/visual-studio-marketplace/v/drcika.apc-extension?label=latest%20Version) ![GitHub last commit (branch)](https://img.shields.io/github/last-commit/drcika/apc-extension/production)
 
+### [0.3.2] - 2023-10-12
+-   Fix hide user settings
+-   Fix patch electron config
 ### [0.3.1] - 2023-10-05
 -   Adopted API changes
 -   Adapted to the new tab configuration changes (v1.83.0)

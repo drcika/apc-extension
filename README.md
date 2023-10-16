@@ -1,6 +1,6 @@
 # Apc Customize UI++ Extension README
 
-The Successor of iocave/Customize UI
+The Successor to iocave's Customize UI
 
 ![Visual Studio Marketplace Downloads](https://img.shields.io/visual-studio-marketplace/d/drcika.apc-extension?color=blue) ![Visual Studio Marketplace Installs](https://img.shields.io/visual-studio-marketplace/i/drcika.apc-extension?color=yellow) ![Visual Studio Marketplace Version (including pre-releases)](https://img.shields.io/visual-studio-marketplace/v/drcika.apc-extension?label=latest%20Version&&color=dark-green) ![License](https://img.shields.io/github/license/drcika/apc-extension?color=red) ![Stargazers](https://img.shields.io/github/stars/drcika/apc-extension?style=social)
 
@@ -60,7 +60,7 @@ To resolve this, claim ownership of VSCode's installation directory with these c
 
 - Most Linux distributions path: `/usr/share/code`
 
-- Arch Linux path:
+- Arch Linux paths
   - `/usr/lib/code/`
   - `/opt/visual-studio-code`
 
@@ -130,7 +130,7 @@ For detailed configuration info, refer to [Electron BrowserWindow documentation]
 
 #### vibrancy setting
 ```jsonc
-    // Other panels must be transparent to use the `vibrancy` option
+    // To utilize the `vibrancy` option, ensure other panels are transparent.
     // Demo: https://github.com/drcika/apc-extension/blob/production/demo/vibrancy.settings.json
     "apc.electron": {
       "vibrancy": "ultra-dark"
@@ -145,18 +145,19 @@ For detailed configuration info, refer to [Electron BrowserWindow documentation]
       "transparent": true,
       "titleBarStyle": "hiddenInset",
       "vibrancy": "ultra-dark",
-      "opacity": 0.98,  // Range: 0-1 (0 means full transparency). If set, you won't see the element.
+      "opacity": 0.98,  // Range: 0-1 (To go fully transparent, set it to 0)
       "visualEffectState": "active"
     }
 ```
 
-> **Note** Multiple declarations of `apc.electron` will result in only the last declaration being applied, while the previous declarations are ignored.
+> **Note** Multiple declarations of `apc.electron` will apply only the last declaration, ignoring previous ones.
 
 ### `font.family`
 
-Change the default font family for (any part of) vscode
+Change the default font family for any part of vscode
 
 By default, Provided by vscode
+
 ```jsonc
   "editor.fontFamily": "Roboto Mono",
   "editor.inlayHints.fontFamily": "Roboto Mono",
@@ -169,15 +170,15 @@ By default, Provided by vscode
   "markdown.preview.fontFamily": "Roboto Mono",
 ```
 
-Replace the Default Font Family for `extension-editor`
-> **Install the desired font on your computer. Restart required.**
+Change the default font family for `extension-editor`
+> **Install the font you want on your computer, then restart vscode.**
 
 ```jsonc
   "apc.font.family": "Roboto Mono",
   "apc.monospace.font.family": "Roboto Mono",
 ```
 
-Replace the Default Font Family for Each Part individually
+Change the default font family for each part separately
 
 ```jsonc
   "apc.parts.font.family": {
@@ -188,7 +189,7 @@ Replace the Default Font Family for Each Part individually
     "tabs": "Roboto Mono",
     "statusbar": "Roboto Mono",
     "settings-body": "Roboto Mono",
-    "extension-editor": "Roboto Mono", // Required: Expected font installation on machine and Application restart
+    "extension-editor": "Roboto Mono", // Install the font you want on your computer, then restart vscode
     "monaco-menu": "Roboto Mono"
   },
 ```
@@ -198,11 +199,12 @@ Replace the Default Font Family for Each Part individually
 Import CSS and JavaScript files to customize the look and feel of VS Code
 
 > **Real-time monitoring of CSS files, no need to restart the application**
+
 ```jsonc
     "apc.imports": [
       "/Users/some/path/style.css",
       "/Users/some/path/script.js",
-      "/C:/Users/path/style.css", // for windows
+      "/C:/Users/path/style.css", // for Windows
 
       // or see https://developer.mozilla.org/en-US/docs/Web/HTML/Element/link
       // Local file imports like this are not watched in real time
@@ -229,7 +231,7 @@ Override the default CSS of VS Code
       ".monaco-workbench .part.editor>.content .editor-group-container>.title div.tabs-container": "border-radius: 5px; font-family: 'Times New Roman', Times, serif;"
       
       "body": {
-        // Other panels should be transparent. see "workbench.colorCustomizations"
+        // Other panels have to be transparent for this. See "workbench.colorCustomizations"
         "background-image": "url(/Users/aleksandarpopovic/imgs/19.png), linear-gradient(to top,rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.2))",
         "background-size": "cover",
         "background-blend-mode": "multiply",
@@ -249,9 +251,9 @@ Adjust the height and font size of the header bar
 
 ```jsonc
     "apc.header": {
-      "default": number, // applied in case "window.density.editorTabHeight": "default"
-      "compact": number, // applied in case "window.density.editorTabHeight": "compact"
-      "height": number, // applied in case if default or compact not specified
+      "default": number, // Applied when "window.density.editorTabHeight": "default"
+      "compact": number, // Applied when "window.density.editorTabHeight": "compact"
+      "height": number, // Applied when "default" or "compact" is not specified
       "fontSize": number
     }
 ```
@@ -273,7 +275,7 @@ Possible values for `apc.activityBar.position` are:
 
 - `top`: above sidebar
 - `bottom`: below sidebar
-- The default left position is used if not specified
+- If not specified, the default position (left) is used.
 
 ### `apc.sidebar.titlebar`
 
@@ -295,7 +297,7 @@ Specify the height and font size of list rows
     // 'settings-toc-wrapper', 'settings-tree-container', 'quick-input-list', 'monaco-table', 'select-box-dropdown-list-container', 'extensions-list', 'notifications-list-container'];
 
     "apc.listRow": {
-      "lists": ["explorer-folders-view", "results"], // dafault if height or fontSize ar provided ['customview-tree', 'results', 'open-editors', 'explorer-folders-view', 'outline-tree', 'scm-view', 'debug-view-content', 'debug-breakpoints', 'tree']
+      "lists": ["explorer-folders-view", "results"], // dafault if height or fontSize are provided ['customview-tree', 'results', 'open-editors', 'explorer-folders-view', 'outline-tree', 'scm-view', 'debug-view-content', 'debug-breakpoints', 'tree']
       "height": number,
       "fontSize": number,
       // by individual list
@@ -313,7 +315,7 @@ Specify the height and font size of list rows
       }
     },
 
-    // if additional styling needed
+    // If additional styling needed
     "stylesheet": {
       ".explorer-folders-view.custom-list-row .monaco-list-row": "font-weight: bold; color: red;"
     }
@@ -344,11 +346,11 @@ Set the position and height of the status bar
 Inject custom CSS into iframes (Notebook, Extension view, etc)
 
 > **Warning** <br>
-> On vscode startup, if there is a tab open with an iframe, you will need to reopen that tab for the styles to be applied.
+> When you start VSCode and have a tab open with an iframe, you must reopen that tab for the styles to take effect.
 
 ```jsonc
   "apc.iframe.style": "/Users/path/style.css",
-  "apc.iframe.style": "C:\\Users\\path\\style.css", // windows
+  "apc.iframe.style": "C:\\Users\\path\\style.css", // Windows
 
   "apc.iframe.style": {
     "h1": "color: red; font-size: 2rem;"

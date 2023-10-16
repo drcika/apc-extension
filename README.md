@@ -367,7 +367,7 @@ Inject custom CSS into iframes (Notebook, Extension view, etc)
 ## Demo
 
 <div style="text-align:center">
-  <img src="https://raw.githubusercontent.com/drcika/apc-extension/production/demo.png" alt="Demo.png"/>
+  <img src="https://raw.githubusercontent.com/drcika/apc-extension/production/demo.png" alt="demo.png"/>
 </div>
 
 ## ⚠️Important Notice

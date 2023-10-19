@@ -56,8 +56,7 @@ To fix this, claim ownership of VSCode installation directory with these command
   sudo chown -R $(whoami) /usr/share/code
   ```
 
-> **Note**: Mac and Linux package managers may use custom installation paths. <br>
-> Verify the correct path for your system.
+> **Note** Verify the custom installation path for your Mac or Linux package manager.
 
 - macOS paths
   - VSCode: `/Applications/Visual Studio Code.app/Contents/Resources/app/out`

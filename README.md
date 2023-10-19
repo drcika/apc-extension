@@ -69,14 +69,13 @@ To fix this, claim ownership of VSCode installation directory with these command
 
 ## ⚠️Disclaimer
 
-This extension tweaks certain VSCode / VSCodium files.
+> **important**
+> This extension tweaks certain VSCode / VSCodium files. Proceed at your own risk.
 
-> **Proceed at your own risk**
+- Automatically reapplies patches after each VSCode / VSCodium update. If not, re-enable it.
+- Disable to back up original files in case of issues.
 
-- Automatically reapply patches after each VSCode / VSCodium update. If it doesn't, re-enable it.
-- When disabled, it creates a backup of the original files. 
-
-Note that this extension is experimental, and you may encounter bugs. Report issues on our [GitHub repository](https://github.com/drcika/apc-extension/issues)
+This extension is experimental, and you may encounter bugs. Report them on our [GitHub repository](https://github.com/drcika/apc-extension/issues).
 
 ## Supported Configuration Options
 

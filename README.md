@@ -1,14 +1,18 @@
+<div align="center">
+
 # Apc Customize UI++ Extension README
 
 The Successor to iocave/Customize UI
 
 ![Visual Studio Marketplace Downloads](https://img.shields.io/visual-studio-marketplace/d/drcika.apc-extension?color=blue) ![Visual Studio Marketplace Installs](https://img.shields.io/visual-studio-marketplace/i/drcika.apc-extension?color=yellow) ![Visual Studio Marketplace Version (including pre-releases)](https://img.shields.io/visual-studio-marketplace/v/drcika.apc-extension?label=latest%20Version&&color=dark-green) ![License](https://img.shields.io/github/license/drcika/apc-extension?color=red) ![GitHub Repo stars](https://img.shields.io/github/stars/drcika/apc-extension?style=social)
 
+</div>
+
 ## Overview
 
 This extension allows customization outside vscode scoop.
 
-Unlike its predecessor, it does not come with default settings, allowing you complete control over customization.
+Unlike its predecessor, it comes with no default settings, allowing you complete control over customization.
 
 Explore my personal settings for inspiration: [View Settings](https://github.com/drcika/apc-extension/blob/production/demo/settings.json)
 
@@ -37,10 +41,10 @@ Run VSCode or VSCodium in **Administrator mode** before enabling/disabling the e
 
 The extension won't work if VSCode or VSCodium cannot modify itself, possibly due to:
 
-  - Code files are set as read-only (like on a read-only file system).
-  - Code didn't start with the right permissions for self-modification.
+  - Code files set as read-only.
+  - Incorrect permissions for self-modification.
 
-To resolve this, claim ownership of VSCode's installation directory with these commands.
+To fix this, claim ownership of VSCode installation directory with these commands.
 
 #### macOS
   ```sh

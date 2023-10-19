@@ -15,21 +15,23 @@ Explore my personal settings for inspiration: [View Settings](https://github.com
 ## Usage Instructions
 
 To use the Apc Customize UI++ extension:
+
   - Disable similar extensions.
-  - Install/enable this extension. (Enabled automatically on the first install)
+  - Install/enable this extension. (Auto-enabled on the first install)
   - Add the configurations below to your `user settings.json` file in vscode.
   - Start customizing!
 
 ## Enabling and Disabling
 
 To enable or disable this extension:
+
   - Open Visual Studio Code.
   - Go to the Command Palette by pressing <kbd>Cmd</kbd>+<kbd>Shift</kbd>+<kbd>P</kbd> on Mac or <kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>P</kbd> on Windows.
   - Type "Enable Apc extension" to enable or "Disable Apc extension" to disable the extension.
 
 ### Windows Users
 
-Run VSCode / VSCodium in **Administrator mode** before enabling or disabling the extension.
+Run VSCode or VSCodium in **Administrator mode** before enabling/disabling the extension.
 
 ### Mac and Linux Users
 
@@ -50,7 +52,7 @@ To resolve this, claim ownership of VSCode's installation directory with these c
   sudo chown -R $(whoami) /usr/share/code
   ```
 
->**Note:** Custom installation paths may be used by Mac and Linux package managers.<br>
+> **Note**: Mac and Linux package managers may use custom installation paths. <br>
 > Verify the correct path for your system.
 
 - macOS paths
@@ -60,21 +62,18 @@ To resolve this, claim ownership of VSCode's installation directory with these c
 
 - Most Linux distributions path: `/usr/share/code`
 
-- Arch Linux paths
-  - `/usr/lib/code/`
-  - `/opt/visual-studio-code`
+- Arch Linux paths: `/usr/lib/code/` or  `/opt/visual-studio-code`
 
 ## ⚠️Disclaimer
 
-This extension tweaks certain Visual Studio Code / VSCodium files.
+This extension tweaks certain VSCode / VSCodium files.
 
 > **Proceed at your own risk**
 
-In case of issues, the disable command auto-backs up the original file.
+- Automatically reapply patches after each VSCode / VSCodium update. If it doesn't, re-enable it.
+- When disabled, it creates a backup of the original files. 
 
-The extension is designed to reapply patches after each VSCode / VSCodium update. If this doesn't occur automatically, re-enable the extension.
-
-Please be aware that this extension is experimental, and you may encounter bugs. Report any issues on the [GitHub repository](https://github.com/drcika/apc-extension/issues)
+Note that this extension is experimental, and you may encounter bugs. Report issues on our [GitHub repository](https://github.com/drcika/apc-extension/issues)
 
 ## Supported Configuration Options
 
@@ -84,10 +83,10 @@ Configures the Electron window
 
 For detailed configuration info, refer to [Electron BrowserWindow documentation](https://www.electronjs.org/docs/latest/api/browser-window#new-browserwindowoptions)
 
-> **Warning** <br>
+> **Warning**
 > Be careful with the "apc.electron" configuration, as incorrect parameters may disrupt VSCode or VSCodium startup.
 
-> **Note** <br>
+> **Note**
 > Here's what we covered. Choose a style you like, or create your own!
 
 #### frameless title bar
@@ -154,9 +153,9 @@ For detailed configuration info, refer to [Electron BrowserWindow documentation]
 
 ### `font.family`
 
-Change the default font family for any part of vscode
+Change the default font family for any part of VSCode
 
-By default, Provided by vscode
+Default in vscode
 
 ```jsonc
   "editor.fontFamily": "Roboto Mono",
@@ -170,15 +169,15 @@ By default, Provided by vscode
   "markdown.preview.fontFamily": "Roboto Mono",
 ```
 
-Change the default font family for `extension-editor`
-> **Install the font you want on your computer, then restart vscode.**
+Customize font family for `extension-editor` only
+> **Install the font on your computer and restart vscode**
 
 ```jsonc
   "apc.font.family": "Roboto Mono",
   "apc.monospace.font.family": "Roboto Mono",
 ```
 
-Change the default font family for each part separately
+Customize fonts for individual sections
 
 ```jsonc
   "apc.parts.font.family": {
@@ -189,7 +188,7 @@ Change the default font family for each part separately
     "tabs": "Roboto Mono",
     "statusbar": "Roboto Mono",
     "settings-body": "Roboto Mono",
-    "extension-editor": "Roboto Mono", // Install the font you want on your computer, then restart vscode
+    "extension-editor": "Roboto Mono", // Install the font on your computer and restart vscode
     "monaco-menu": "Roboto Mono"
   },
 ```
@@ -198,7 +197,7 @@ Change the default font family for each part separately
 
 Import CSS and JavaScript files to customize the look and feel of VS Code
 
-> **Real-time monitoring of CSS files, no need to restart the application**
+> **Real-time monitoring of CSS files, No need to restart**
 
 ```jsonc
     "apc.imports": [
@@ -275,7 +274,7 @@ Possible values for `apc.activityBar.position` are:
 
 - `top`: above sidebar
 - `bottom`: below sidebar
-- If not specified, the default position (left) is used.
+- If not specified, the default (left) position is used.
 
 ### `apc.sidebar.titlebar`
 
@@ -315,7 +314,7 @@ Specify the height and font size of list rows
       }
     },
 
-    // If additional styling needed
+    // if additional styling needed
     "stylesheet": {
       ".explorer-folders-view.custom-list-row .monaco-list-row": "font-weight: bold; color: red;"
     }
@@ -345,7 +344,7 @@ Set the position and height of the status bar
 
 Inject custom CSS into iframes (Notebook, Extension view, etc)
 
-> **Warning** <br>
+> **Warning**
 > When you start VSCode and have a tab open with an iframe, you must reopen that tab for the styles to take effect.
 
 ```jsonc
@@ -370,14 +369,13 @@ Inject custom CSS into iframes (Notebook, Extension view, etc)
   <img src="https://raw.githubusercontent.com/drcika/apc-extension/production/demo.png" alt="demo.png"/>
 </div>
 
-## ⚠️Important Notice
+## 🌟 Important Notice
 
 This extension is your go-to tool for configuring Electron and Visual Studio Code.
 
 I haven't developed anything nor provided support for potential bugs, but consider me your bridge to tailor Electron and VS Code just the way you like.
 
-## Acknowledgements
+## Inspirations
 
-Inspired by
   - [iocave/customize-ui](https://github.com/iocave/customize-ui)
   - [iocave/monkey-patch](https://github.com/iocave/monkey-patch)

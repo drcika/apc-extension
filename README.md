@@ -12,34 +12,29 @@ The Successor to iocave/Customize UI
 
 This extension allows customization outside vscode scoop.
 
-Unlike its predecessor, it comes with no default settings, allowing you complete control over customization.
+Unlike its predecessor, it ships with no default settings, allowing you complete control over customization.
 
 Explore my personal settings for inspiration: [View Settings](https://github.com/drcika/apc-extension/blob/production/demo/settings.json)
 
-## Usage Instructions
+## Getting Started
 
-To use the Apc Customize UI++ extension:
-
+  - Open Visual Studio Code.
   - Disable similar extensions.
-  - Install/enable this extension. (Auto-enabled on the first install)
-  - Add the configurations below to your `user settings.json` file in vscode.
-  - Start customizing!
+  - Install this extension (auto-enabled on first installation).
+  - Customize by adding configurations to your `user settings.json`.
 
 ## Enabling and Disabling
 
-To enable or disable this extension:
-
-  - Open Visual Studio Code.
-  - Go to the Command Palette by pressing <kbd>Cmd</kbd>+<kbd>Shift</kbd>+<kbd>P</kbd> on Mac or <kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>P</kbd> on Windows.
-  - Type "Enable Apc extension" to enable or "Disable Apc extension" to disable the extension.
+  - Open the Command Palette: Mac (<kbd>⌘</kbd>+<kbd>Shift</kbd>+<kbd>P</kbd>) or Windows (<kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>P</kbd>)
+  - Type "Enable Apc extension" to enable or "Disable Apc extension" to disable.
 
 ### Windows Users
 
-Run VSCode or VSCodium in **Administrator mode** before enabling/disabling the extension.
+Run VSCode or VSCodium in Administrator mode.
 
 ### Mac and Linux Users
 
-The extension won't work if VSCode or VSCodium cannot modify itself, possibly due to:
+The extension won't work if VSCode or VSCodium can't modify itself, possibly due to:
 
   - Code files set as read-only.
   - Incorrect permissions for self-modification.
@@ -70,12 +65,12 @@ To fix this, claim ownership of VSCode installation directory with these command
 ## ⚠️Disclaimer
 
 > **important**
-> This extension tweaks certain VSCode / VSCodium files. Proceed at your own risk.
+> This extension is experimental and tweaks certain VSCode / VSCodium files. Proceed at your own risk.
 
-- Automatically reapplies patches after each VSCode / VSCodium update. If not, re-enable it.
+- Auto-reapplies patches after each VSCode / VSCodium update. If not, re-enable it.
 - Disable to back up original files in case of issues.
 
-This extension is experimental, and you may encounter bugs. Report them on our [GitHub repository](https://github.com/drcika/apc-extension/issues).
+Report bugs on our [GitHub repository](https://github.com/drcika/apc-extension/issues).
 
 ## Supported Configuration Options
 
@@ -266,9 +261,9 @@ Set the position and dimensions of the activity bar
 ```jsonc
     "apc.activityBar": {
       "position": "bottom" | "top",
-      "size": number,  // height when positioned at top/bottom, width in the default position
+      "size": number, // height when positioned at top/bottom, width in the default position
       "itemSize": number, // the size of the items within the bar, defaults to `size`
-      "itemMargin": number // the margin between two items, defaults to `3` 
+      "itemMargin": number // the margin between two items, defaults to `3`
     }
 ```
 

@@ -12,34 +12,29 @@ The Successor to iocave/Customize UI
 
 This extension allows customization outside vscode scoop.
 
-Unlike its predecessor, it ships with no default settings, allowing you complete control over customization.
+Unlike its predecessor, it ships with no default settings, granting you full customization control.
 
-Explore my personal settings for inspiration: [View Settings](https://github.com/drcika/apc-extension/blob/production/demo/settings.json)
+Explore my setup for inspiration: [View Settings](https://github.com/drcika/apc-extension/blob/production/demo/settings.json)
 
 ## Getting Started
 
-  - Open Visual Studio Code.
-  - Disable similar extensions.
-  - Install this extension (auto-enabled on first installation).
-  - Customize by adding configurations to your `user settings.json`.
+  - Open Visual Studio Code
+  - Disable similar extensions
+  - Install this extension (auto-enabled on first installation)
+  - Customize by adding configurations to your `user settings.json`
 
 ## Enabling and Disabling
 
   - Open the Command Palette: Mac (<kbd>⌘</kbd>+<kbd>Shift</kbd>+<kbd>P</kbd>) or Windows (<kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>P</kbd>)
-  - Type "Enable Apc extension" to enable or "Disable Apc extension" to disable.
+  - Type "Enable Apc extension" to enable or "Disable Apc extension" to disable
 
-### Windows Users
+### 🌟 Windows Users
 
 Run VSCode or VSCodium in Administrator mode.
 
-### Mac and Linux Users
+### 🌟 Mac and Linux Users
 
-The extension won't work if VSCode or VSCodium can't modify itself, possibly due to:
-
-  - Code files set as read-only.
-  - Incorrect permissions for self-modification.
-
-To fix this, claim ownership of VSCode installation directory with these commands.
+To make the extension work, ensure VSCode or VSCodium can modify itself by resolving read-only code files and permission issues.
 
 #### macOS
   ```sh
@@ -53,35 +48,34 @@ To fix this, claim ownership of VSCode installation directory with these command
 
 > **Note** Verify the custom installation path for your Mac or Linux package manager.
 
-- macOS paths
-  - VSCode: `/Applications/Visual Studio Code.app/Contents/Resources/app/out`
-  - VSCode Insiders: `/Applications/Visual Studio Code - Insiders.app/Contents/Resources/app/out`
-  - VSCodium: `/Applications/VSCodium.app/Contents/Resources/app/out`
+| Operating System       | Software        | Installation Path |
+|------------------------|-----------------|-------------------|
+| 🍎 **macOS**           | VSCode          | `/Applications/Visual Studio Code.app/Contents/Resources/app/out` |
+|                        | VSCode Insiders | `/Applications/Visual Studio Code - Insiders.app/Contents/Resources/app/out` |
+|                        | VSCodium        | `/Applications/VSCodium.app/Contents/Resources/app/out` |
+| 🐧 **Linux** (most distros) | VSCode | `/usr/share/code` |
+| 🐧 **Arch Linux** (alternate) | VSCode | `/opt/visual-studio-code` |
 
-- Most Linux distributions path: `/usr/share/code`
+## Disclaimer
 
-- Arch Linux paths: `/usr/lib/code/` or  `/opt/visual-studio-code`
+This extension is experimental and tweaks certain VSCode / VSCodium files. <br>
 
-## ⚠️Disclaimer
+> Proceed at your own risk
 
-> **important**
-> This extension is experimental and tweaks certain VSCode / VSCodium files. Proceed at your own risk.
+💡 Disable to back up original files in case of issues. <br>
+🔄 Auto-reapplies patches after each VSCode / VSCodium update. If not, re-enable it. <br>
+🐞 Report bugs on our [GitHub repository](https://github.com/drcika/apc-extension/issues)
 
-- Auto-reapplies patches after each VSCode / VSCodium update. If not, re-enable it.
-- Disable to back up original files in case of issues.
-
-Report bugs on our [GitHub repository](https://github.com/drcika/apc-extension/issues).
+---
 
 ## Supported Configuration Options
 
 ### `apc.electron`
 
-Configures the Electron window
-
-For detailed configuration info, refer to [Electron BrowserWindow documentation](https://www.electronjs.org/docs/latest/api/browser-window#new-browserwindowoptions)
+Configures the Electron window. For detailed info, see the [Electron BrowserWindow documentation](https://www.electronjs.org/docs/latest/api/browser-window#new-browserwindowoptions)
 
 > **Warning**
-> Be careful with the "apc.electron" configuration, as incorrect parameters may disrupt VSCode or VSCodium startup.
+> Incorrect "apc.electron" configuration can disrupt VSCode or VSCodium startup.
 
 > **Note**
 > Here's what we covered. Choose a style you like, or create your own!
@@ -152,7 +146,8 @@ For detailed configuration info, refer to [Electron BrowserWindow documentation]
 
 Change the default font family for any part of VSCode
 
-Default in vscode
+<details>
+<summary>Defaults in vscode</summary>
 
 ```jsonc
   "editor.fontFamily": "Roboto Mono",
@@ -165,8 +160,9 @@ Default in vscode
   "notebook.output.fontFamily": "Roboto Mono",
   "markdown.preview.fontFamily": "Roboto Mono",
 ```
+</details>
 
-Customize font family for `extension-editor` only
+Adjust font family for `extension-editor` only
 > **Install the font on your computer and restart vscode**
 
 ```jsonc
@@ -190,11 +186,34 @@ Customize fonts for individual sections
   },
 ```
 
+### `apc.stylesheet`
+
+Override the default CSS of VS Code
+
+```jsonc
+    "apc.stylesheet": {
+      ".monaco-workbench .part.editor>.content .editor-group-container>.title div.tabs-container": "border-radius: 5px; font-family: 'Times New Roman', Times, serif;"
+      
+      "body": {
+        // Other panels have to be transparent for this. See "workbench.colorCustomizations"
+        "background-image": "url(/Users/aleksandarpopovic/imgs/19.png), linear-gradient(to top,rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.2))",
+        "background-size": "cover",
+        "background-blend-mode": "multiply",
+        "background-repeat": "no-repeat"
+      },
+      "workbench.colorCustomizations": {
+        "sideBar.background": "#00000000", // transparent
+        "editor.background": "#00000000"
+      ...etc
+   	  }
+    }
+```
+
 ### `apc.imports`
 
 Import CSS and JavaScript files to customize the look and feel of VS Code
 
-> **Real-time monitoring of CSS files, No need to restart**
+> **Real-time CSS file monitoring, no restart required**
 
 ```jsonc
     "apc.imports": [
@@ -218,27 +237,12 @@ Import CSS and JavaScript files to customize the look and feel of VS Code
     ]
 ```
 
-### `apc.stylesheet`
+### `apc.menubar.compact`
 
-Override the default CSS of VS Code
+Move Menu bar to Activity bar for a compact design
 
 ```jsonc
-    "apc.stylesheet": {
-      ".monaco-workbench .part.editor>.content .editor-group-container>.title div.tabs-container": "border-radius: 5px; font-family: 'Times New Roman', Times, serif;"
-      
-      "body": {
-        // Other panels have to be transparent for this. See "workbench.colorCustomizations"
-        "background-image": "url(/Users/aleksandarpopovic/imgs/19.png), linear-gradient(to top,rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.2))",
-        "background-size": "cover",
-        "background-blend-mode": "multiply",
-        "background-repeat": "no-repeat"
-      },
-      "workbench.colorCustomizations": {
-        "sideBar.background": "#00000000", // transparent
-        "editor.background": "#00000000"
-      ...etc
-   	  }
-    }
+    "apc.menubar.compact": true
 ```
 
 ### `apc.header`
@@ -271,7 +275,7 @@ Possible values for `apc.activityBar.position` are:
 
 - `top`: above sidebar
 - `bottom`: below sidebar
-- If not specified, the default (left) position is used.
+- Default (left) position is used if not specified.
 
 ### `apc.sidebar.titlebar`
 
@@ -279,6 +283,18 @@ Define the height and font size of the sidebar title bar
 
 ```jsonc
     "apc.sidebar.titlebar": {
+      "height": number,
+      "fontSize": number
+    }
+```
+
+### `apc.statusBar`
+
+Set the position and height of the status bar
+
+```jsonc
+    "apc.statusBar": {
+      "position": "top" | "bottom" | "editor-top" | "editor-bottom",
       "height": number,
       "fontSize": number
     }
@@ -317,31 +333,11 @@ Specify the height and font size of list rows
     }
 ```
 
-### `apc.menubar.compact`
-
-Enable a compact menu bar by relocating the Menu Bar to the Activity Bar
-
-```jsonc
-    "apc.menubar.compact": true
-```
-
-### `apc.statusBar`
-
-Set the position and height of the status bar
-
-```jsonc
-    "apc.statusBar": {
-      "position": "top" | "bottom" | "editor-top" | "editor-bottom",
-      "height": number,
-      "fontSize": number
-    }
-```
-
 ### `apc.iframe.style`
 
-Inject custom CSS into iframes (Notebook, Extension view, etc)
+Apply custom CSS to iframes (Notebook, Extension view, etc)
 
-> **Warning**
+> **important**
 > When you start VSCode and have a tab open with an iframe, you must reopen that tab for the styles to take effect.
 
 ```jsonc
@@ -366,9 +362,9 @@ Inject custom CSS into iframes (Notebook, Extension view, etc)
   <img src="https://raw.githubusercontent.com/drcika/apc-extension/production/demo.png" alt="demo.png"/>
 </div>
 
-## 🌟 Important Notice
+## ⚠️ Important Notice
 
-This extension is your go-to tool for configuring Electron and Visual Studio Code.
+This extension is your go-to tool for customizing Electron and Visual Studio Code.
 
 I haven't developed anything nor provided support for potential bugs, but consider me your bridge to tailor Electron and VS Code just the way you like.
 

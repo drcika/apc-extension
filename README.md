@@ -28,11 +28,14 @@ Explore my setup for inspiration: [View Settings](https://github.com/drcika/apc-
   - Open the Command Palette: Mac (<kbd>⌘</kbd>+<kbd>Shift</kbd>+<kbd>P</kbd>) or Windows (<kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>P</kbd>)
   - Type "Enable Apc extension" to enable or "Disable Apc extension" to disable
 
-### 🌟 Windows Users
+<details>
+<summary>💡 Extension Troubles? We've Got You Covered!</summary>
+
+### Windows Users
 
 Run VSCode or VSCodium in Administrator mode.
 
-### 🌟 Mac and Linux Users
+### Mac and Linux Users
 
 To make the extension work, ensure VSCode or VSCodium can modify itself by resolving read-only code files and permission issues.
 
@@ -56,13 +59,15 @@ To make the extension work, ensure VSCode or VSCodium can modify itself by resol
 | 🐧 **Linux** (most distros) | VSCode | `/usr/share/code` |
 | 🐧 **Arch Linux** (alternate) | VSCode | `/opt/visual-studio-code` |
 
+</details>
+
 ## Disclaimer
 
 This extension is experimental and tweaks certain VSCode / VSCodium files. <br>
 
 > Proceed at your own risk
 
-💡 Disable to back up original files in case of issues. <br>
+🔔 Disable to back up original files in case of issues. <br>
 🔄 Auto-reapplies patches after each VSCode / VSCodium update. If not, re-enable it. <br>
 🐞 Report bugs on our [GitHub repository](https://github.com/drcika/apc-extension/issues)
 
@@ -89,10 +94,10 @@ Configures the Electron window. For detailed info, see the [Electron BrowserWind
 
 #### inline title bar
 ```jsonc
-    // requires "window.titleBarStyle": "native" to take effect
     "apc.electron": {
       "titleBarStyle": "hidden",
-    }
+    },
+    "window.titleBarStyle": "native"
 ```
 
 #### inline title bar with traffic light position

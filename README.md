@@ -23,21 +23,24 @@ Explore my setup for inspiration: [View Settings](https://github.com/drcika/apc-
   - Install this extension (auto-enabled on first installation)
   - Customize by adding configurations to your `user settings.json`
 
-## Enabling and Disabling
-
-  - Open the Command Palette: Mac (<kbd>⌘</kbd>+<kbd>Shift</kbd>+<kbd>P</kbd>) or Windows (<kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>P</kbd>)
-  - Type "Enable Apc extension" to enable or "Disable Apc extension" to disable
-
 <details>
-<summary>💡 Extension Troubles? We've Got You Covered!</summary>
+<summary>💡 Extension Trouble? We've Got Solutions!</summary>
 
-### Windows Users
+#### Extension stopped functioning after an update
 
-Run VSCode or VSCodium in Administrator mode.
+- Go to the Command Palette and type "Enable Apc extension" to enable.
 
-### Mac and Linux Users
+#### Windows Users
 
-To make the extension work, ensure VSCode or VSCodium can modify itself by resolving read-only code files and permission issues.
+- *Single-user* installs: No admin rights required.
+- *All-user* installs: Run VSCode or VSCodium in Administrator mode.
+
+#### Mac and Linux Users
+
+For the extension to work, ensure VSCode or VSCodium can modify itself by fixing read-only code files and permission issues.
+
+> **important**
+> If you use a package manager, confirm the custom installation path before executing these commands.
 
 #### macOS
   ```sh
@@ -49,8 +52,7 @@ To make the extension work, ensure VSCode or VSCodium can modify itself by resol
   sudo chown -R $(whoami) /usr/share/code
   ```
 
-> **Note** Verify the custom installation path for your Mac or Linux package manager.
-
+#### Common Software Installation Paths
 | Operating System       | Software        | Installation Path |
 |------------------------|-----------------|-------------------|
 | 🍎 **macOS**           | VSCode          | `/Applications/Visual Studio Code.app/Contents/Resources/app/out` |
@@ -60,6 +62,11 @@ To make the extension work, ensure VSCode or VSCodium can modify itself by resol
 | 🐧 **Arch Linux** (alternate) | VSCode | `/opt/visual-studio-code` |
 
 </details>
+
+## Enabling and Disabling
+
+  - Open the Command Palette: Mac (<kbd>⌘</kbd>+<kbd>Shift</kbd>+<kbd>P</kbd>) or Windows (<kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>P</kbd>)
+  - Type "Enable Apc extension" to enable or "Disable Apc extension" to disable
 
 ## Disclaimer
 
@@ -149,7 +156,7 @@ Configures the Electron window. For detailed info, see the [Electron BrowserWind
 
 ### `font.family`
 
-Change the default font family for any part of VSCode
+Customize font family for any part of VSCode
 
 <details>
 <summary>Defaults in vscode</summary>
@@ -175,7 +182,7 @@ Adjust font family for `extension-editor` only
   "apc.monospace.font.family": "Roboto Mono",
 ```
 
-Customize fonts for individual sections
+Change the default font family for individual sections
 
 ```jsonc
   "apc.parts.font.family": {

@@ -232,6 +232,7 @@ Import CSS and JavaScript files to customize the look and feel of VS Code
       "/Users/some/path/style.css",
       "/Users/some/path/script.js",
       "/C:/Users/path/style.css", // for Windows
+      "${userHome}/path/style.css", // ${userHome} currently only supported
 
       // or see https://developer.mozilla.org/en-US/docs/Web/HTML/Element/link
       // Local file imports like this are not watched in real time

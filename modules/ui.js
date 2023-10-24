@@ -179,9 +179,10 @@ define(['exports', 'apc/auxiliary', 'apc/configuration'], (exports, auxiliary, c
               }
             }
             else if (typeof path === 'string' && path.match(/(\.css|\.js)$/)) {
-              const URI = uri.URI.parse(!path.startsWith('file://') ? 'file://' + path : path);
+              const substitutedPath = path.replace('${userHome}', services.environmentService.userHome.path);
+              const URI = uri.URI.parse(!substitutedPath.startsWith('file://') ? 'file://' + substitutedPath : substitutedPath);
               const data = await services.fileService.readFile(URI);
-              const isCss = path.endsWith('.css');
+              const isCss = substitutedPath.endsWith('.css');
 
               if (isCss) {
                 const disposable = services.fileService.watch(URI);

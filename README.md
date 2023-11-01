@@ -118,7 +118,9 @@ Configures the Electron window. For detailed info, see the [Electron BrowserWind
     }
 ```
 
-#### custom title bar
+<details>
+<summary><b>custom title bar</b></summary>
+
 ```jsonc
     "apc.electron": {
       "titleBarStyle": "hidden",
@@ -129,8 +131,11 @@ Configures the Electron window. For detailed info, see the [Electron BrowserWind
       }
     }
 ```
+</details>
 
-#### vibrancy setting
+<details>
+<summary><b>vibrancy setting</b></summary>
+
 ```jsonc
     // To utilize the `vibrancy` option, ensure other panels are transparent.
     // Demo: https://github.com/drcika/apc-extension/blob/production/demo/vibrancy.settings.json
@@ -138,8 +143,11 @@ Configures the Electron window. For detailed info, see the [Electron BrowserWind
       "vibrancy": "ultra-dark"
     }
 ```
+</details>
 
-#### background color, transparency
+<details>
+<summary><b>background color, transparency</b></summary>
+
 ```jsonc
     "apc.electron": {
       "backgroundColor": "rgba(123, 123, 123, 0.5)",
@@ -151,12 +159,13 @@ Configures the Electron window. For detailed info, see the [Electron BrowserWind
       "visualEffectState": "active"
     }
 ```
+</details>
 
 > **Note** Multiple declarations of `apc.electron` will apply only the last declaration, ignoring previous ones.
 
 ### `font.family`
 
-Customize font family for any part of VSCode
+Customize font family for any part of VS Code
 
 <details>
 <summary>Defaults in vscode</summary>
@@ -174,15 +183,14 @@ Customize font family for any part of VSCode
 ```
 </details>
 
-Adjust font family for `extension-editor` only
-> **Install the font on your computer and restart vscode**
+To adjust font family for `extension-editor`, install the font on your computer and restart vscode.
 
 ```jsonc
   "apc.font.family": "Roboto Mono",
   "apc.monospace.font.family": "Roboto Mono",
 ```
 
-Change the default font family for individual sections
+Change default font family for individual sections
 
 ```jsonc
   "apc.parts.font.family": {
@@ -193,7 +201,7 @@ Change the default font family for individual sections
     "tabs": "Roboto Mono",
     "statusbar": "Roboto Mono",
     "settings-body": "Roboto Mono",
-    "extension-editor": "Roboto Mono", // Install the font on your computer and restart vscode
+    "extension-editor": "Roboto Mono", // Install the font and restart vscode
     "monaco-menu": "Roboto Mono"
   },
 ```
@@ -223,25 +231,23 @@ Override the default CSS of VS Code
 
 ### `apc.imports`
 
-Import CSS and JavaScript files to customize the look and feel of VS Code
-
-> **Real-time CSS file monitoring, no restart required**
+Customize VS Code's Look and Feel with Real-time CSS & JS Imports
 
 ```jsonc
     "apc.imports": [
       "/Users/some/path/style.css",
       "/Users/some/path/script.js",
-      "/C:/Users/path/style.css", // for Windows
-      "${userHome}/path/style.css", // ${userHome} currently only supported
+      "/C:/Users/path/style.css", // Windows path
+      "${userHome}/path/style.css", // Only supports ${userHome}
 
-      // or see https://developer.mozilla.org/en-US/docs/Web/HTML/Element/link
       // Local file imports like this are not watched in real time
+      // Reference: https://developer.mozilla.org/en-US/docs/Web/HTML/Element/link
       {
         "rel": "stylesheet",
         "href": "https://fonts.googleapis.com/css?family=Sofia"
       },
 
-      // or see https://developer.mozilla.org/en-US/docs/Web/HTML/Element/script
+      // Reference: https://developer.mozilla.org/en-US/docs/Web/HTML/Element/script
       {
         "async":"async",
         "type":"text/javascript",
@@ -264,9 +270,9 @@ Adjust the height and font size of the header bar
 
 ```jsonc
     "apc.header": {
-      "default": number, // Applied when "window.density.editorTabHeight": "default"
-      "compact": number, // Applied when "window.density.editorTabHeight": "compact"
-      "height": number, // Applied when "default" or "compact" is not specified
+      "default": number, // Applied with "window.density.editorTabHeight": "default"
+      "compact": number, // Applied wtih "window.density.editorTabHeight": "compact"
+      "height": number, // Applied when neither "default" nor "compact" is specified
       "fontSize": number
     }
 ```
@@ -277,18 +283,12 @@ Set the position and dimensions of the activity bar
 
 ```jsonc
     "apc.activityBar": {
-      "position": "bottom" | "top",
-      "size": number, // height when positioned at top/bottom, width in the default position
-      "itemSize": number, // the size of the items within the bar, defaults to `size`
-      "itemMargin": number // the margin between two items, defaults to `3`
+      "position": "bottom" | "top", // top: above sidebar, bottom: below sidebar (default: 'left' if unspecified)
+      "size": number, // Height (when top/bottom) or width (in default position)
+      "itemSize": number, // Size of items within the bar (default: size)
+      "itemMargin": number // Margin between two items (default: 3)
     }
 ```
-
-Possible values for `apc.activityBar.position` are:
-
-- `top`: above sidebar
-- `bottom`: below sidebar
-- Default (left) position is used if not specified.
 
 ### `apc.sidebar.titlebar`
 

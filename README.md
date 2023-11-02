@@ -20,24 +20,24 @@ Explore my setup for inspiration: [View Settings](https://github.com/drcika/apc-
 
   - Open Visual Studio Code
   - Disable similar extensions
-  - Install this extension (auto-enabled on first installation)
+  - Install this extension (auto-enabled on first install)
   - Customize by adding configurations to your `user settings.json`
 
 <details>
-<summary>💡 Extension Trouble? We've Got Solutions!</summary>
+<summary>💡 Troubleshooting Extension Issues!</summary>
 
 #### Extension stopped functioning after an update
 
-- Go to the Command Palette and type "Enable Apc extension" to enable.
+- To re-enable, go to the Command Palette and type `Enable Apc extension`
 
 #### Windows Users
 
-- *Single-user* installs: No admin rights required.
-- *All-user* installs: Run VSCode or VSCodium in Administrator mode.
+- **Single-user** installs: No admin rights required.
+- **All-user** installs: Run VSCode or VSCodium in Administrator mode.
 
 #### Mac and Linux Users
 
-For the extension to work, ensure VSCode or VSCodium can modify itself by fixing read-only code files and permission issues.
+To ensure the extension works, allow VSCode or VSCodium to modify itself by fixing read-only code files and permission issues.
 
 > **important**
 > If you use a package manager, confirm the custom installation path before executing these commands.
@@ -65,8 +65,8 @@ For the extension to work, ensure VSCode or VSCodium can modify itself by fixing
 
 ## Enabling and Disabling
 
-  - Open the Command Palette: Mac (<kbd>⌘</kbd>+<kbd>Shift</kbd>+<kbd>P</kbd>) or Windows (<kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>P</kbd>)
-  - Type "Enable Apc extension" to enable or "Disable Apc extension" to disable
+  - Open the Command Palette (Mac: <kbd>⌘</kbd>+<kbd>Shift</kbd>+<kbd>P</kbd>, Windows: <kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>P</kbd>)
+  - Type `Enable Apc extension` to enable or `Disable Apc extension` to disable
 
 ## Disclaimer
 
@@ -74,7 +74,7 @@ This extension is experimental and tweaks certain VSCode / VSCodium files. <br>
 
 > Proceed at your own risk
 
-🔔 Disable to back up original files in case of issues. <br>
+🚀 Disable to back up original files in case of issues. <br>
 🔄 Auto-reapplies patches after each VSCode / VSCodium update. If not, re-enable it. <br>
 🐞 Report bugs on our [GitHub repository](https://github.com/drcika/apc-extension/issues)
 

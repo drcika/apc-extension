@@ -32,7 +32,7 @@ define(
         try {
           const sideBarPosition = services.layoutService.getSideBarPosition();
           const isRight = sideBarPosition === store.Position.RIGHT;
-          services.layoutService.container.classList[isRight ? 'add' : 'remove']('sidebar-right');
+          services.layoutService.mainContainer.classList[isRight ? 'add' : 'remove']('sidebar-right');
         } catch (error) { traceError(error); }
       };
 

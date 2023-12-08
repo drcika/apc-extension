@@ -143,13 +143,13 @@ define(
     exports.setVisibleActivityBar = function (original) {
       original();
       if (!config.isInline) { return; }
-      try { services.layoutService.container.classList.toggle('no-activity-bar'); }
+      try { services.layoutService.mainContainer.classList.toggle('no-activity-bar'); }
       catch (error) { traceError(error); }
     };
 
     exports.activitybarUpdateStyles = function (original) {
       original();
-      try { services.layoutService.container.style.setProperty('--title-border-bottom-color', config.getColor('editorGroupHeader.border')); }
+      try { services.layoutService.mainContainer.style.setProperty('--title-border-bottom-color', config.getColor('editorGroupHeader.border')); }
       catch (error) { traceError(error); }
     };
 
@@ -174,7 +174,7 @@ define(
       original();
       try {
         if (!config.isInline) { return; }
-        if (!config.isVisible(store.Parts.ACTIVITYBAR_PART)) { services.layoutService.container.classList.add('no-activity-bar'); }
+        if (!config.isVisible(store.Parts.ACTIVITYBAR_PART)) { services.layoutService.mainContainer.classList.add('no-activity-bar'); }
         config.isMacintosh && UI.prependDiv(parent, 'activity-bar-placeholder');
         const content = parent.querySelector('.content');
         !config.isMacintosh && content.insertBefore(UI.createDiv('activity-bar-placeholder-win'), content.children[1]);

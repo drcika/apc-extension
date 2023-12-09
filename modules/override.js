@@ -16,6 +16,9 @@ define(
       original();
       try {
         switch (part.getId()) {
+          case store.Parts?.STATUSBAR_PART:
+            store.statusBarPartView = part;
+            break;
           case store.Parts?.PANEL_PART:
             store.panelPartView = part;
             break;

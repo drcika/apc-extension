@@ -224,6 +224,10 @@ body.horizontal-activitybar .monaco-workbench .activitybar>.content :not(.monaco
   flex: 1;
 }
 
+.frameless-title-bar.statusbar-top .monaco-workbench:not(.fullscreen) .statusbar .statusbar-item,
+.frameless-title-bar.statusbar-editor-top .monaco-workbench:not(.fullscreen) .statusbar .statusbar-item,
+.inline-title-bar.statusbar-top .monaco-workbench:not(.fullscreen) .statusbar .statusbar-item,
+.inline-title-bar.statusbar-editor-top .monaco-workbench:not(.fullscreen) .statusbar .statusbar-item,
 .frameless-title-bar:not(.statusbar-top) .monaco-workbench:not(.fullscreen) .editor-group-top .tab,
 .inline-title-bar:not(.statusbar-top) .monaco-workbench:not(.fullscreen) .editor-group-top .tab {
   -webkit-app-region: no-drag;

@@ -4,6 +4,8 @@ This file tracks the changes made to the project.
 
 ![Visual Studio Marketplace Last Updated](https://img.shields.io/visual-studio-marketplace/last-updated/drcika.apc-extension) ![Visual Studio Marketplace Version (including pre-releases)](https://img.shields.io/visual-studio-marketplace/v/drcika.apc-extension?label=latest%20Version) ![GitHub last commit (branch)](https://img.shields.io/github/last-commit/drcika/apc-extension/production)
 
+### [0.3.5] - 2023-12-11
+-   Fix multi css files
 ### [0.3.5] - 2023-12-09
 -   Fix / adopt status bar changes
 ### [0.3.4] - 2023-12-08

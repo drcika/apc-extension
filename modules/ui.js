@@ -190,7 +190,7 @@ define(['exports', 'apc/auxiliary', 'apc/configuration'], (exports, auxiliary, c
                 store.watchedFiles.set(URI.path, disposable);
               }
               const source = isCss ? store.customFileImports : store.customScriptImports;
-              source.textContent = data?.value?.toString ? `${data.value.toString()}\n` : '';
+              source.textContent += data?.value?.toString ? `${data.value.toString()}\n` : '';
             }
           } catch (err) {
             traceError(err);

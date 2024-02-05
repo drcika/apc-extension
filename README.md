@@ -104,7 +104,8 @@ Configures the Electron window. For detailed info, see the [Electron BrowserWind
     "apc.electron": {
       "titleBarStyle": "hidden",
     },
-    "window.titleBarStyle": "native"
+    "window.titleBarStyle": "native",
+    "window.customTitleBarVisibility": "never",
 ```
 
 #### inline title bar with traffic light position

@@ -23,8 +23,7 @@ Explore my setup for inspiration: [View Settings](https://github.com/drcika/apc-
   - Install this extension (auto-enabled on first install)
   - Customize by adding configurations to your `user settings.json`
 
-<details>
-<summary>💡 Troubleshooting Extension Issues!</summary>
+### Troubleshooting Extension Issues!
 
 #### Extension stopped functioning after an update
 

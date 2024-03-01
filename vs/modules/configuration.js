@@ -1,4 +1,4 @@
-define(['exports', 'apc/auxiliary'], function (exports, auxiliary) {
+define(['exports', 'vs/modules/auxiliary'], function (exports, auxiliary) {
 
   class DomListener {
     constructor(node, type, handler, options) {

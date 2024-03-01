@@ -1,4 +1,4 @@
-define(['exports', 'apc/auxiliary', 'apc/configuration'], (exports, auxiliary, configuration) => {
+define(['exports', 'vs/modules/auxiliary', 'vs/modules/configuration'], (exports, auxiliary, configuration) => {
   try {
     const { traceError, store, services } = auxiliary;
     const { config } = configuration;

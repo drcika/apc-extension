@@ -1,5 +1,5 @@
 define(
-  ['exports', 'apc/auxiliary', 'apc/configuration'],
+  ['exports', 'vs/modules/auxiliary', 'vs/modules/configuration'],
   (exports, auxiliary, configuration) => {
     try {
       const { traceError, store, services } = auxiliary;

@@ -1,5 +1,5 @@
 define(
-  ['exports', 'apc/utils', 'apc/auxiliary', 'apc/configuration', 'apc/override'],
+  ['exports', 'vs/modules/utils', 'vs/modules/auxiliary', 'vs/modules/configuration', 'vs/modules/override'],
   function (exports, utils, auxiliary, { config }, override) {
     try {
       const { traceError, findInPrototype, findOwnProperty, store, getProperty, services, findVariable } = auxiliary;

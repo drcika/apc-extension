@@ -1,5 +1,5 @@
 define(
-  ['exports', 'apc/auxiliary', 'apc/configuration', 'apc/layout.statusbar', 'apc/layout.activitybar'],
+  ['exports', 'vs/modules/auxiliary', 'vs/modules/configuration', 'vs/modules/layout.statusbar', 'vs/modules/layout.activitybar'],
   (exports, auxiliary, configuration, statusbar, activitybar) => {
     try {
       const { traceError, store, services } = auxiliary;

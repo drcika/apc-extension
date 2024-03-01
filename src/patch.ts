@@ -6,8 +6,8 @@ import { getConfiguration, getStyleFromFile, getStyles, promptRestart } from './
 
 const bkpName = '.apc.extension.backup';
 const bootstrapName = 'bootstrap-amd.js';
-const modules = 'modules';
-const patch = 'patch';
+const modules = 'vs/modules';
+const patch = 'vs/patch';
 const mainJsName = 'main.js';
 const mainProcessJsName = 'process.main.js';
 const workbenchHtmlName = 'workbench.html';
@@ -109,7 +109,7 @@ function patchBootstrap(extensionPath: string) {
     fs.readFile = function (path, options, callback) {
       if (path.endsWith(p.join('electron-main', 'main.js'))) {
         readFile(path, options, function () {
-          loader(["apc/main"], console.log, console.log);
+          loader(["vs/patch/main"], console.log, console.log);
           callback.apply(this, arguments);
         });
       }
@@ -119,7 +119,7 @@ function patchBootstrap(extensionPath: string) {
   performance.mark('code/fork/willLoadCode');
   // $apcExtensionBootstrapToken$`;
   const patchedbootstrapJs = fs.readFileSync(bootstrapResourcesPath, 'utf8')
-    .replace('amdModulesPattern: \/^vs\\\/\/', `paths: { "apc": "${fixedPatchPath}" }`)
+    // .replace('amdModulesPattern: \/^vs\\\/\/', `paths: { "apc": "${fixedPatchPath}" }`)
     .replace(`performance.mark('code/fork/willLoadCode');`, inject);
 
   fs.writeFile(bootstrapPath, patchedbootstrapJs, 'utf8', () => { });
@@ -138,8 +138,10 @@ function patchMain(extensionPath: string) {
   const processEntrypointPath = path.join(patchPath, mainJsName);
   const processMainSourcePath = path.join(patchPath, mainProcessJsName);
 
-  const moduleName = 'apc-main';
-  const patchModule = 'apc-patch';
+  // const moduleName = 'apc-main';
+  // const patchModule = 'apc-patch';
+  const moduleName = 'vs/modules';
+  const patchModule = 'vs/patch';
 
   const files = `["${patchModule}/process.main", "${moduleName}/patch.main", "${moduleName}/utils"]`;
   const data = `require.config({\n\tpaths: {\n\t\t"${moduleName}": "${fixedModulesPath}",\n\t\t"${patchModule}": "${fixedPatchPath}"\n\t}\n});\ndefine(${files}, () => { });`;

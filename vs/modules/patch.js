@@ -1,5 +1,5 @@
 define(
-  ['exports', 'apc/utils', 'apc/auxiliary', 'apc/configuration', 'apc/classes', 'apc/ui', 'apc/layout', 'apc/layout.statusbar', 'apc/layout.activitybar'],
+  ['exports', 'vs/modules/utils', 'vs/modules/auxiliary', 'vs/modules/configuration', 'vs/modules/classes', 'vs/modules/ui', 'vs/modules/layout', 'vs/modules/layout.statusbar', 'vs/modules/layout.activitybar'],
   (exports, utils, auxiliary, { config }, classes, ui, layout, statusbar, activitybar) => {
     const { traceError, store } = auxiliary;
 

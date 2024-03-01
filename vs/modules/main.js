@@ -1,5 +1,5 @@
 define(
-  ['module', 'require', 'vs/platform/instantiation/common/instantiationService', 'apc/patch', 'apc/auxiliary'],
+  ['module', 'require', 'vs/platform/instantiation/common/instantiationService', 'vs/modules/patch', 'vs/modules/auxiliary'],
   (module, r, insantiationService, patch, auxiliary) => {
     try {
       const [instantiationServiceKey, InstantiationServiceClass] = auxiliary.findInPrototype(insantiationService, 'InstantiationService', 'createInstance');

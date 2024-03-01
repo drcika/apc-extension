@@ -1,4 +1,4 @@
-define(['vs/platform/windows/electron-main/windowImpl', 'vs/platform/windows/electron-main/windows', 'electron', 'apc-main/utils'], (windowImpl, windows, electron, utils) => {
+define(['vs/platform/windows/electron-main/windowImpl', 'vs/platform/windows/electron-main/windows', 'electron', 'vs/modules/utils'], (windowImpl, windows, electron, utils) => {
   function findeCodeWindow() {
     for (const key in windowImpl) { if (windowImpl[key] instanceof Function && windowImpl[key].toString().startsWith('class extends')) { return key; } }
   }
@@ -45,7 +45,7 @@ define(['vs/platform/windows/electron-main/windowImpl', 'vs/platform/windows/ele
             const originalDefaultBrowserWindowOptions = windows[defaultBrowserWindowOptionsKey];
             windows[defaultBrowserWindowOptionsKey] = (...args) => {
               return { ...originalDefaultBrowserWindowOptions(...args), ...config };
-            }
+            };
           }
           else {
             for (const key in config) {

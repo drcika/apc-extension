@@ -39,6 +39,7 @@ define(['vs/platform/windows/electron-main/windowImpl', 'vs/platform/windows/ele
           if (originalGetBackgroundColor) {
             themeMainService.getBackgroundColor = () => config.backgroundColor ?? originalGetBackgroundColor();
             utils.override(electron.BrowserWindow, "setBackgroundColor", function (original, [color]) { });
+            utils.override(electron.BrowserWindow, "setTrafficLightPosition", function () { });
           }
 
           if (defaultBrowserWindowOptionsKey) {

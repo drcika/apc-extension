@@ -152,45 +152,46 @@ define(['exports', 'vs/modules/auxiliary', 'vs/modules/configuration'], (exports
           config.disposables.add(services.fileService.onDidFilesChange(onDidFilesChange));
         }
 
-        if (store.externalLinks) {
-          store.externalLinks.forEach(el => document.head.removeChild(el));
-          store.externalLinks.clear();
-        }
-        else { store.externalLinks = new Map(); }
-
         if (!store.customFileImports) { store.customFileImports = appendStyleElement(); }
 
-        if (!store.customScriptImports) {
-          store.customScriptImports = document.createElement('script');
-          store.customScriptImports.type = 'text/javascript';
-          document.head.appendChild(store.customScriptImports);
+        if (store.customScriptImports) {
+          store.customScriptImports.forEach(el => document.head.removeChild(el));
+          store.customScriptImports.clear();
         }
+        else { store.customScriptImports = new Set(); }
 
         store.customFileImports.textContent = '';
-        store.customScriptImports.textContent = '';
 
         for await (const path of paths) {
           try {
             if (typeof path === 'object') {
               const element = 'href' in path ? createExternal('link', path) : 'src' in path && createExternal('script', path);
               if (element) {
-                store.externalLinks.set(path, element);
+                store.customScriptImports.add(element);
                 document.head.appendChild(element);
               }
             }
-            else if (typeof path === 'string' && path.match(/(\.css|\.js)$/)) {
+            else if (typeof path === 'string' && path.match(/(\.js)$/)) {
               const substitutedPath = path.replace('${userHome}', services.environmentService.userHome.path);
               const URI = uri.URI.parse(!substitutedPath.startsWith('file://') ? 'file://' + substitutedPath : substitutedPath);
               const data = await services.fileService.readFile(URI);
-              const isCss = substitutedPath.endsWith('.css');
 
-              if (isCss) {
-                const disposable = services.fileService.watch(URI);
-                config.disposables.add(disposable);
-                store.watchedFiles.set(URI.path, disposable);
-              }
-              const source = isCss ? store.customFileImports : store.customScriptImports;
-              source.textContent += (data?.value?.toString ? `${data.value.toString()}\n` : '');
+              const script = document.createElement('script');
+              script.type = 'text/javascript';
+              document.head.appendChild(script);
+              store.customScriptImports.add(script);
+
+              script.textContent += (data?.value?.toString ? `${data.value.toString()}\n` : '');
+            }
+            else if (typeof path === 'string' && path.match(/(\.css)$/)) {
+              const substitutedPath = path.replace('${userHome}', services.environmentService.userHome.path);
+              const URI = uri.URI.parse(!substitutedPath.startsWith('file://') ? 'file://' + substitutedPath : substitutedPath);
+              const data = await services.fileService.readFile(URI);
+              const disposable = services.fileService.watch(URI);
+              config.disposables.add(disposable);
+              store.watchedFiles.set(URI.path, disposable);
+
+              store.customFileImports.textContent += (data?.value?.toString ? `${data.value.toString()}\n` : '');
             }
           } catch (err) {
             traceError(err);

@@ -144,7 +144,8 @@ function patchMain(extensionPath: string) {
   const patchModule = 'vs/patch';
 
   const files = `["${patchModule}/process.main", "${moduleName}/patch.main", "${moduleName}/utils"]`;
-  const data = `require.config({\n\tpaths: {\n\t\t"${moduleName}": "${fixedModulesPath}",\n\t\t"${patchModule}": "${fixedPatchPath}"\n\t}\n});\ndefine(${files}, () => { });`;
+  // const data = `require.config({\n\tpaths: {\n\t\t"${moduleName}": "${fixedModulesPath}",\n\t\t"${patchModule}": "${fixedPatchPath}"\n\t}\n});\ndefine(${files}, () => { });`;
+  const data = `define(${files}, () => { });`;
 
   const patchedMainJs = fs.readFileSync(mainJsPath, 'utf8').replace('require_bootstrap_amd()', 'require("./bootstrap-amd")');
 
@@ -202,11 +203,12 @@ function patchWorkbench(extensionPath: string) {
       function beforeLoaderConfig(configuration, loaderConfig) {
         if (!loaderConfig) loaderConfig = configuration;
         if (typeof prevBeforeLoaderConfig === 'function') prevBeforeLoaderConfig(configuration, loaderConfig);
-        if (loaderConfig.amdModulesPattern) loaderConfig.amdModulesPattern = new RegExp(loaderConfig.amdModulesPattern.toString().slice(1, -1) + /|^apc\\//.toString().slice(1, -1));
-        Object.assign(loaderConfig.paths, {
-          "apc": "${modules}",
+        require.define("apc-patch", { 
+          load: (name, req, onload, config) => req([name], 
+          (value) => req(["vs/modules/main"], 
+          () => onload(value), 
+          error => (console.error(error), onload(value))))
         });
-        require.define("apc-patch", { load: (name, req, onload, config) => req([name], (value) => req(["apc/main"], () => onload(value), error => (console.error(error), onload(value)))) });
       };
       options.beforeLoaderConfig = beforeLoaderConfig;
   
@@ -252,6 +254,6 @@ export function uninstallPatch() {
   restoreBootstrap();
   restoreMain();
   restoreWorkbench();
-  promptRestart();
   restoreIframe();
+  promptRestart();
 }

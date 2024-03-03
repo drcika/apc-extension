@@ -35,7 +35,7 @@ export function activate(context: vscode.ExtensionContext) {
   // const isRunned = context.globalState.get('isRunned');
   const isEnabled = context.globalState.get('isEnabled');
 
-  if (isEnabled) { 
+  if (isEnabled !== false) { 
    ensurePatch(context); 
    appendIframeStyles();
   }

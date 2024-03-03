@@ -23,9 +23,9 @@ define(['exports', 'vs/modules/auxiliary', 'vs/modules/configuration'], (exports
 
         const isUnderPanel = position === 'editor-bottom' && services.layoutService.getPanelPosition() === store.Position.BOTTOM;
         const isEditor = position.includes('editor');
-
-        store.statusBarPartView.minimumWidth = isUnderPanel ? store.panelPartView.minimumWidth : isEditor ? services.editorGroupsService.minimumWidth : store.statusBarPartView.minimumWidth;
-        store.statusBarPartView.maximumWidth = isUnderPanel ? store.panelPartView.maximumWidth : isEditor ? services.editorGroupsService.maximumWidth : store.statusBarPartView.maximumWidth;
+        
+        store.statusBarPartView.minimumWidth = isUnderPanel ? store.panelPartView.minimumWidth : isEditor ? services.editorGroupsService.mainPart.minimumWidth : store.statusBarPartView.minimumWidth;
+        store.statusBarPartView.maximumWidth = isUnderPanel ? store.panelPartView.maximumWidth : isEditor ? services.editorGroupsService.mainPart.maximumWidth : store.statusBarPartView.maximumWidth;
         store.statusBarPartView.minimumHeight = height;
         store.statusBarPartView.maximumHeight = height;
 
@@ -34,8 +34,8 @@ define(['exports', 'vs/modules/auxiliary', 'vs/modules/configuration'], (exports
           store.workbenchGrid.addView(store.statusBarPartView, height, store.panelPartView, store.Direction.Down);
         }
         else if (isEditor) {
-          const placment = position === 'editor-top' ? store.Direction.Up : store.Direction.Down;
-          store.workbenchGrid.moveView(store.statusBarPartView, height, services.editorGroupsService, placment);
+          const placment = position === 'editor-top' ? store.Direction.Up : store.Direction.Down;          
+          store.workbenchGrid.moveView(store.statusBarPartView, height, services.editorGroupsService.mainPart, placment);
         }
         else {
           store.workbenchGrid.moveViewTo(store.statusBarPartView, [store.Direction.Up]);

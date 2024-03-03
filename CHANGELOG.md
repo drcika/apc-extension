@@ -9,6 +9,7 @@ This file tracks the changes made to the project.
 - Fix js files mulit import
 - Floating editor windows
 - Fix traffic light overlap
+- Fix statusbar position editor-top
 
 ### [0.3.7] - 2023-03-01
 

@@ -98,8 +98,8 @@ define(
       return store.menubarControlContainer;
     };
 
-    function addTabsPlaceHolder() {
-      try { config.inlineTabsPlaceholder && services.editorGroupsService.groups[0].element.querySelector('.tabs-and-actions-container').prepend(config.inlineTabsPlaceholder); }
+    function addTabsPlaceHolder(element, inlineTabsPlaceholder) {
+      try { element.querySelector('.tabs-and-actions-container').prepend(inlineTabsPlaceholder); }
       catch (error) { traceError(error); }
     }
 
@@ -119,17 +119,16 @@ define(
           decorateTabsPlaceHolders(group);
         }));
 
+        const inlineTabsPlaceholder = UI.createDiv('inline-tabs-placeholder');
+
         config.disposables.add(this.onDidRemoveGroup((group) => {
           group.disposableTabsDblclick?.dispose?.();
           group.disposableNoTabsDblclick?.dispose?.();
-          store.isMacintosh && addTabsPlaceHolder();
+          store.isMacintosh && addTabsPlaceHolder(this.element, inlineTabsPlaceholder);
         }));
 
         queueMicrotask(() => {
-          if (store.isMacintosh) {
-            config.inlineTabsPlaceholder = UI.createDiv('inline-tabs-placeholder');
-            addTabsPlaceHolder();
-          }
+          store.isMacintosh && addTabsPlaceHolder(this.element, inlineTabsPlaceholder);
           layout.updateTabsClasses();
           this.groups.forEach(decorateTabsPlaceHolders);
         });

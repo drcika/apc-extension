@@ -32,15 +32,17 @@ function registerCommands(context: vscode.ExtensionContext) {
 
 
 export function activate(context: vscode.ExtensionContext) {
-  const isRunned = context.globalState.get('isRunned');
+  // const isRunned = context.globalState.get('isRunned');
   const isEnabled = context.globalState.get('isEnabled');
 
-  isEnabled && appendIframeStyles();
-  if (isRunned) { isEnabled && ensurePatch(context); }
-  else {
-    context.globalState.update('isRunned', true);
-    install(context);
+  if (isEnabled) { 
+   ensurePatch(context); 
+   appendIframeStyles();
   }
+  // else {
+  //   context.globalState.update('isRunned', true);
+  //   install(context);
+  // }
 
   registerCommands(context);
 

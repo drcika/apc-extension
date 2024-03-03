@@ -1,7 +1,7 @@
 import * as vscode from 'vscode';
 import * as fs from 'fs';
 import * as path from 'path';
-import * as os from 'os';
+// import * as os from 'os';
 import { getConfiguration, getStyleFromFile, getStyles, promptRestart } from './utils';
 
 const bkpName = '.apc.extension.backup';
@@ -27,14 +27,14 @@ const browserEntrypointPath = path.join(patchPath, browserMain);
 const iframeIndexPath = path.join(installationPath, '/vs/workbench/contrib/webview/browser/pre/index.html');
 const iframeIndexBkpPath = iframeIndexPath + bkpName;
 
-const isWin = os.platform() === 'win32';
+// const isWin = os.platform() === 'win32';
 
-function fixPath(path: string) {
-  return isWin ? "file://./" + path.replace(/\\/g, "/") : path;
-}
+// function fixPath(path: string) {
+//   return isWin ? "file://./" + path.replace(/\\/g, "/") : path;
+// }
 
-const fixedPatchPath = fixPath(patchPath);
-const fixedModulesPath = fixPath(modulesPath);
+// const fixedPatchPath = fixPath(patchPath);
+// const fixedModulesPath = fixPath(modulesPath);
 
 function isFilesChanges(context: vscode.ExtensionContext): boolean {
   return fs.readdirSync(modulesPath).some(name => fs.readFileSync(path.join(modulesPath, name), "utf8") !== fs.readFileSync(path.join(context.extensionPath, modules, name), "utf8"));
@@ -78,15 +78,15 @@ function restoreIframe() {
 }
 
 export async function ensurePatch(context: vscode.ExtensionContext) {
-
   if (
     !fs.existsSync(bootstrapBackupPath) ||
-    !fs.existsSync(workbenchHtmlReplacementPath) ||
-    !fs.readFileSync(bootstrapPath, "utf8")?.includes('$apcExtensionBootstrapToken$') ||
-    !fs.existsSync(browserEntrypointPath) ||
-    !fs.existsSync(modulesPath) ||
-    !fs.readFileSync(bootstrapPath, "utf8")?.includes('apc') ||
+    !fs.readFileSync(bootstrapPath, "utf8")?.includes('vs/patch/main') ||
     !fs.readFileSync(mainJsPath, 'utf8')?.includes('require("./bootstrap-amd")') ||
+    !fs.existsSync(workbenchHtmlReplacementPath) ||
+    !fs.existsSync(browserEntrypointPath) ||
+    !fs.existsSync(path.join(patchPath, mainJsName)) ||
+    !fs.existsSync(path.join(patchPath, mainProcessJsName)) ||
+    !fs.existsSync(modulesPath) ||
     isFilesChanges(context)
   ) {
     await install(context);
@@ -116,8 +116,8 @@ function patchBootstrap(extensionPath: string) {
       else readFile(...arguments);
     };
   }
-  performance.mark('code/fork/willLoadCode');
-  // $apcExtensionBootstrapToken$`;
+  performance.mark('code/fork/willLoadCode');`;
+
   const patchedbootstrapJs = fs.readFileSync(bootstrapResourcesPath, 'utf8')
     // .replace('amdModulesPattern: \/^vs\\\/\/', `paths: { "apc": "${fixedPatchPath}" }`)
     .replace(`performance.mark('code/fork/willLoadCode');`, inject);

@@ -37,7 +37,12 @@ define(
       };
 
       function updateTabsClasses() {
-        try { services.editorGroupsService.groups.forEach(group => group.element.classList[group.element.getBoundingClientRect().top === 0 ? 'add' : 'remove']('editor-group-top')); }
+        try { 
+          services.editorGroupsService.groups.forEach(group => {
+            const key = group.groupsView?.getId()?.includes('auxiliaryEditor') ? 'add' : group.element.getBoundingClientRect().top < 30 ? 'add' : 'remove';
+            group.element.classList[key]('editor-group-top');
+          }); 
+        }
         catch (error) { traceError(error); }
       }
 

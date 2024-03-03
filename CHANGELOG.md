@@ -7,6 +7,7 @@ This file tracks the changes made to the project.
 ### [0.3.8] - 2023-03-02
 
 - Fix js files mulit import
+- Floating editor windows
 
 ### [0.3.7] - 2023-03-01
 

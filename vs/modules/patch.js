@@ -65,7 +65,7 @@ define(
             // this.configurationService.updateValue(LayoutSettings.ACTIVITY_BAR_LOCATION, value ? ActivityBarPosition.HIDDEN : undefined);
             // auxiliary.services.configurationService.updateValue('workbench.activityBar.location', 'top');
             
-            // store.dummActivitybarPartView = new auxiliary.Part(store.DUMMY_ACTIVITYBAR_PART, { hasTitle: false }, auxiliary.services.themeService, auxiliary.services.storageService, auxiliary.services.layoutService);
+            store.dummActivitybarPartView = new auxiliary.Part(store.DUMMY_ACTIVITYBAR_PART, { hasTitle: false }, auxiliary.services.themeService, auxiliary.services.storageService, auxiliary.services.layoutService);
             store.dummStatusbarPartView = new auxiliary.Part(store.DUMMY_STATUSBAR_PART, { hasTitle: false }, auxiliary.services.themeService, auxiliary.services.storageService, auxiliary.services.layoutService);
           } catch (error) {
             console.log(error);

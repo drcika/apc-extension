@@ -89,7 +89,7 @@ define(
           ui.run();
 
           config.addDisposable(config.onDidChangeConfiguration(e => {
-            if (Array.from(e.affectedKeys.values()).find(key => key.startsWith('apc.'))) {
+            if (Array.from(e.affectedKeys.values()).find(key => key.startsWith('apc.') || key === 'window.customTitleBarVisibility')) {
               if (!store.initialised) { return (store.initialised = true); }
               ui.updateClasses();
             };

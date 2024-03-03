@@ -283,7 +283,8 @@ Set the position and dimensions of the activity bar
 
 ```jsonc
     "apc.activityBar": {
-      "position": "bottom" | "top", // top: above sidebar, bottom: below sidebar (default: 'left' if unspecified)
+        "position": "bottom", // bottom: below sidebar (default: 'left' if unspecified)
+        // currently it only works if the position is bottom or regular
       "size": number, // Height (when top/bottom) or width (in default position)
       "itemSize": number, // Size of items within the bar (default: size)
       "itemMargin": number // Margin between two items (default: 3)
@@ -291,12 +292,15 @@ Set the position and dimensions of the activity bar
 ```
 removed
 ```
-apc.activityBar.hideSettings
+  apc.activityBar.position: 'top'
+  apc.activityBar.hideSettings
 ```
 alternative 
 ```
-"window.customTitleBarVisibility": "never",
+  "workbench.activityBar.location": "top",
+  "window.customTitleBarVisibility": "never",
 ```
+
 ### `apc.sidebar.titlebar`
 
 Define the height and font size of the sidebar title bar

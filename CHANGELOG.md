@@ -4,6 +4,10 @@ This file tracks the changes made to the project.
 
 ![Visual Studio Marketplace Last Updated](https://img.shields.io/visual-studio-marketplace/last-updated/drcika.apc-extension) ![Visual Studio Marketplace Version (including pre-releases)](https://img.shields.io/visual-studio-marketplace/v/drcika.apc-extension?label=latest%20Version) ![GitHub last commit (branch)](https://img.shields.io/github/last-commit/drcika/apc-extension/production)
 
+### [0.4.0] - 2023-03-03
+
+- remove apc.activityBar.position: 'top'
+
 ### [0.3.9] - 2023-03-03
 
 - Fix activity bar

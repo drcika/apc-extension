@@ -27,7 +27,7 @@ define(
             if (store.isMacintosh && config.isInline) {
               queueMicrotask(() => {
                 const inlineTitle = part.getContainer().querySelector('.title-label');
-                config.handleDblclick(inlineTitle, () => config.activityBar.position !== 'top' && config.statusBar.position !== 'top' && config.handleTitleDoubleClick());
+                // config.handleDblclick(inlineTitle, () => config.activityBar.position !== 'top' && config.statusBar.position !== 'top' && config.handleTitleDoubleClick());
                 UI.prependDiv(inlineTitle, 'inline-titlebar-placeholder');
               });
             }
@@ -162,10 +162,11 @@ define(
         if (orientation === store.ActionsOrientation.VERTICAL || height === undefined || !(config.isVisible(store.Parts.ACTIVITYBAR_PART))) { return; }
         const sideBarPosition = services.layoutService.getSideBarPosition();
 
-        const padding = sideBarPosition !== store.Position.RIGHT && position === 'top' && config.electron.titleBarStyle && config.statusBar.position !== 'top' ? 55 : 0;
+        // const padding = sideBarPosition !== store.Position.RIGHT && position === 'top' && config.electron.titleBarStyle && config.statusBar.position !== 'top' ? 55 : 0;
         const menubar = store.menubarControlContainer?.isConnected ? itemSize : 0;
         const viewItems = store.globalActivityActionBar?.domNode?.isConnected ? (store.globalActivityActionBar?.viewItems?.length ?? 0) * itemSize : 0;
-        const availableSize = width - viewItems - menubar - padding;
+        // const availableSize = width - viewItems - menubar - padding;
+        const availableSize = width - viewItems - menubar;
 
         store.activityBarCompositeBar.layout(new store.Dimension(height, availableSize));
       }
@@ -181,7 +182,7 @@ define(
         const content = parent.querySelector('.content');
         !config.isMacintosh && content.insertBefore(UI.createDiv('activity-bar-placeholder-win'), content.children[1]);
 
-        config.handleDblclick(content, () => config.activityBar.position === 'top' && config.statusBar.position !== 'top' && config.handleTitleDoubleClick());
+        // config.handleDblclick(content, () => config.activityBar.position === 'top' && config.statusBar.position !== 'top' && config.handleTitleDoubleClick());
       }
       catch (error) { traceError(error); }
     };

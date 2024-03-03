@@ -221,7 +221,6 @@
             "position": {
               "type": "string",
               "enum": [
-                "top",
                 "bottom"
               ]
             }

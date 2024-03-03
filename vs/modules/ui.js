@@ -45,13 +45,13 @@ define(['exports', 'vs/modules/auxiliary', 'vs/modules/configuration'], (exports
       const trafficLightPosition = config.electron.trafficLightPosition;
       const sidebarTitlebarConfig = config.titlebar;
       const { customFontFamily, customMonospaceFontFamily, ...fontFamilyParts } = config.fontFamily;
+      const customTitleBarVisibility = config.titleBarStyle === 'native' && services.configurationService.getValue('window.customTitleBarVisibility');
 
       const classList = document.body.classList;
+      classList[customTitleBarVisibility === 'never' ? 'add' : 'remove']('no-custom-title-bar-visibility');
       classList[statusBarConfig.position === 'top' ? 'add' : 'remove']('statusbar-top');
       classList[statusBarConfig.position === 'editor-top' ? 'add' : 'remove']('statusbar-editor-top');
       classList[activityBarConfig.position ? 'add' : 'remove']('horizontal-activitybar');
-      classList[activityBarConfig.position === 'bottom' ? 'add' : 'remove']('activitybar-bottom');
-      classList[activityBarConfig.position === 'top' ? 'add' : 'remove']('activitybar-top');
       classList[activityBarConfig.isEnabled ? 'add' : 'remove']('custom-activitybar');
       classList[headerConfig.isEnabled ? 'add' : 'remove']('custom-header');
       classList[sidebarTitlebarConfig.isEnabled ? 'add' : 'remove']('custom-sidebar-titlebar');

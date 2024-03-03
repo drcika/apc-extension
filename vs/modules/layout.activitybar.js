@@ -5,20 +5,7 @@ define(
       const { traceError, store, services } = auxiliary;
       const { config } = configuration;
 
-      store.previousActivityBarConfig = { size: config.ACTIVITY_BAR_SIZE, hideSettings: false };
-
-      function toggleSettings(hideSettings) {
-        try {
-          const content = store.activitybarPartView.getContainer().querySelector('.content');
-          if (!store.globalActivitiesContainer) { store.globalActivitiesContainer = content.querySelector('.global-activity-actionbar'); };
-          const isConnected = store.globalActivitiesContainer?.isConnected;
-
-          if (hideSettings && isConnected) { content.removeChild(store.globalActivitiesContainer); }
-          if (!hideSettings && !isConnected) { content.appendChild(store.globalActivitiesContainer); }
-
-          store.previousActivityBarConfig.hideSettings = hideSettings;
-        } catch (error) { traceError(error); }
-      };
+      store.previousActivityBarConfig = { size: config.ACTIVITY_BAR_SIZE };
 
       function updateActivityBarClassList(isHorizontal) {
         try { store.activitybarPartView.getContainer().querySelectorAll('div.monaco-action-bar').forEach(el => el.classList[isHorizontal ? 'remove' : 'add']('vertical')); }
@@ -42,7 +29,8 @@ define(
       function switchPosition() {
         try {
           const { size, position } = config.activityBar;
-          store.workbenchGrid.moveView(store.activitybarPartView, size, store.sidebarPartView, position === 'top' ? store.Direction.Up : store.Direction.Down);
+          // store.workbenchGrid.moveView(store.activitybarPartView, size, store.sidebarPartView, position === 'top' ? store.Direction.Up : store.Direction.Down);
+          store.workbenchGrid.moveView(store.activitybarPartView, size, store.sidebarPartView, store.Direction.Down);
           store.previousActivityBarConfig.position = position;
         } catch (error) { traceError(error); }
       };
@@ -70,7 +58,8 @@ define(
           store.activitybarPartView.minimumHeight = size;
           store.activitybarPartView.maximumHeight = size;
 
-          store.workbenchGrid.moveView(store.activitybarPartView, size, store.sidebarPartView, position === 'top' ? store.Direction.Up : store.Direction.Down);
+          // store.workbenchGrid.moveView(store.activitybarPartView, size, store.sidebarPartView, position === 'top' ? store.Direction.Up : store.Direction.Down);
+          store.workbenchGrid.moveView(store.activitybarPartView, size, store.sidebarPartView, store.Direction.Down);
           store.workbenchGrid.resizeView(store.auxiliarybarPartView, auxiliarybarPartViewSize);
           store.workbenchGrid.resizeView(store.sidebarPartView, sidebarPartViewSize);
 
@@ -127,9 +116,7 @@ define(
 
       function update() {
         try {
-          const { size, position, hideSettings } = config.activityBar;
-          if (hideSettings !== store.previousActivityBarConfig.hideSettings) { toggleSettings(hideSettings); }
-
+          const { size, position } = config.activityBar;
           if (!config.isVisible(store.Parts.SIDEBAR_PART)) {
             if (position) {
               store.activitybarPartView.minimumWidth = 0;
@@ -157,8 +144,7 @@ define(
       exports.init = function () {
         try {
           if (store.zenMode) { return; };
-          const { size, position, hideSettings } = config.activityBar;
-          toggleSettings(hideSettings);
+          const { size, position } = config.activityBar;
 
           if (!store.previousActivityBarConfig.position && position) {
             if (config.isVisible(store.Parts.SIDEBAR_PART)) {

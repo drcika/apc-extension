@@ -153,7 +153,6 @@ body:not(.statusbar-editor-top):not(.horizontal-activitybar) .mac.nosidebar:not(
   min-width: calc(var(--traffic-X) + 46px - var(--activity-bar-action-size));
 }
 
-.content.auxiliary .inline-tabs-placeholder,
 .inline-title-bar:not(.horizontal-activitybar):not(.activitybar-top):not(.statusbar-top) .monaco-workbench.mac.no-activity-bar:not(.sidebar-right):not(.fullscreen) .inline-titlebar-placeholder,
 .horizontal-activitybar:not(.statusbar-editor-top):not(.statusbar-top) .monaco-workbench.mac.sidebar-right.noauxiliarybar:not(.fullscreen) .part.editor>.content .editor-group-container>.title:not(.tabs),
 .horizontal-activitybar:not(.frameless-title-bar):not(.statusbar-editor-top):not(.statusbar-top) .monaco-workbench.mac:not(.sidebar-right).nosidebar:not(.fullscreen) .part.editor>.content .editor-group-container>.title:not(.tabs),
@@ -170,6 +169,8 @@ body:not(.statusbar-editor-top):not(.horizontal-activitybar) .mac.nosidebar:not(
   min-width: calc(var(--traffic-X) + 46px);
 }
 
+.content.auxiliary .inline-tabs-placeholder,
+.no-activity-bar.nosidebar:not(.sidebar-right) .inline-tabs-placeholder,
 .inline-title-bar.horizontal-activitybar .nosidebar:not(.sidebar-right).noeditorarea.monaco-workbench .part.panel.bottom .composite.title,
 .inline-title-bar .sidebar-right.noauxiliarybar.noeditorarea.monaco-workbench .part.panel.bottom .composite.title,
 .inline-title-bar:not(.statusbar-top) .monaco-workbench.mac:not(.fullscreen) .auxiliarybar.left .composite.title,
@@ -184,7 +185,6 @@ body:not(.statusbar-editor-top):not(.horizontal-activitybar) .mac.nosidebar:not(
 .inline-title-bar.activitybar-top:not(.statusbar-top) .monaco-workbench.mac:not(.fullscreen) .activitybar.left .content>div:first-child {
   margin-left: calc(var(--traffic-X) + 60px);
 }
-
 
 .inline-title-bar:not(.horizontal-activitybar) .monaco-workbench div.activitybar.bordered.left .content {
   border-color: inherit;

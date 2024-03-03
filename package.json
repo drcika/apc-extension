@@ -206,11 +206,6 @@
         "apc.activityBar": {
           "type": "object",
           "properties": {
-            "hideSettings": {
-              "type": "boolean",
-              "default": false,
-              "description": "Hides settings and accounts icon"
-            },
             "size": {
               "type": "number",
               "default": 48

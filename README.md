@@ -289,7 +289,14 @@ Set the position and dimensions of the activity bar
       "itemMargin": number // Margin between two items (default: 3)
     }
 ```
-
+removed
+```
+apc.activityBar.hideSettings
+```
+alternative 
+```
+"window.customTitleBarVisibility": "never",
+```
 ### `apc.sidebar.titlebar`
 
 Define the height and font size of the sidebar title bar

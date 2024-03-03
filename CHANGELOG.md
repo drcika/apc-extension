@@ -10,6 +10,7 @@ This file tracks the changes made to the project.
 - Floating editor windows
 - Fix traffic light overlap
 - Fix statusbar position editor-top
+- remove apc.activityBar.hideSettings
 
 ### [0.3.7] - 2023-03-01
 

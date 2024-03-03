@@ -140,7 +140,7 @@ div.monaco-workbench {
 body:not(.statusbar-editor-top) .mac.no-activity-bar.noauxiliarybar.sidebar-right .inline-tabs-placeholder,
 body:not(.statusbar-editor-top) .mac.no-activity-bar.nosidebar:not(.sidebar-right):not(.nosidebar) .inline-tabs-placeholder,
 body:not(.frameless-title-bar):not(.statusbar-editor-top) .monaco-workbench.mac.sidebar-right.noauxiliarybar .split-view-view:nth-child(1) .split-view-view:nth-child(1) .tabs-and-actions-container .inline-tabs-placeholder,
-.horizontal-activitybar.inline-title-bar:not(.statusbar-editor-top) .monaco-workbench.mac.nosidebar:not(.sidebar-right) .inline-tabs-placeholder,
+.horizontal-activitybar.inline-title-bar:not(.statusbar-editor-top) .monaco-workbench.mac.nosidebar:not(.sidebar-right):not(.fullscreen) .inline-tabs-placeholder,
 .horizontal-activitybar.inline-title-bar:not(.statusbar-editor-top) .monaco-workbench.mac.sidebar-right.noauxiliarybar .inline-tabs-placeholder {
   width: calc(var(--traffic-X) + 60px);
 }
@@ -170,7 +170,7 @@ body:not(.statusbar-editor-top):not(.horizontal-activitybar) .mac.nosidebar:not(
 }
 
 .content.auxiliary .inline-tabs-placeholder,
-.no-activity-bar.nosidebar:not(.sidebar-right) .inline-tabs-placeholder,
+.no-activity-bar.nosidebar:not(.sidebar-right):not(.fullscreen) .inline-tabs-placeholder,
 .inline-title-bar.horizontal-activitybar .nosidebar:not(.sidebar-right).noeditorarea.monaco-workbench .part.panel.bottom .composite.title,
 .inline-title-bar .sidebar-right.noauxiliarybar.noeditorarea.monaco-workbench .part.panel.bottom .composite.title,
 .inline-title-bar:not(.statusbar-top) .monaco-workbench.mac:not(.fullscreen) .auxiliarybar.left .composite.title,
@@ -213,11 +213,11 @@ body.horizontal-activitybar .monaco-workbench .activitybar>.content :not(.monaco
   border-bottom: 1px solid var(--title-border-bottom-color);
 }
 
-.frameless-title-bar:not(.statusbar-top) .tabs-container,
+/* .frameless-title-bar:not(.statusbar-top) .tabs-container,
 .inline-title-bar:not(.statusbar-top) .tabs-container {
   position: relative;
   z-index: 1;
-}
+} */
 
 .frameless-title-bar.activitybar-top:not(.statusbar-top) .monaco-workbench:not(.fullscreen) .activitybar.left .activity-bar-placeholder-win,
 .inline-title-bar.activitybar-top:not(.statusbar-top) .monaco-workbench:not(.fullscreen) .activitybar.left .activity-bar-placeholder-win {

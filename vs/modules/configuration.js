@@ -104,11 +104,10 @@ define(['exports', 'vs/modules/auxiliary'], function (exports, auxiliary) {
 
       ACTIVITY_BAR_SIZE: 48,
       get activityBar() {
-        const { size, itemSize, itemMargin, position, hideSettings } = this.getConfiguration('apc.activityBar') || {};
+        const { size, itemSize, itemMargin, position } = this.getConfiguration('apc.activityBar') || {};
         const isHorizontal = !!position;
         return {
           position,
-          hideSettings,
           isHorizontal,
           orientation: isHorizontal ? store.ActionsOrientation.HORIZONTAL : store.ActionsOrientation.VERTICAL,
           size: (size ?? this.ACTIVITY_BAR_SIZE),

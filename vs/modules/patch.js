@@ -56,10 +56,16 @@ define(
       class Patch {
         constructor(...args) {
           try {
-            args.forEach((service, index) => auxiliary.services[services[index]] = service);
+            args.forEach((service, index) => {
+              if('getBoolean' in service){ auxiliary.store.zenMode = service.getBoolean('workbench.zenMode.active', 1);}
+              auxiliary.services[services[index]] = service;
+            });
             require(['vs/workbench/browser/parts/editor/editorTabsControl'], classes.editorTabsControl, traceError);
 
-            store.dummActivitybarPartView = new auxiliary.Part(store.DUMMY_ACTIVITYBAR_PART, { hasTitle: false }, auxiliary.services.themeService, auxiliary.services.storageService, auxiliary.services.layoutService);
+            // this.configurationService.updateValue(LayoutSettings.ACTIVITY_BAR_LOCATION, value ? ActivityBarPosition.HIDDEN : undefined);
+            // auxiliary.services.configurationService.updateValue('workbench.activityBar.location', 'top');
+            
+            // store.dummActivitybarPartView = new auxiliary.Part(store.DUMMY_ACTIVITYBAR_PART, { hasTitle: false }, auxiliary.services.themeService, auxiliary.services.storageService, auxiliary.services.layoutService);
             store.dummStatusbarPartView = new auxiliary.Part(store.DUMMY_STATUSBAR_PART, { hasTitle: false }, auxiliary.services.themeService, auxiliary.services.storageService, auxiliary.services.layoutService);
           } catch (error) {
             console.log(error);

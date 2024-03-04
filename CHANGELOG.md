@@ -4,15 +4,15 @@ This file tracks the changes made to the project.
 
 ![Visual Studio Marketplace Last Updated](https://img.shields.io/visual-studio-marketplace/last-updated/drcika.apc-extension) ![Visual Studio Marketplace Version (including pre-releases)](https://img.shields.io/visual-studio-marketplace/v/drcika.apc-extension?label=latest%20Version) ![GitHub last commit (branch)](https://img.shields.io/github/last-commit/drcika/apc-extension/production)
 
-### [0.4.0] - 2023-03-03
+### [0.4.0] - 2024-03-03
 
 - remove apc.activityBar.position: 'top'
 
-### [0.3.9] - 2023-03-03
+### [0.3.9] - 2024-03-03
 
 - Fix activity bar
 
-### [0.3.8] - 2023-03-03
+### [0.3.8] - 2024-03-03
 
 - Fix js files mulit import
 - Floating editor windows
@@ -20,7 +20,7 @@ This file tracks the changes made to the project.
 - Fix statusbar position editor-top
 - remove apc.activityBar.hideSettings
 
-### [0.3.7] - 2023-03-01
+### [0.3.7] - 2024-03-01
 
 - Fix extensions panel
 

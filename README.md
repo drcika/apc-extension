@@ -60,8 +60,6 @@ To ensure the extension works, allow VSCode or VSCodium to modify itself by fixi
 | 🐧 **Linux** (most distros) | VSCode | `/usr/share/code` |
 | 🐧 **Arch Linux** (alternate) | VSCode | `/opt/visual-studio-code` |
 
-</details>
-
 ## Enabling and Disabling
 
   - Open the Command Palette (Mac: <kbd>⌘</kbd>+<kbd>Shift</kbd>+<kbd>P</kbd>, Windows: <kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>P</kbd>)

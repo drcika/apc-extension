@@ -23,6 +23,11 @@ Explore my setup for inspiration: [View Settings](https://github.com/drcika/apc-
   - Install this extension (auto-enabled on first install)
   - Customize by adding configurations to your `user settings.json`
 
+## Enabling and Disabling
+
+  - Open the Command Palette (Mac: <kbd>⌘</kbd>+<kbd>Shift</kbd>+<kbd>P</kbd>, Windows: <kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>P</kbd>)
+  - Type `Enable Apc extension` to enable or `Disable Apc extension` to disable
+
 ### Troubleshooting Extension Issues!
 
 #### Extension stopped functioning after an update
@@ -59,11 +64,6 @@ To ensure the extension works, allow VSCode or VSCodium to modify itself by fixi
 |                        | VSCodium        | `/Applications/VSCodium.app/Contents/Resources/app/out` |
 | 🐧 **Linux** (most distros) | VSCode | `/usr/share/code` |
 | 🐧 **Arch Linux** (alternate) | VSCode | `/opt/visual-studio-code` |
-
-## Enabling and Disabling
-
-  - Open the Command Palette (Mac: <kbd>⌘</kbd>+<kbd>Shift</kbd>+<kbd>P</kbd>, Windows: <kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>P</kbd>)
-  - Type `Enable Apc extension` to enable or `Disable Apc extension` to disable
 
 ## Disclaimer
 
@@ -288,13 +288,15 @@ Set the position and dimensions of the activity bar
       "itemMargin": number // Margin between two items (default: 3)
     }
 ```
-removed
-```
+
+Removed
+```jsonc
   apc.activityBar.position: 'top'
   apc.activityBar.hideSettings
 ```
-alternative 
-```
+
+Alternative 
+```jsonc
   "workbench.activityBar.location": "top",
   "window.customTitleBarVisibility": "never",
 ```
